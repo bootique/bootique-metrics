@@ -1,0 +1,12 @@
+0.11:
+
+#4 ServerRuntimeFactory: 'createSchema' - a config flag to enable schema auto-creation
+
+0.10:
+
+#3 Adding Shutdown hook
+
+0.9:
+
+#1 Support for named Cayenne stacks
+#2 Upgrade to Cayenne 4.0.M3.fb19854
