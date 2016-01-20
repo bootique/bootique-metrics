@@ -6,7 +6,6 @@ import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import com.codahale.metrics.JmxReporter;
-import com.codahale.metrics.Metric;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Slf4jReporter;
 import com.nhl.bootique.shutdown.ShutdownManager;
@@ -23,11 +22,9 @@ public class MetricRegistryFactory {
 
 	private List<Map<String, String>> reporters;
 
-	public MetricRegistry createMetricsRegistry(Map<String, Metric> metrics, ShutdownManager shutdownManager) {
+	public MetricRegistry createMetricsRegistry(ShutdownManager shutdownManager) {
 
 		MetricRegistry registry = new MetricRegistry();
-
-		registry.registerAll(() -> metrics);
 
 		if (reporters != null) {
 			reporters.forEach(factorySettings -> toFactory(factorySettings).installReporter(registry, shutdownManager));

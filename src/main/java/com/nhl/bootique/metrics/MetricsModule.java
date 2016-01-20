@@ -1,6 +1,5 @@
 package com.nhl.bootique.metrics;
 
-import com.codahale.metrics.JvmAttributeGaugeSet;
 import com.codahale.metrics.MetricRegistry;
 import com.google.inject.Binder;
 import com.google.inject.Provides;
@@ -19,9 +18,6 @@ public class MetricsModule extends ConfigModule {
 
 	@Override
 	public void configure(Binder binder) {
-
-		// init metrics map ... load default JVM set of metrics
-		MetricsBinder.contributeTo(binder).metric("jvm", new JvmAttributeGaugeSet());
 
 		// eager-load the registry. Otherwise it may never start...
 		binder.bind(MetricRegistry.class).toProvider(MetricRegistryProvider.class).asEagerSingleton();
