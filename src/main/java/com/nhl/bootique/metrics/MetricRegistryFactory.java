@@ -14,8 +14,7 @@ public class MetricRegistryFactory {
 
 	private static final String FACTORY_TYPE_KEY = "type";
 
-	// TODO: change this into polimorphic ReporterFactory interface once
-	// https://github.com/nhl/bootique/issues/14 is in.
+	// TODO: change this into polimorphic ReporterFactory interface 
 
 	// TODO: once the above is accomplished, we can make factories
 	// auto-discoverable via ServiceLoader approach..
