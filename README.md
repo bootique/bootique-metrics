@@ -21,7 +21,7 @@ in your code where you need to create [Meters](http://metrics.dropwizard.io/3.1.
 [Gauges](http://metrics.dropwizard.io/3.1.0/getting-started/#gauges), 
 [Counters](http://metrics.dropwizard.io/3.1.0/getting-started/#counters), 
 [Histograms](http://metrics.dropwizard.io/3.1.0/getting-started/#histograms), 
-[Timers](http://metrics.dropwizard.io/3.1.0/getting-started/#timers), etc.
+[Timers](http://metrics.dropwizard.io/3.1.0/getting-started/#timers), etc. E.g.:
 
 ```java
 @Inject
