@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/nhl/bootique-metrics.svg)](https://travis-ci.org/nhl/bootique-metrics)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.nhl.bootique.metrics/bootique-metrics/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.nhl.bootique.metrics/bootique-metrics/)
 
 # bootique-metrics
 
