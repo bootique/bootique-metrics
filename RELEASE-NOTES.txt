@@ -1,3 +1,0 @@
-0.5:
-
-Initial framework with basic functionality
