@@ -1,0 +1,5 @@
+metrics:
+  reporters:
+    - type: slf4j
+    - type: jmx
+    - type: slf4j

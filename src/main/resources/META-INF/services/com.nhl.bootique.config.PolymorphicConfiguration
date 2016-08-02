@@ -1,0 +1,3 @@
+com.nhl.bootique.metrics.reporter.ReporterFactory
+com.nhl.bootique.metrics.reporter.JmxReporterFactory
+com.nhl.bootique.metrics.reporter.Slf4jReporterFactory

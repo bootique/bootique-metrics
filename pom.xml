@@ -45,10 +45,28 @@
                 <artifactId>bootique-test</artifactId>
                 <version>${bootique-version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-simple</artifactId>
+                <version>1.7.13</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
     <dependencies>
+
+        <!-- Compile dependencies -->
+        <dependency>
+            <groupId>com.nhl.bootique</groupId>
+            <artifactId>bootique</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.dropwizard.metrics</groupId>
+            <artifactId>metrics-core</artifactId>
+            <scope>compile</scope>
+        </dependency>
+
         <!-- Unit test dependencies -->
         <dependency>
             <groupId>junit</groupId>
@@ -65,17 +83,10 @@
             <artifactId>bootique-test</artifactId>
             <scope>test</scope>
         </dependency>
-
-        <!-- Compile dependencies -->
         <dependency>
-            <groupId>com.nhl.bootique</groupId>
-            <artifactId>bootique</artifactId>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.dropwizard.metrics</groupId>
-            <artifactId>metrics-core</artifactId>
-            <scope>compile</scope>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
