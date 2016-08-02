@@ -41,6 +41,11 @@
                 <version>${metrics-version}</version>
             </dependency>
             <dependency>
+                <groupId>io.dropwizard.metrics</groupId>
+                <artifactId>metrics-healthchecks</artifactId>
+                <version>${metrics-version}</version>
+            </dependency>
+            <dependency>
                 <groupId>com.nhl.bootique</groupId>
                 <artifactId>bootique-test</artifactId>
                 <version>${bootique-version}</version>
@@ -64,6 +69,11 @@
         <dependency>
             <groupId>io.dropwizard.metrics</groupId>
             <artifactId>metrics-core</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.dropwizard.metrics</groupId>
+            <artifactId>metrics-healthchecks</artifactId>
             <scope>compile</scope>
         </dependency>
 

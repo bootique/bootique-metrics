@@ -1,5 +1,7 @@
 package com.nhl.bootique.metrics;
 
+import com.codahale.metrics.MetricRegistry;
+import com.codahale.metrics.health.HealthCheckRegistry;
 import com.nhl.bootique.BQRuntime;
 import com.nhl.bootique.Bootique;
 import com.nhl.bootique.metrics.reporter.JmxReporterFactory;
@@ -11,6 +13,8 @@ import org.junit.Test;
 import java.util.function.Consumer;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
 public class MetricsModuleIT {
@@ -18,19 +22,44 @@ public class MetricsModuleIT {
     @Rule
     public final BQTestFactory testFactory = new BQTestFactory();
 
-    @Test
-    public void testConfig() {
-
+    protected BQRuntime createRuntime(String... args) {
         Consumer<Bootique> config = b -> {
             b.module(MetricsModule.class);
         };
 
-        BQRuntime runtime = testFactory.newRuntime().configurator(config).build("--config", "classpath:config1.yml").getRuntime();
+        return testFactory.newRuntime().configurator(config).build(args).getRuntime();
+    }
+
+    @Test
+    public void testMetricRegistryConfig() {
+
+        BQRuntime runtime = createRuntime("--config", "classpath:config1.yml");
         MetricRegistryFactory factory = runtime.getInstance(MetricRegistryFactory.class);
 
         assertEquals(3, factory.getReporters().size());
         assertTrue(factory.getReporters().get(0) instanceof Slf4jReporterFactory);
         assertTrue(factory.getReporters().get(1) instanceof JmxReporterFactory);
         assertTrue(factory.getReporters().get(2) instanceof Slf4jReporterFactory);
+    }
+
+    @Test
+    public void testMetricRegistry() {
+
+        BQRuntime runtime = createRuntime();
+
+        MetricRegistry r1 = runtime.getInstance(MetricRegistry.class);
+        MetricRegistry r2 = runtime.getInstance(MetricRegistry.class);
+        assertNotNull(r1);
+        assertSame("MetricRegistry must be a singleton", r1, r2);
+    }
+
+    @Test
+    public void testHealthcheckRegistry() {
+        BQRuntime runtime = createRuntime();
+
+        HealthCheckRegistry r1 = runtime.getInstance(HealthCheckRegistry.class);
+        HealthCheckRegistry r2 = runtime.getInstance(HealthCheckRegistry.class);
+        assertNotNull(r1);
+        assertSame("HealthCheckRegistry must be a singleton", r1, r2);
     }
 }
