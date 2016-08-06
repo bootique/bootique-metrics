@@ -1,6 +1,6 @@
-package com.nhl.bootique.metrics;
+package io.bootique.metrics;
 
-import com.nhl.bootique.test.junit.BQModuleProviderChecker;
+import io.bootique.test.junit.BQModuleProviderChecker;
 import org.junit.Test;
 
 public class MetricsModuleProviderIT {

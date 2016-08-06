@@ -1,8 +1,8 @@
-package com.nhl.bootique.metrics;
+package io.bootique.metrics;
 
 import com.codahale.metrics.MetricRegistry;
-import com.nhl.bootique.metrics.reporter.ReporterFactory;
-import com.nhl.bootique.shutdown.ShutdownManager;
+import io.bootique.metrics.reporter.ReporterFactory;
+import io.bootique.shutdown.ShutdownManager;
 
 import java.util.List;
 

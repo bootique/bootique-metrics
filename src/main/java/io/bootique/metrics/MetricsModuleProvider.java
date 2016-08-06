@@ -1,7 +1,7 @@
-package com.nhl.bootique.metrics;
+package io.bootique.metrics;
 
 import com.google.inject.Module;
-import com.nhl.bootique.BQModuleProvider;
+import io.bootique.BQModuleProvider;
 
 public class MetricsModuleProvider implements BQModuleProvider {
 

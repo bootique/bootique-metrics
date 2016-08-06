@@ -1,9 +1,9 @@
-package com.nhl.bootique.metrics.reporter;
+package io.bootique.metrics.reporter;
 
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Slf4jReporter;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.nhl.bootique.shutdown.ShutdownManager;
+import io.bootique.shutdown.ShutdownManager;
 
 import java.util.concurrent.TimeUnit;
 

@@ -1,9 +1,9 @@
-package com.nhl.bootique.metrics;
+package io.bootique.metrics;
 
 import com.codahale.metrics.MetricRegistry;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
-import com.nhl.bootique.shutdown.ShutdownManager;
+import io.bootique.shutdown.ShutdownManager;
 
 public class MetricRegistryProvider implements Provider<MetricRegistry> {
 

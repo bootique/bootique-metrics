@@ -1,5 +1,5 @@
-[![Build Status](https://travis-ci.org/nhl/bootique-metrics.svg)](https://travis-ci.org/nhl/bootique-metrics)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.nhl.bootique.metrics/bootique-metrics/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.nhl.bootique.metrics/bootique-metrics/)
+[![Build Status](https://travis-ci.org/bootique/bootique-metrics.svg)](https://travis-ci.org/bootique/bootique-metrics)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.bootique.metrics/bootique-metrics/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.bootique.metrics/bootique-metrics/)
 
 # bootique-metrics
 
@@ -11,7 +11,7 @@ Add the Metrics module to your Bootique app:
 
 ```xml
 <dependency>
-	<groupId>com.nhl.bootique.metrics</groupId>
+	<groupId>io.bootique.metrics</groupId>
 	<artifactId>bootique-metrics</artifactId>
 	<scope>compile</scope>
 </dependency>

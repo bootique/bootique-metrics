@@ -1,12 +1,12 @@
-package com.nhl.bootique.metrics;
+package io.bootique.metrics;
 
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.health.HealthCheckRegistry;
-import com.nhl.bootique.BQRuntime;
-import com.nhl.bootique.Bootique;
-import com.nhl.bootique.metrics.reporter.JmxReporterFactory;
-import com.nhl.bootique.metrics.reporter.Slf4jReporterFactory;
-import com.nhl.bootique.test.junit.BQTestFactory;
+import io.bootique.BQRuntime;
+import io.bootique.Bootique;
+import io.bootique.metrics.reporter.JmxReporterFactory;
+import io.bootique.metrics.reporter.Slf4jReporterFactory;
+import io.bootique.test.junit.BQTestFactory;
 import org.junit.Rule;
 import org.junit.Test;
 

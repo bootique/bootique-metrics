@@ -1,12 +1,12 @@
-package com.nhl.bootique.metrics;
+package io.bootique.metrics;
 
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.health.HealthCheckRegistry;
 import com.google.inject.Binder;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
-import com.nhl.bootique.ConfigModule;
-import com.nhl.bootique.config.ConfigurationFactory;
+import io.bootique.ConfigModule;
+import io.bootique.config.ConfigurationFactory;
 
 public class MetricsModule extends ConfigModule {
 

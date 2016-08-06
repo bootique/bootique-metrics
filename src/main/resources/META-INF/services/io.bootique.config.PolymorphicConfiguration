@@ -1,0 +1,3 @@
+io.bootique.metrics.reporter.ReporterFactory
+io.bootique.metrics.reporter.JmxReporterFactory
+io.bootique.metrics.reporter.Slf4jReporterFactory

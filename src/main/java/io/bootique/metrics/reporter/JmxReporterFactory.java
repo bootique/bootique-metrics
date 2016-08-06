@@ -1,9 +1,9 @@
-package com.nhl.bootique.metrics.reporter;
+package io.bootique.metrics.reporter;
 
 import com.codahale.metrics.JmxReporter;
 import com.codahale.metrics.MetricRegistry;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.nhl.bootique.shutdown.ShutdownManager;
+import io.bootique.shutdown.ShutdownManager;
 
 /**
  * A {@link ReporterFactory} that produces a {@link JmxReporter}.
