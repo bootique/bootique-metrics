@@ -9,8 +9,8 @@ branches:
 
 script: mvn clean deploy --settings travis_settings.xml
 
-# travis encrypt -r nhl/bootique-metrics "CI_DEPLOY_USERNAME='name'"
-# travis encrypt -r nhl/bootique-metrics "CI_DEPLOY_PASSWORD='password'"
+# travis encrypt -r bootique/bootique-metrics "CI_DEPLOY_USERNAME='name'"
+# travis encrypt -r bootique/bootique-metrics "CI_DEPLOY_PASSWORD='password'"
 env:
   global:
     - secure: "v0OPhAHzzZpv2ySWr2kvAloh2gcF7C+ybi7hbTldxi3jV7N+oUQgg7tHOKTTuEHxydG9fUGqCtznWmaHpD65DMQSf5gfyH8HUA6jaEuaxYar+yih+nOeBtzidShQK0dP3Su+jfZEPOC5SMuyHEjM+uncS7L3iAPCgpgGniSdSlvhTNqYgqBmvLeCb0MLhl0ab3Q9aDGmrRyYFixeC81WiBd/n07QRy0PIgzH2EDoGOE29ldRLQYWeBd+2rEaSjL6aFQMUDnaHTlCmkgVRzAr0OXV18bPOM5nQkrR1fQQR4M5MDDLm4nSqiCHZ2TW5P07B7h6QSGF/Mazn5DeOuxIp9jD2weJD9yymH6iJcz0DBeXRApytIbp8FwFwqp7cf7UxO+/qFbBd4OHxSjTWT/Z2oaFo+AfW+Y00D3g2cyQD/BCkOrNKj17kGV+gBvbgC0DoXkZdIDnrm48ZVN1pqXS8m1adQZoUq73btfoP0SPr/rRNpVTM6fCBNoLkH6jcIuoejQQ+g5dPdvNqwJOQtwyC8QA6GupOgG1RZbo1P4QjBdV9ApFyevebEhzW4Mmi1SLM5lSYdaRJ4spTfki1kGgvC0T5/CU/ZAn/UOxaw/PMAGR848h2gjz+JYfkFexY77E6YKlSMrDACo15Ec6or6iNVzF7sm4l6Ga+lB3WqWaLJ4="
