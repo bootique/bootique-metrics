@@ -4,9 +4,9 @@
 
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>io.bootique.parent</groupId>
-        <artifactId>bootique-parent</artifactId>
-        <version>0.12</version>
+        <groupId>io.bootique.modules.parent</groupId>
+        <artifactId>bootique-modules-parent</artifactId>
+        <version>0.2</version>
     </parent>
 
     <groupId>io.bootique.metrics</groupId>
@@ -21,12 +21,6 @@
         <bootique-version>0.19-SNAPSHOT</bootique-version>
         <metrics-version>3.1.2</metrics-version>
     </properties>
-
-    <scm>
-        <developerConnection>scm:git:ssh://git@github.com/bootique/bootique-metrics</developerConnection>
-        <url>https://github.com/bootique/bootique-metrics</url>
-        <tag>HEAD</tag>
-    </scm>
 
     <dependencyManagement>
         <dependencies>
@@ -99,14 +93,6 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <artifactId>maven-failsafe-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
 
     <!-- Optional profile used to sign artifacts -->
     <profiles>
