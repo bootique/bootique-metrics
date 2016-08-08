@@ -11,7 +11,7 @@
 
     <groupId>io.bootique.metrics</groupId>
     <artifactId>bootique-metrics</artifactId>
-    <version>0.7</version>
+    <version>0.8-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>bootique-metrics: Dropwizard metrics integration module for Bootique</name>
