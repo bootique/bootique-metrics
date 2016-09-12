@@ -1,3 +1,7 @@
+## 0.8
+
+* #6 Upgrade to Bootique 0.20
+
 ## 0.7
 
 * #1 Rewrite MetricRegistryFactory to use polimorphic reporter config
