@@ -3,14 +3,11 @@ package io.bootique.metrics;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.health.HealthCheckRegistry;
 import io.bootique.BQRuntime;
-import io.bootique.Bootique;
 import io.bootique.metrics.reporter.JmxReporterFactory;
 import io.bootique.metrics.reporter.Slf4jReporterFactory;
 import io.bootique.test.junit.BQTestFactory;
 import org.junit.Rule;
 import org.junit.Test;
-
-import java.util.function.Consumer;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -23,11 +20,7 @@ public class MetricsModuleIT {
     public final BQTestFactory testFactory = new BQTestFactory();
 
     protected BQRuntime createRuntime(String... args) {
-        Consumer<Bootique> config = b -> {
-            b.module(MetricsModule.class);
-        };
-
-        return testFactory.newRuntime().configurator(config).build(args).getRuntime();
+        return testFactory.app(args).module(MetricsModule.class).createRuntime().getRuntime();
     }
 
     @Test
