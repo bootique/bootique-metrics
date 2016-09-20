@@ -1,8 +1,9 @@
 package io.bootique.metrics;
 
 import com.codahale.metrics.MetricRegistry;
-import com.codahale.metrics.health.HealthCheckRegistry;
+import com.codahale.metrics.health.HealthCheck;
 import io.bootique.BQRuntime;
+import io.bootique.metrics.healthcheck.HealthCheckRegistry;
 import io.bootique.metrics.reporter.JmxReporterFactory;
 import io.bootique.metrics.reporter.Slf4jReporterFactory;
 import io.bootique.test.junit.BQTestFactory;
@@ -13,6 +14,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class MetricsModuleIT {
 
@@ -54,5 +57,24 @@ public class MetricsModuleIT {
         HealthCheckRegistry r2 = runtime.getInstance(HealthCheckRegistry.class);
         assertNotNull(r1);
         assertSame("HealthCheckRegistry must be a singleton", r1, r2);
+    }
+
+
+    @Test
+    public void testHealthcheckRegistry_Contributions() {
+
+        HealthCheck.Result hcr = mock(HealthCheck.Result.class);
+        HealthCheck hc = mock(HealthCheck.class);
+        when(hc.execute()).thenReturn(hcr);
+
+        BQRuntime runtime = testFactory
+                .app()
+                .module(MetricsModule.class)
+                .module(b -> MetricsModule.contributeHealthchecks(b).addBinding("x").toInstance(hc))
+                .createRuntime()
+                .getRuntime();
+
+        HealthCheckRegistry r = runtime.getInstance(HealthCheckRegistry.class);
+        assertSame(hcr, r.runHealthCheck("x"));
     }
 }

@@ -1,6 +1,7 @@
 ## 0.8
 
 * #6 Upgrade to Bootique 0.20
+* #7 Reimplement HealthcheckRegistry
 
 ## 0.7
 
