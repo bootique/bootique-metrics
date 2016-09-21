@@ -70,7 +70,7 @@ public class MetricsModuleIT {
         BQRuntime runtime = testFactory
                 .app()
                 .module(MetricsModule.class)
-                .module(b -> MetricsModule.contributeHealthchecks(b).addBinding("x").toInstance(hc))
+                .module(b -> MetricsModule.contributeHealthChecks(b).addBinding("x").toInstance(hc))
                 .createRuntime()
                 .getRuntime();
 

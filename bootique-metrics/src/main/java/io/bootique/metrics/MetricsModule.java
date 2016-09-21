@@ -6,11 +6,15 @@ import com.google.inject.Binder;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import com.google.inject.multibindings.MapBinder;
+import com.google.inject.multibindings.Multibinder;
 import io.bootique.ConfigModule;
 import io.bootique.config.ConfigurationFactory;
+import io.bootique.metrics.healthcheck.HealthCheckGroup;
 import io.bootique.metrics.healthcheck.HealthCheckRegistry;
 
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class MetricsModule extends ConfigModule {
 
@@ -26,8 +30,17 @@ public class MetricsModule extends ConfigModule {
      * @return {@link MapBinder} for Healthchecks.
      * @since 0.8
      */
-    public static MapBinder<String, HealthCheck> contributeHealthchecks(Binder binder) {
+    public static MapBinder<String, HealthCheck> contributeHealthChecks(Binder binder) {
         return MapBinder.newMapBinder(binder, String.class, HealthCheck.class);
+    }
+
+    /**
+     * @param binder DI binder passed to the Module that invokes this method.
+     * @return {@link MapBinder} for Healthchecks.
+     * @since 0.8
+     */
+    public static Multibinder<HealthCheckGroup> contributeHealthCheckGroups(Binder binder) {
+        return Multibinder.newSetBinder(binder, HealthCheckGroup.class);
     }
 
     @Override
@@ -37,7 +50,8 @@ public class MetricsModule extends ConfigModule {
         binder.bind(MetricRegistry.class).toProvider(MetricRegistryProvider.class).asEagerSingleton();
 
         // init DI collections and maps...
-        contributeHealthchecks(binder);
+        contributeHealthChecks(binder);
+        contributeHealthCheckGroups(binder);
     }
 
     @Provides
@@ -48,7 +62,9 @@ public class MetricsModule extends ConfigModule {
 
     @Provides
     @Singleton
-    HealthCheckRegistry createHealthcheckRegistry(Map<String, HealthCheck> healthChecks) {
-        return new HealthCheckRegistry(healthChecks);
+    HealthCheckRegistry createHealthcheckRegistry(Map<String, HealthCheck> healthChecks, Set<HealthCheckGroup> groups) {
+        Map<String, HealthCheck> checks = new HashMap<>(healthChecks);
+        groups.forEach(g -> checks.putAll(g.getHealthChecks()));
+        return new HealthCheckRegistry(checks);
     }
 }
