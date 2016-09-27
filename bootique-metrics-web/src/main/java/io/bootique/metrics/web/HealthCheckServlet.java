@@ -63,18 +63,17 @@ public class HealthCheckServlet extends HttpServlet {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
 
-        for (Map.Entry<String, HealthCheckOutcome> entry : results.entrySet()) {
-
-            HealthCheckOutcome result = entry.getValue();
+        results.entrySet().stream().sorted((e1, e2) -> e1.getKey().compareTo(e2.getKey())).forEach(e -> {
+            HealthCheckOutcome result = e.getValue();
             if (result.isHealthy()) {
                 if (result.getMessage() != null) {
-                    writer.format("* %s: OK - %s\n", entry.getKey(), result.getMessage());
+                    writer.format("* %s: OK - %s\n", e.getKey(), result.getMessage());
                 } else {
-                    writer.format("* %s: OK\n", entry.getKey());
+                    writer.format("* %s: OK\n", e.getKey());
                 }
             } else {
                 if (result.getMessage() != null) {
-                    writer.format("! %s: ERROR - %s\n", entry.getKey(), result.getMessage());
+                    writer.format("! %s: ERROR - %s\n", e.getKey(), result.getMessage());
                 }
 
                 @SuppressWarnings("ThrowableResultOfMethodCallIgnored")
@@ -85,6 +84,6 @@ public class HealthCheckServlet extends HttpServlet {
                     writer.println();
                 }
             }
-        }
+        });
     }
 }

@@ -11,8 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.SortedMap;
-import java.util.TreeMap;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -36,7 +36,7 @@ public class HealthCheckServletTest {
     @Test
     public void testDoGet_NoHealthChecks() throws ServletException, IOException {
 
-        when(mockRegistry.runHealthChecks()).thenReturn(new TreeMap<>());
+        when(mockRegistry.runHealthChecks()).thenReturn(new HashMap<>());
 
         StringWriter writer = new StringWriter();
         when(mockResponse.getWriter()).thenReturn(new PrintWriter(writer));
@@ -52,7 +52,7 @@ public class HealthCheckServletTest {
     @Test
     public void testDoGet_Success() throws ServletException, IOException {
 
-        SortedMap<String, HealthCheckOutcome> testResults = new TreeMap<>();
+        Map<String, HealthCheckOutcome> testResults = new HashMap<>();
         testResults.put("h1", HealthCheckOutcome.healthy());
         testResults.put("h2", HealthCheckOutcome.healthy("I am healthy"));
 
@@ -73,7 +73,7 @@ public class HealthCheckServletTest {
     @Test
     public void testDoGet_Mixed() throws ServletException, IOException {
 
-        SortedMap<String, HealthCheckOutcome> testResults = new TreeMap<>();
+        Map<String, HealthCheckOutcome> testResults = new HashMap<>();
         testResults.put("h1", HealthCheckOutcome.healthy());
         testResults.put("h2", HealthCheckOutcome.healthy("I am healthy"));
         testResults.put("h3", HealthCheckOutcome.unhealthy("I am not healthy"));
@@ -96,7 +96,7 @@ public class HealthCheckServletTest {
     @Test
     public void testDoGet_StackTrace() throws ServletException, IOException {
 
-        SortedMap<String, HealthCheckOutcome> testResults = new TreeMap<>();
+        Map<String, HealthCheckOutcome> testResults = new HashMap<>();
         try {
             throw new RuntimeException("Test exception");
         } catch (RuntimeException e) {
