@@ -13,7 +13,7 @@ import java.util.Map;
 
 /**
  * A servlet that executes app healthchecks and returns text status document. By default mapped as "/health" in the
- * web application conbtext.
+ * web application context.
  *
  * @since 0.8
  */
