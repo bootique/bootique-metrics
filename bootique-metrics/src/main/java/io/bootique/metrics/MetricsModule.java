@@ -8,9 +8,9 @@ import com.google.inject.multibindings.MapBinder;
 import com.google.inject.multibindings.Multibinder;
 import io.bootique.ConfigModule;
 import io.bootique.config.ConfigurationFactory;
-import io.bootique.metrics.healthcheck.HealthCheck;
-import io.bootique.metrics.healthcheck.HealthCheckGroup;
-import io.bootique.metrics.healthcheck.HealthCheckRegistry;
+import io.bootique.metrics.health.HealthCheck;
+import io.bootique.metrics.health.HealthCheckGroup;
+import io.bootique.metrics.health.HealthCheckRegistry;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,7 +1,7 @@
 package io.bootique.metrics.web;
 
-import io.bootique.metrics.healthcheck.HealthCheckOutcome;
-import io.bootique.metrics.healthcheck.HealthCheckRegistry;
+import io.bootique.metrics.health.HealthCheckOutcome;
+import io.bootique.metrics.health.HealthCheckRegistry;
 import org.junit.Before;
 import org.junit.Test;
 

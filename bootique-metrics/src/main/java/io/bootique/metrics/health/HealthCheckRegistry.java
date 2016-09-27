@@ -1,4 +1,4 @@
-package io.bootique.metrics.healthcheck;
+package io.bootique.metrics.health;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,4 +1,4 @@
-package io.bootique.metrics.healthcheck;
+package io.bootique.metrics.health;
 
 /**
  * @since 0.8

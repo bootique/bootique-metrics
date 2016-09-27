@@ -7,7 +7,7 @@ import com.google.inject.Singleton;
 import com.google.inject.TypeLiteral;
 import io.bootique.jetty.JettyModule;
 import io.bootique.jetty.MappedServlet;
-import io.bootique.metrics.healthcheck.HealthCheckRegistry;
+import io.bootique.metrics.health.HealthCheckRegistry;
 
 import java.util.Collections;
 

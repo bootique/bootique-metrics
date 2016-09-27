@@ -2,9 +2,9 @@ package io.bootique.metrics;
 
 import com.codahale.metrics.MetricRegistry;
 import io.bootique.BQRuntime;
-import io.bootique.metrics.healthcheck.HealthCheck;
-import io.bootique.metrics.healthcheck.HealthCheckOutcome;
-import io.bootique.metrics.healthcheck.HealthCheckRegistry;
+import io.bootique.metrics.health.HealthCheck;
+import io.bootique.metrics.health.HealthCheckOutcome;
+import io.bootique.metrics.health.HealthCheckRegistry;
 import io.bootique.metrics.reporter.JmxReporterFactory;
 import io.bootique.metrics.reporter.Slf4jReporterFactory;
 import io.bootique.test.junit.BQTestFactory;
