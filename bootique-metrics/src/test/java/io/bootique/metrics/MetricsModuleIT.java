@@ -1,8 +1,9 @@
 package io.bootique.metrics;
 
 import com.codahale.metrics.MetricRegistry;
-import com.codahale.metrics.health.HealthCheck;
 import io.bootique.BQRuntime;
+import io.bootique.metrics.healthcheck.HealthCheck;
+import io.bootique.metrics.healthcheck.HealthCheckOutcome;
 import io.bootique.metrics.healthcheck.HealthCheckRegistry;
 import io.bootique.metrics.reporter.JmxReporterFactory;
 import io.bootique.metrics.reporter.Slf4jReporterFactory;
@@ -63,9 +64,9 @@ public class MetricsModuleIT {
     @Test
     public void testHealthcheckRegistry_Contributions() {
 
-        HealthCheck.Result hcr = mock(HealthCheck.Result.class);
+        HealthCheckOutcome hcr = mock(HealthCheckOutcome.class);
         HealthCheck hc = mock(HealthCheck.class);
-        when(hc.execute()).thenReturn(hcr);
+        when(hc.safeCheck()).thenReturn(hcr);
 
         BQRuntime runtime = testFactory
                 .app()

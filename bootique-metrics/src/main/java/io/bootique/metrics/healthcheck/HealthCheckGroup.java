@@ -1,7 +1,5 @@
 package io.bootique.metrics.healthcheck;
 
-import com.codahale.metrics.health.HealthCheck;
-
 import java.util.Map;
 
 /**

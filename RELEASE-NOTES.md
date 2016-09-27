@@ -3,6 +3,7 @@
 * #6 Upgrade to Bootique 0.20
 * #7 Reimplement HealthcheckRegistry
 * #8 Implement our own healthchecks servlet
+* #9 Replace Dropwizard healthchecks with our own
 
 ## 0.7
 

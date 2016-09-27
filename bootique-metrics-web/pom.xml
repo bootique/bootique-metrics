@@ -27,9 +27,9 @@
                 <version>${bootique-jetty-version}</version>
             </dependency>
             <dependency>
-                <groupId>io.bootique.jetty</groupId>
-                <artifactId>bootique-jetty-test</artifactId>
-                <version>${bootique-jetty-version}</version>
+                <groupId>io.bootique</groupId>
+                <artifactId>bootique-test</artifactId>
+                <version>${bootique-version}</version>
             </dependency>
              <dependency>
                 <groupId>org.slf4j</groupId>
@@ -64,14 +64,14 @@
             <artifactId>mockito-core</artifactId>
             <scope>test</scope>
         </dependency>
-         <dependency>
-            <groupId>io.bootique.jetty</groupId>
-            <artifactId>bootique-jetty-test</artifactId>
-            <scope>test</scope>
-        </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.bootique</groupId>
+            <artifactId>bootique-test</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>

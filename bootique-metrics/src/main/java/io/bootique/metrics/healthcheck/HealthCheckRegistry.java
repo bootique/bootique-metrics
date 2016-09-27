@@ -1,10 +1,7 @@
 package io.bootique.metrics.healthcheck;
 
-import com.codahale.metrics.health.HealthCheck;
-
+import java.util.HashMap;
 import java.util.Map;
-import java.util.SortedMap;
-import java.util.TreeMap;
 
 /**
  * An immutable registry of HealthChecks.
@@ -19,20 +16,21 @@ public class HealthCheckRegistry {
         this.healthchecks = healthchecks;
     }
 
-    public HealthCheck.Result runHealthCheck(String name) {
+    public HealthCheckOutcome runHealthCheck(String name) {
         HealthCheck healthCheck = healthchecks.get(name);
         if (healthCheck == null) {
             throw new IllegalArgumentException("No health check named " + name + " exists");
         }
-        return healthCheck.execute();
+        return healthCheck.safeCheck();
     }
 
-    public SortedMap<String, HealthCheck.Result> runHealthChecks() {
-        SortedMap<String, HealthCheck.Result> results = new TreeMap<String, HealthCheck.Result>();
-        for (Map.Entry<String, HealthCheck> entry : healthchecks.entrySet()) {
-            HealthCheck.Result result = entry.getValue().execute();
-            results.put(entry.getKey(), result);
-        }
+    public Map<String, HealthCheckOutcome> runHealthChecks() {
+
+        Map<String, HealthCheckOutcome> results = new HashMap<>();
+
+        healthchecks.forEach((name, healthcheck) ->
+                results.put(name, healthcheck.safeCheck()));
+
         return results;
     }
 }

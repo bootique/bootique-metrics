@@ -1,6 +1,6 @@
 package io.bootique.metrics.web;
 
-import com.codahale.metrics.health.HealthCheck;
+import io.bootique.metrics.healthcheck.HealthCheckOutcome;
 import io.bootique.metrics.healthcheck.HealthCheckRegistry;
 
 import javax.servlet.ServletException;
@@ -28,8 +28,8 @@ public class HealthCheckServlet extends HttpServlet {
         this.registry = registry;
     }
 
-    private static boolean isAllHealthy(Map<String, HealthCheck.Result> results) {
-        for (HealthCheck.Result result : results.values()) {
+    private static boolean isAllHealthy(Map<String, HealthCheckOutcome> results) {
+        for (HealthCheckOutcome result : results.values()) {
             if (!result.isHealthy()) {
                 return false;
             }
@@ -46,7 +46,7 @@ public class HealthCheckServlet extends HttpServlet {
 
     protected void doWrite(HttpServletResponse response, PrintWriter writer) throws IOException {
 
-        Map<String, HealthCheck.Result> results = registry.runHealthChecks();
+        Map<String, HealthCheckOutcome> results = registry.runHealthChecks();
 
         response.setContentType(CONTENT_TYPE);
         response.setHeader("Cache-Control", "must-revalidate,no-cache,no-store");
@@ -63,9 +63,9 @@ public class HealthCheckServlet extends HttpServlet {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
 
-        for (Map.Entry<String, HealthCheck.Result> entry : results.entrySet()) {
+        for (Map.Entry<String, HealthCheckOutcome> entry : results.entrySet()) {
 
-            HealthCheck.Result result = entry.getValue();
+            HealthCheckOutcome result = entry.getValue();
             if (result.isHealthy()) {
                 if (result.getMessage() != null) {
                     writer.format("* %s: OK - %s\n", entry.getKey(), result.getMessage());

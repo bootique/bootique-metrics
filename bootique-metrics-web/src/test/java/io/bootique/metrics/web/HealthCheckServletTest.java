@@ -1,6 +1,6 @@
 package io.bootique.metrics.web;
 
-import com.codahale.metrics.health.HealthCheck;
+import io.bootique.metrics.healthcheck.HealthCheckOutcome;
 import io.bootique.metrics.healthcheck.HealthCheckRegistry;
 import org.junit.Before;
 import org.junit.Test;
@@ -52,9 +52,9 @@ public class HealthCheckServletTest {
     @Test
     public void testDoGet_Success() throws ServletException, IOException {
 
-        SortedMap<String, HealthCheck.Result> testResults = new TreeMap<>();
-        testResults.put("h1", HealthCheck.Result.healthy());
-        testResults.put("h2", HealthCheck.Result.healthy("I am healthy"));
+        SortedMap<String, HealthCheckOutcome> testResults = new TreeMap<>();
+        testResults.put("h1", HealthCheckOutcome.healthy());
+        testResults.put("h2", HealthCheckOutcome.healthy("I am healthy"));
 
         when(mockRegistry.runHealthChecks()).thenReturn(testResults);
 
@@ -73,10 +73,10 @@ public class HealthCheckServletTest {
     @Test
     public void testDoGet_Mixed() throws ServletException, IOException {
 
-        SortedMap<String, HealthCheck.Result> testResults = new TreeMap<>();
-        testResults.put("h1", HealthCheck.Result.healthy());
-        testResults.put("h2", HealthCheck.Result.healthy("I am healthy"));
-        testResults.put("h3", HealthCheck.Result.unhealthy("I am not healthy"));
+        SortedMap<String, HealthCheckOutcome> testResults = new TreeMap<>();
+        testResults.put("h1", HealthCheckOutcome.healthy());
+        testResults.put("h2", HealthCheckOutcome.healthy("I am healthy"));
+        testResults.put("h3", HealthCheckOutcome.unhealthy("I am not healthy"));
 
         when(mockRegistry.runHealthChecks()).thenReturn(testResults);
 
@@ -96,11 +96,11 @@ public class HealthCheckServletTest {
     @Test
     public void testDoGet_StackTrace() throws ServletException, IOException {
 
-        SortedMap<String, HealthCheck.Result> testResults = new TreeMap<>();
+        SortedMap<String, HealthCheckOutcome> testResults = new TreeMap<>();
         try {
             throw new RuntimeException("Test exception");
         } catch (RuntimeException e) {
-            testResults.put("h4", HealthCheck.Result.unhealthy(e));
+            testResults.put("h4", HealthCheckOutcome.unhealthy(e));
         }
 
         when(mockRegistry.runHealthChecks()).thenReturn(testResults);
