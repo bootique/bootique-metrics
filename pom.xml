@@ -12,17 +12,19 @@
 	<version>0.8-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
-	<name>bootique-metrics-parent: Parent of Dropwizard metrics integration modules for Bootique</name>
+	<name>bootique-metrics-parent: Parent of metrics modules for Bootique</name>
 	<description>
-		Parent POM of Dropwizard metrics-related Bootique modules.
+		Parent POM of metrics-related Bootique modules.
 	</description>
 
 	<modules>
 		<module>bootique-metrics</module>
+		<module>bootique-metrics-web</module>
 	</modules>
 
     <properties>
         <bootique-version>0.20-SNAPSHOT</bootique-version>
+		<bootique-jetty-version>0.18-SNAPSHOT</bootique-jetty-version>
         <metrics-version>3.1.2</metrics-version>
     </properties>
 

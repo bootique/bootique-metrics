@@ -2,6 +2,7 @@
 
 * #6 Upgrade to Bootique 0.20
 * #7 Reimplement HealthcheckRegistry
+* #8 Implement our own healthchecks servlet
 
 ## 0.7
 
