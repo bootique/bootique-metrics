@@ -12,10 +12,12 @@ import java.io.PrintWriter;
 import java.util.Map;
 
 /**
+ * A servlet that executes app healthchecks and returns text status document. By default mapped as /<appcontext>/health
+ *
  * @since 0.8
  */
-// inspired com.yammer.metrics.servlet.HealthCheckServlet, only better integrated to Bootique.
-// TODO: verbosity levels .. perhaps use nagios plugin format?
+// inspired com.yammer.metrics.servlet.HealthCheckServlet, only better integrated to Bootique and using our own format
+// TODO: config-driven verbosity levels .. perhaps use nagios plugin format?
 public class HealthCheckServlet extends HttpServlet {
 
     private static final String CONTENT_TYPE = "text/plain";
