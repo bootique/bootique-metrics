@@ -12,7 +12,8 @@ import java.io.PrintWriter;
 import java.util.Map;
 
 /**
- * A servlet that executes app healthchecks and returns text status document. By default mapped as /<appcontext>/health
+ * A servlet that executes app healthchecks and returns text status document. By default mapped as "/health" in the
+ * web application conbtext.
  *
  * @since 0.8
  */
