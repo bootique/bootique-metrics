@@ -20,21 +20,26 @@
                 <groupId>io.bootique.metrics</groupId>
                 <artifactId>bootique-metrics</artifactId>
                 <version>${project.version}</version>
+		<scope>compile</scope>
             </dependency>
+            <!-- "provided" scope due to circular dependency with jetty-instrumented -->
             <dependency>
                 <groupId>io.bootique.jetty</groupId>
                 <artifactId>bootique-jetty</artifactId>
                 <version>${bootique-jetty-version}</version>
+		<scope>provided</scope>
             </dependency>
             <dependency>
                 <groupId>io.bootique</groupId>
                 <artifactId>bootique-test</artifactId>
                 <version>${bootique-version}</version>
+		<scope>test</scope>
             </dependency>
              <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-simple</artifactId>
                 <version>1.7.13</version>
+		<scope>test</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>

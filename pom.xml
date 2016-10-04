@@ -23,8 +23,12 @@
 	</modules>
 
     <properties>
-        <bootique-version>0.20-SNAPSHOT</bootique-version>
-		<bootique-jetty-version>0.18-SNAPSHOT</bootique-jetty-version>
+        <bootique-version>0.20</bootique-version>
+	<!-- Since we have a circular dependency with jetty-instrumented, 
+	     setting the dependency version to an earlier release to
+             ensure we can compile...
+        -->
+	<bootique-jetty-version>[0.17,)</bootique-jetty-version>
         <metrics-version>3.1.2</metrics-version>
     </properties>
 
