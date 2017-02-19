@@ -1,6 +1,7 @@
 ## 0.9
 
 * #10 Move bootique-metrics-web under bootique-jetty repo
+* #11 Upgrade to BQ 0.22
 
 ## 0.8
 
