@@ -1,3 +1,7 @@
+## 0.9
+
+* #10 Move bootique-metrics-web under bootique-jetty repo
+
 ## 0.8
 
 * #6 Upgrade to Bootique 0.20
