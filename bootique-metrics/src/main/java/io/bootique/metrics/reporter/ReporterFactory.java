@@ -2,6 +2,7 @@ package io.bootique.metrics.reporter;
 
 import com.codahale.metrics.MetricRegistry;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import io.bootique.annotation.BQConfig;
 import io.bootique.shutdown.ShutdownManager;
 
 /**
@@ -9,6 +10,7 @@ import io.bootique.shutdown.ShutdownManager;
  *
  * @since 0.7
  */
+@BQConfig
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type", defaultImpl = Slf4jReporterFactory.class)
 public interface ReporterFactory {
 

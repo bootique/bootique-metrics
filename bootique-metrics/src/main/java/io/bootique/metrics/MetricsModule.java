@@ -26,10 +26,25 @@ public class MetricsModule extends ConfigModule {
     }
 
     /**
+     * Returns an instance of {@link MetricsModuleExtender} used by downstream modules to load custom extensions for
+     * the MetricsModule. Should be invoked from a downstream Module's "configure" method.
+     *
+     * @param binder DI binder passed to the Module that invokes this method.
+     * @return an instance of {@link MetricsModuleExtender} that can be used to load MetricsModule custom extensions.
+     * @since 0.9
+     */
+    public static MetricsModuleExtender extend(Binder binder) {
+        return new MetricsModuleExtender(binder);
+    }
+
+    /**
      * @param binder DI binder passed to the Module that invokes this method.
      * @return {@link MapBinder} for Healthchecks.
      * @since 0.8
+     * @deprecated since 0.9 use {@link #extend(Binder)} and then call
+     * {@link MetricsModuleExtender#addHealthCheck(String, Class)} or similar method.
      */
+    @Deprecated
     public static MapBinder<String, HealthCheck> contributeHealthChecks(Binder binder) {
         return MapBinder.newMapBinder(binder, String.class, HealthCheck.class);
     }
@@ -38,7 +53,10 @@ public class MetricsModule extends ConfigModule {
      * @param binder DI binder passed to the Module that invokes this method.
      * @return {@link MapBinder} for Healthchecks.
      * @since 0.8
+     * @deprecated since 0.9 use {@link #extend(Binder)} and then call
+     * {@link MetricsModuleExtender#addHealthCheckGroup(Class)} or similar method.
      */
+    @Deprecated
     public static Multibinder<HealthCheckGroup> contributeHealthCheckGroups(Binder binder) {
         return Multibinder.newSetBinder(binder, HealthCheckGroup.class);
     }
@@ -50,19 +68,18 @@ public class MetricsModule extends ConfigModule {
         binder.bind(MetricRegistry.class).toProvider(MetricRegistryProvider.class).asEagerSingleton();
 
         // init DI collections and maps...
-        contributeHealthChecks(binder);
-        contributeHealthCheckGroups(binder);
+        extend(binder).initAllExtensions();
     }
 
     @Provides
     @Singleton
-    MetricRegistryFactory createMetricRegistryFactory(ConfigurationFactory configFactory) {
+    MetricRegistryFactory provideMetricRegistryFactory(ConfigurationFactory configFactory) {
         return configFactory.config(MetricRegistryFactory.class, configPrefix);
     }
 
     @Provides
     @Singleton
-    HealthCheckRegistry createHealthcheckRegistry(Map<String, HealthCheck> healthChecks, Set<HealthCheckGroup> groups) {
+    HealthCheckRegistry provideHealthCheckRegistry(Map<String, HealthCheck> healthChecks, Set<HealthCheckGroup> groups) {
         Map<String, HealthCheck> checks = new HashMap<>(healthChecks);
         groups.forEach(g -> checks.putAll(g.getHealthChecks()));
         return new HealthCheckRegistry(checks);

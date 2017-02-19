@@ -9,4 +9,9 @@ public class MetricsModuleProviderIT {
 	public void testPresentInJar() {
 		BQModuleProviderChecker.testPresentInJar(MetricsModuleProvider.class);
 	}
+
+	@Test
+	public void testMeta() {
+		BQModuleProviderChecker.testMetadata(MetricsModuleProvider.class);
+	}
 }
