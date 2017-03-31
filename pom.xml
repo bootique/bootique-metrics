@@ -22,7 +22,7 @@
 	</modules>
 
     <properties>
-        <bootique-version>0.22-SNAPSHOT</bootique-version>
+        <bootique-version>0.22</bootique-version>
         <metrics-version>3.1.2</metrics-version>
     </properties>
 
