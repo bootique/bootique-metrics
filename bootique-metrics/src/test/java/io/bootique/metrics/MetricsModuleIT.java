@@ -24,7 +24,7 @@ public class MetricsModuleIT {
     public final BQTestFactory testFactory = new BQTestFactory();
 
     protected BQRuntime createRuntime(String... args) {
-        return testFactory.app(args).module(MetricsModule.class).createRuntime().getRuntime();
+        return testFactory.app(args).module(MetricsModule.class).createRuntime();
     }
 
     @Test
@@ -72,8 +72,7 @@ public class MetricsModuleIT {
                 .app()
                 .module(MetricsModule.class)
                 .module(b -> MetricsModule.extend(b).addHealthCheck("x", hc))
-                .createRuntime()
-                .getRuntime();
+                .createRuntime();
 
         HealthCheckRegistry r = runtime.getInstance(HealthCheckRegistry.class);
         assertSame(hcr, r.runHealthCheck("x"));
