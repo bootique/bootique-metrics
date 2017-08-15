@@ -22,7 +22,7 @@
 	</modules>
 
     <properties>
-        <bootique-version>0.23</bootique-version>
+        <bootique-version>${project.version}</bootique-version>
         <metrics-version>3.1.2</metrics-version>
     </properties>
 
