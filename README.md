@@ -4,6 +4,7 @@
 # bootique-metrics
 
 Provides [Dropwizard Metrics](http://metrics.dropwizard.io/) integration module for [Bootique](http://bootique.io).
+See usage example [bootique-metrics-demo](https://github.com/bootique-examples/bootique-metrics-demo).
 
 ## Quick Start:
 
