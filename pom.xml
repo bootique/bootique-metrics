@@ -22,7 +22,6 @@
 	</modules>
 
     <properties>
-        <bootique-version>${project.version}</bootique-version>
         <metrics-version>3.1.2</metrics-version>
     </properties>
 
