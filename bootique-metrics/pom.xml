@@ -19,7 +19,7 @@
             <dependency>
                 <groupId>io.bootique</groupId>
                 <artifactId>bootique</artifactId>
-                <version>${project.parent.version}</version>
+                <version>${bootique-version}</version>
             </dependency>
             <dependency>
                 <groupId>io.dropwizard.metrics</groupId>
@@ -29,7 +29,7 @@
             <dependency>
                 <groupId>io.bootique</groupId>
                 <artifactId>bootique-test</artifactId>
-                <version>${project.parent.version}</version>
+                <version>${bootique-version}</version>
             </dependency>
             <dependency>
                 <groupId>org.slf4j</groupId>
