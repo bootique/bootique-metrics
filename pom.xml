@@ -9,7 +9,7 @@
 
 	<groupId>io.bootique.metrics</groupId>
 	<artifactId>bootique-metrics-parent</artifactId>
-	<version>0.25-SNAPSHOT</version>
+	<version>0.24-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>bootique-metrics-parent: Parent of metrics modules for Bootique</name>
