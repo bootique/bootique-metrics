@@ -11,6 +11,7 @@ import io.bootique.config.ConfigurationFactory;
 import io.bootique.metrics.health.HealthCheck;
 import io.bootique.metrics.health.HealthCheckGroup;
 import io.bootique.metrics.health.HealthCheckRegistry;
+import io.bootique.metrics.mdc.SafeTransactionIdGenerator;
 import io.bootique.metrics.mdc.TransactionIdGenerator;
 import io.bootique.metrics.mdc.TransactionIdMDC;
 
@@ -90,7 +91,16 @@ public class MetricsModule extends ConfigModule {
     @Provides
     @Singleton
     TransactionIdGenerator provideTransactionIdGenerator() {
-        return new TransactionIdGenerator();
+
+        int cpus = Runtime.getRuntime().availableProcessors();
+        if (cpus < 1) {
+            cpus = 1;
+        }
+        else if(cpus > 4) {
+            cpus = 4;
+        }
+
+        return new SafeTransactionIdGenerator(cpus);
     }
 
     @Provides
