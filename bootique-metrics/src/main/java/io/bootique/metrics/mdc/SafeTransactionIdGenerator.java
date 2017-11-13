@@ -37,8 +37,12 @@ public class SafeTransactionIdGenerator implements TransactionIdGenerator {
     void resetIfNeeded() {
         if (delegate.willNeedResetSoon()) {
 
-            // TODO: use hard reset with blocking if background tasks did not succeed, and the app was able to churn
-            // through 100K IDs.
+            // TODO: use hard reset with blocking if background tasks did not finish by the time the app was able to churn
+            // through 1mln IDs. Standalone generator produced 34mln ids / sec in one of the benchmarks in 2017, so
+            // this condition is not completely out of the question. Note that the overflow will not cause any exceptions,
+            // but the AtomicInteger will simply restrat the counter from Integer.MIN_VALUE, potentially causing ID
+            // duplicates
+            
             ForkJoinPool.commonPool().submit(() -> reset());
         }
     }

@@ -48,21 +48,15 @@ public class SafeTransactionIdGeneratorTest {
 
         String id1 = generator.nextId();
 
-        // the next ID after reset still follows the initial sequence...
-        String id2 = generator.nextId();
-
-        assertNotEquals(id1, id2);
-        assertEquals(
-                id1.substring(0, UnsafeTransactionIdGenerator.COUNTER_STRING_LEN),
-                id2.substring(0, UnsafeTransactionIdGenerator.COUNTER_STRING_LEN));
-
-        // wait until background thread resets the id...
+        // generate a few more ids and wait till the reset happens on background
+        generator.nextId();
+        generator.nextId();
         Thread.sleep(500);
 
-        String id3 = generator.nextId();
+        String id2 = generator.nextId();
 
         assertNotEquals(
                 id1.substring(0, UnsafeTransactionIdGenerator.COUNTER_STRING_LEN),
-                id3.substring(0, UnsafeTransactionIdGenerator.COUNTER_STRING_LEN));
+                id2.substring(0, UnsafeTransactionIdGenerator.COUNTER_STRING_LEN));
     }
 }

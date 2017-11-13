@@ -11,8 +11,8 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class UnsafeTransactionIdGenerator implements TransactionIdGenerator {
 
-    // add some room before overflow, so that reset could proceed on background...
-    static final int RESET_THRESHOLD = Integer.MAX_VALUE - 100000;
+    // add some room before overflow happens, so that reset could be processed on background...
+    static final int RESET_THRESHOLD = Integer.MAX_VALUE - 1_000_000;
     static final int COUNTER_STRING_LEN = 8;
     static final int STRING_LENGTH = 8 + COUNTER_STRING_LEN;
     static final String PADDING = "00000000";
