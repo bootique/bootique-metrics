@@ -1,3 +1,7 @@
+## 0.25
+
+* #16 "business transaction" ids for logs correlation
+
 ## 0.10
 
 * #14 Upgrade to BQ 0.23 

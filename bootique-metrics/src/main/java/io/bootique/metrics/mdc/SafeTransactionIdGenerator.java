@@ -42,7 +42,7 @@ public class SafeTransactionIdGenerator implements TransactionIdGenerator {
             // this condition is not completely out of the question. Note that the overflow will not cause any exceptions,
             // but the AtomicInteger will simply restrat the counter from Integer.MIN_VALUE, potentially causing ID
             // duplicates
-            
+
             ForkJoinPool.commonPool().submit(() -> reset());
         }
     }
