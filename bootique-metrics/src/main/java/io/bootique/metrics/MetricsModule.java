@@ -11,6 +11,8 @@ import io.bootique.config.ConfigurationFactory;
 import io.bootique.metrics.health.HealthCheck;
 import io.bootique.metrics.health.HealthCheckGroup;
 import io.bootique.metrics.health.HealthCheckRegistry;
+import io.bootique.metrics.mdc.TransactionIdGenerator;
+import io.bootique.metrics.mdc.TransactionIdMDC;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -83,5 +85,17 @@ public class MetricsModule extends ConfigModule {
         Map<String, HealthCheck> checks = new HashMap<>(healthChecks);
         groups.forEach(g -> checks.putAll(g.getHealthChecks()));
         return new HealthCheckRegistry(checks);
+    }
+
+    @Provides
+    @Singleton
+    TransactionIdGenerator provideTransactionIdGenerator() {
+        return new TransactionIdGenerator();
+    }
+
+    @Provides
+    @Singleton
+    TransactionIdMDC provideTransactionIdMDC() {
+        return new TransactionIdMDC();
     }
 }
