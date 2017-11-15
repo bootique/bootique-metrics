@@ -15,6 +15,7 @@ import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -52,6 +53,20 @@ public class HealthCheckRegistryTest {
         }
 
         return new HealthCheckRegistry(healthChecks);
+    }
+
+    @Test
+    public void testFiltered() {
+        HealthCheckRegistry original = createRegistry(success, failure);
+        HealthCheckRegistry filtered = original.filtered(s -> "1".equals(s));
+        assertNotSame(original, filtered);
+
+        Map<String, HealthCheckOutcome> originalResult = original.runHealthChecks();
+        Map<String, HealthCheckOutcome> filteredResult = filtered.runHealthChecks();
+
+        assertEquals(2, originalResult.size());
+        assertEquals(1, filteredResult.size());
+        assertFalse(filteredResult.get("1").isHealthy());
     }
 
     @Test

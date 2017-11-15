@@ -6,6 +6,7 @@
 * #18 ReporterFactory is not a PolymorphicConfiguration
 * #20 Split healthchecks code to a new "bootique-metrics-healthchecks"
 * #21 Upgrade to Dropwizard metrics 3.2.5
+* #22 HealthCheckRegistry filtering
 
 ## 0.10
 

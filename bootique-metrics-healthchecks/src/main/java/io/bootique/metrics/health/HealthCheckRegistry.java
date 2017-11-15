@@ -7,6 +7,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Predicate;
 
 /**
  * An immutable registry of HealthChecks.
@@ -33,6 +34,27 @@ public class HealthCheckRegistry {
         } else {
             return HealthCheckOutcome.unhealthy("health check timed out");
         }
+    }
+
+    /**
+     * Returns a new registry that contains a subset of health checks from the current registry, whose names match the
+     * provided criteria.
+     *
+     * @param healthCheckFilter filtering criteria for health checks.
+     * @return a new registry that contains a subset of health checks from the current registry, whose names match the
+     * provided criteria.
+     * @since 0.25
+     */
+    public HealthCheckRegistry filtered(Predicate<String> healthCheckFilter) {
+        Map<String, HealthCheck> filtered = new HashMap<>();
+
+        healthChecks.forEach((k, v) -> {
+            if(healthCheckFilter.test(k)) {
+                filtered.put(k, v);
+            }
+        });
+
+        return new HealthCheckRegistry(filtered);
     }
 
     public HealthCheckOutcome runHealthCheck(String name) {
