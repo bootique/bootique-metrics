@@ -22,7 +22,7 @@ public class HealthCheckRegistryTest {
     private HealthCheck success;
     private HealthCheck failure;
     private HealthCheck failureTh;
-    private HealthCheck slow;
+    private HealthCheck slowSuccess;
 
     @Before
     public void before() {
@@ -35,8 +35,8 @@ public class HealthCheckRegistryTest {
         this.failureTh = mock(HealthCheck.class);
         when(failureTh.safeCheck()).thenReturn(HealthCheckOutcome.unhealthy(new Throwable("uh")));
 
-        this.slow = mock(HealthCheck.class);
-        when(slow.safeCheck()).then(i -> {
+        this.slowSuccess = mock(HealthCheck.class);
+        when(slowSuccess.safeCheck()).then(i -> {
             Thread.sleep(500);
             return HealthCheckOutcome.healthy();
         });
@@ -77,13 +77,18 @@ public class HealthCheckRegistryTest {
     @Test
     public void testRunHealthChecks_ParallelTimeout() {
 
-        HealthCheckRegistry registry = createRegistry(success, slow);
+        HealthCheckRegistry registry = createRegistry(slowSuccess, success, slowSuccess);
 
         Map<String, HealthCheckOutcome> results = registry
                 .runHealthChecks(ForkJoinPool.commonPool(), 80, TimeUnit.MILLISECONDS);
-        assertEquals(2, results.size());
-        assertTrue(results.get("0").isHealthy());
-        assertFalse(results.get("1").isHealthy());
-        assertEquals("health check timed out", results.get("1").getMessage());
+        assertEquals(3, results.size());
+
+        assertFalse(results.get("0").isHealthy());
+        assertEquals("health check timed out", results.get("0").getMessage());
+
+        assertTrue(results.get("1").isHealthy());
+
+        assertFalse(results.get("2").isHealthy());
+        assertEquals("health check timed out", results.get("2").getMessage());
     }
 }

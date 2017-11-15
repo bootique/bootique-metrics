@@ -3,11 +3,10 @@ package io.bootique.metrics.health;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 /**
  * An immutable registry of HealthChecks.
@@ -22,19 +21,17 @@ public class HealthCheckRegistry {
         this.healthChecks = healthChecks;
     }
 
-    private static HealthCheckOutcome waitForHealthCheck(
-            Future<HealthCheckOutcome> inProcess,
-            long singleCheckTimeout,
-            TimeUnit timeoutUnit) {
+    private static HealthCheckOutcome immediateOutcome(Future<HealthCheckOutcome> hcRunner) {
 
-        try {
-            return inProcess.get(singleCheckTimeout, timeoutUnit);
-        } catch (ExecutionException e) {
-            return HealthCheckOutcome.unhealthy(e);
-        } catch (TimeoutException e) {
+        if (hcRunner.isDone()) {
+            try {
+                return hcRunner.get();
+            } catch (Exception e) {
+                // unexpected... we should be done here...
+                return HealthCheckOutcome.unhealthy(e);
+            }
+        } else {
             return HealthCheckOutcome.unhealthy("health check timed out");
-        } catch (InterruptedException e) {
-            return HealthCheckOutcome.unhealthy("health check interrupted");
         }
     }
 
@@ -73,28 +70,42 @@ public class HealthCheckRegistry {
      * Runs registered health checks in parallel using provided thread pool and using specified timeouts for each health
      * check.
      *
-     * @param threadPool         a thread pool to use for parallel execution of health checks.
-     * @param singleCheckTimeout max time to execute any single health check.
-     * @param timeoutUnit        time unit for "singleCheckTimeout" value.
+     * @param threadPool  a thread pool to use for parallel execution of health checks.
+     * @param timeout     max time to execute any single health check.
+     * @param timeoutUnit time unit for "timeout" value.
      * @return health checks execution results.
      * @since 0.25
      */
     public Map<String, HealthCheckOutcome> runHealthChecks(
             ExecutorService threadPool,
-            long singleCheckTimeout,
+            long timeout,
             TimeUnit timeoutUnit) {
 
         if (healthChecks.isEmpty()) {
             return Collections.emptyMap();
         }
 
+        // use the latch to ensure we can control the overall timeout, not individual healthcheck timeouts...
+        CountDownLatch doneSignal = new CountDownLatch(healthChecks.size());
+
         Map<String, Future<HealthCheckOutcome>> futures = new HashMap<>();
-        healthChecks.forEach((n, hc) -> futures.put(n, threadPool.submit(hc::safeCheck)));
+        healthChecks.forEach((n, hc) -> futures.put(n, threadPool.submit(() -> run(hc, doneSignal))));
+
+        try {
+            doneSignal.await(timeout, timeoutUnit);
+        } catch (InterruptedException e) {
+            // let's still finish the healthcheck analysis on interrupt
+        }
 
         Map<String, HealthCheckOutcome> results = new HashMap<>();
-        futures.forEach((n, f) -> results.put(n, waitForHealthCheck(f, singleCheckTimeout, timeoutUnit)));
+        futures.forEach((n, f) -> results.put(n, immediateOutcome(f)));
 
         return results;
     }
 
+    private HealthCheckOutcome run(HealthCheck hc, CountDownLatch doneSignal) {
+        HealthCheckOutcome outcome = hc.safeCheck();
+        doneSignal.countDown();
+        return outcome;
+    }
 }
