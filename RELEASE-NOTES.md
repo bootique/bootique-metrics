@@ -2,6 +2,7 @@
 
 * #15 Supported reporters are not shown when the app is run with -H
 * #16 "business transaction" ids for logs correlation
+* #17 Allow to run healthchecks in parallel
 * #18 ReporterFactory is not a PolymorphicConfiguration
 * #20 Split healthchecks code to a new "bootique-metrics-healthchecks"
 * #21 Upgrade to Dropwizard metrics 3.2.5
