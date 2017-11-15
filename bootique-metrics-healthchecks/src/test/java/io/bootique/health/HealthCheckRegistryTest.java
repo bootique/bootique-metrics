@@ -8,6 +8,8 @@ import org.junit.Test;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.TimeUnit;
 
@@ -78,9 +80,8 @@ public class HealthCheckRegistryTest {
     public void testRunHealthChecks_ParallelTimeout() {
 
         HealthCheckRegistry registry = createRegistry(slowSuccess, success, slowSuccess);
-
-        Map<String, HealthCheckOutcome> results = registry
-                .runHealthChecks(ForkJoinPool.commonPool(), 80, TimeUnit.MILLISECONDS);
+        Map<String, HealthCheckOutcome> results = runParallel(registry, 3, 80);
+        
         assertEquals(3, results.size());
 
         assertFalse(results.get("0").isHealthy());
@@ -90,5 +91,15 @@ public class HealthCheckRegistryTest {
 
         assertFalse(results.get("2").isHealthy());
         assertEquals("health check timed out", results.get("2").getMessage());
+    }
+
+    private Map<String, HealthCheckOutcome> runParallel(HealthCheckRegistry registry, int threads, long timeoutMs) {
+        ExecutorService threadPool = Executors.newFixedThreadPool(threads);
+
+        try {
+            return registry.runHealthChecks(threadPool, timeoutMs, TimeUnit.MILLISECONDS);
+        } finally {
+            threadPool.shutdownNow();
+        }
     }
 }

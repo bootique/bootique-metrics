@@ -71,7 +71,7 @@ public class HealthCheckRegistry {
      * check.
      *
      * @param threadPool  a thread pool to use for parallel execution of health checks.
-     * @param timeout     max time to execute any single health check.
+     * @param timeout     combined time to run all health checks.
      * @param timeoutUnit time unit for "timeout" value.
      * @return health checks execution results.
      * @since 0.25
