@@ -1,6 +1,7 @@
 ## 0.25
 
 * #16 "business transaction" ids for logs correlation
+* #18 ReporterFactory is not a PolymorphicConfiguration
 
 ## 0.10
 
