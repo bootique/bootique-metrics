@@ -1,5 +1,6 @@
 ## 0.25
 
+* #15 Supported reporters are not shown when the app is run with -H
 * #16 "business transaction" ids for logs correlation
 * #18 ReporterFactory is not a PolymorphicConfiguration
 
