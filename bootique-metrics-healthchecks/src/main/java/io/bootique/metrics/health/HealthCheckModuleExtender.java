@@ -1,54 +1,46 @@
-package io.bootique.metrics;
+package io.bootique.metrics.health;
 
 import com.google.inject.Binder;
 import com.google.inject.multibindings.MapBinder;
 import com.google.inject.multibindings.Multibinder;
-import io.bootique.metrics.health.HealthCheck;
-import io.bootique.metrics.health.HealthCheckGroup;
+import io.bootique.ModuleExtender;
 
 /**
- * @since 0.9
+ * @since 0.25
  */
-public class MetricsModuleExtender {
-
-    private Binder binder;
+public class HealthCheckModuleExtender extends ModuleExtender<HealthCheckModuleExtender> {
 
     private MapBinder<String, HealthCheck> healthChecks;
     private Multibinder<HealthCheckGroup> healthCheckGroups;
 
-    MetricsModuleExtender(Binder binder) {
-        this.binder = binder;
+    public HealthCheckModuleExtender(Binder binder) {
+        super(binder);
     }
 
-    /**
-     * Should be called by owning Module to initialize all contribution maps and collections. Failure to call this
-     * method may result in injection failures for empty maps and collections.
-     *
-     * @return this extender instance.
-     */
-    MetricsModuleExtender initAllExtensions() {
+    @Override
+    public HealthCheckModuleExtender initAllExtensions() {
         getOrCreateHealthCheckGroupsBinder();
         getOrCreateHealthChecksBinder();
 
         return this;
     }
 
-    public MetricsModuleExtender addHealthCheck(String name, HealthCheck healthCheck) {
+    public HealthCheckModuleExtender addHealthCheck(String name, HealthCheck healthCheck) {
         getOrCreateHealthChecksBinder().addBinding(name).toInstance(healthCheck);
         return this;
     }
 
-    public <T extends HealthCheck> MetricsModuleExtender addHealthCheck(String name, Class<T> healthCheckType) {
+    public <T extends HealthCheck> HealthCheckModuleExtender addHealthCheck(String name, Class<T> healthCheckType) {
         getOrCreateHealthChecksBinder().addBinding(name).to(healthCheckType);
         return this;
     }
 
-    public MetricsModuleExtender addHealthCheckGroup(HealthCheckGroup healthCheckGroup) {
+    public HealthCheckModuleExtender addHealthCheckGroup(HealthCheckGroup healthCheckGroup) {
         getOrCreateHealthCheckGroupsBinder().addBinding().toInstance(healthCheckGroup);
         return this;
     }
 
-    public <T extends HealthCheckGroup> MetricsModuleExtender addHealthCheckGroup(Class<T> healthCheckGroupType) {
+    public <T extends HealthCheckGroup> HealthCheckModuleExtender addHealthCheckGroup(Class<T> healthCheckGroupType) {
         getOrCreateHealthCheckGroupsBinder().addBinding().to(healthCheckGroupType);
         return this;
     }
