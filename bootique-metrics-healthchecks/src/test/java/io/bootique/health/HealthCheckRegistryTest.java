@@ -81,7 +81,7 @@ public class HealthCheckRegistryTest {
 
         HealthCheckRegistry registry = createRegistry(slowSuccess, success, slowSuccess);
         Map<String, HealthCheckOutcome> results = runParallel(registry, 3, 80);
-        
+
         assertEquals(3, results.size());
 
         assertFalse(results.get("0").isHealthy());

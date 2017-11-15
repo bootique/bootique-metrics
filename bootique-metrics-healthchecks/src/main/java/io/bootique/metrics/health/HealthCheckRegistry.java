@@ -85,7 +85,9 @@ public class HealthCheckRegistry {
             return Collections.emptyMap();
         }
 
-        // use the latch to ensure we can control the overall timeout, not individual healthcheck timeouts...
+        // use the latch to ensure we can control the overall timeout, not individual health check timeouts...
+        // note that if the health check pool is thread-starved, then a few slow checks would result in
+        // faster checks reported as timeouts...
         CountDownLatch doneSignal = new CountDownLatch(healthChecks.size());
 
         Map<String, Future<HealthCheckOutcome>> futures = new HashMap<>();
