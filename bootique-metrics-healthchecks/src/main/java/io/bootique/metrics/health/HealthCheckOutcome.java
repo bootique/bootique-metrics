@@ -44,4 +44,24 @@ public class HealthCheckOutcome {
     public Throwable getError() {
         return error;
     }
+
+    @Override
+    public String toString() {
+
+        if (healthy) {
+            return "[healthy]";
+        }
+
+        String message = this.message;
+
+        if (message == null && error != null) {
+            message = error.getMessage();
+        }
+
+        if (message == null) {
+            return "[unhealthy]";
+        }
+
+        return "[unhealthy: " + message + "]";
+    }
 }
