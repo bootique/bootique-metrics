@@ -73,10 +73,12 @@ public class HealthCheckModuleHeartbeatIT {
         Thread.sleep(100);
         int c2 = listener.counter;
         assertTrue(c1 < c2);
-
+        
         Thread.sleep(100);
         int c3 = listener.counter;
         assertTrue(c2 < c3);
+
+        threadTester.assertPoolSize(2);
 
         runtime.shutdown();
         threadTester.assertNoHeartbeat();
@@ -84,7 +86,7 @@ public class HealthCheckModuleHeartbeatIT {
 
     private static class ThreadTester {
 
-        // from HeartbeatLauncher
+
         private static final String TIMER_THREAD = "bootique-heartbeat";
 
         public void assertNoHeartbeat() {
@@ -97,8 +99,19 @@ public class HealthCheckModuleHeartbeatIT {
             assertEquals(1, matched);
         }
 
+        public void assertPoolSize(int expected) {
+            long matched = allThreads().filter(this::isPoolThread).count();
+            assertEquals(expected, matched);
+        }
+
         private boolean isTimerThread(Thread t) {
-            return TIMER_THREAD.equals(t.getName());
+            // the name comes from HeartbeatLauncher
+            return "bootique-heartbeat".equals(t.getName());
+        }
+
+        private boolean isPoolThread(Thread t) {
+            // the name comes from HeartbeatFactory
+            return t.getName().startsWith("bootique-healthcheck-");
         }
 
         private Stream<Thread> allThreads() {
