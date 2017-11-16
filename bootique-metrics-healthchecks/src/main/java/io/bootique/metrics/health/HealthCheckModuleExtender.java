@@ -4,6 +4,7 @@ import com.google.inject.Binder;
 import com.google.inject.multibindings.MapBinder;
 import com.google.inject.multibindings.Multibinder;
 import io.bootique.ModuleExtender;
+import io.bootique.metrics.health.heartbeat.HeartbeatListener;
 
 /**
  * @since 0.25
@@ -12,6 +13,7 @@ public class HealthCheckModuleExtender extends ModuleExtender<HealthCheckModuleE
 
     private MapBinder<String, HealthCheck> healthChecks;
     private Multibinder<HealthCheckGroup> healthCheckGroups;
+    private Multibinder<HeartbeatListener> heartbeatListeners;
 
     public HealthCheckModuleExtender(Binder binder) {
         super(binder);
@@ -19,33 +21,43 @@ public class HealthCheckModuleExtender extends ModuleExtender<HealthCheckModuleE
 
     @Override
     public HealthCheckModuleExtender initAllExtensions() {
-        getOrCreateHealthCheckGroupsBinder();
-        getOrCreateHealthChecksBinder();
+        getOrCreateHealthCheckGroups();
+        getOrCreateHealthChecks();
+        getOrCreateHeartbeatListeners();
+        return this;
+    }
 
+    public HealthCheckModuleExtender addHeartbeatListener(HeartbeatListener listener) {
+        getOrCreateHeartbeatListeners().addBinding().toInstance(listener);
+        return this;
+    }
+
+    public HealthCheckModuleExtender addHeartbeatListener(Class<? extends HeartbeatListener> listenerType) {
+        getOrCreateHeartbeatListeners().addBinding().to(listenerType);
         return this;
     }
 
     public HealthCheckModuleExtender addHealthCheck(String name, HealthCheck healthCheck) {
-        getOrCreateHealthChecksBinder().addBinding(name).toInstance(healthCheck);
+        getOrCreateHealthChecks().addBinding(name).toInstance(healthCheck);
         return this;
     }
 
     public <T extends HealthCheck> HealthCheckModuleExtender addHealthCheck(String name, Class<T> healthCheckType) {
-        getOrCreateHealthChecksBinder().addBinding(name).to(healthCheckType);
+        getOrCreateHealthChecks().addBinding(name).to(healthCheckType);
         return this;
     }
 
     public HealthCheckModuleExtender addHealthCheckGroup(HealthCheckGroup healthCheckGroup) {
-        getOrCreateHealthCheckGroupsBinder().addBinding().toInstance(healthCheckGroup);
+        getOrCreateHealthCheckGroups().addBinding().toInstance(healthCheckGroup);
         return this;
     }
 
     public <T extends HealthCheckGroup> HealthCheckModuleExtender addHealthCheckGroup(Class<T> healthCheckGroupType) {
-        getOrCreateHealthCheckGroupsBinder().addBinding().to(healthCheckGroupType);
+        getOrCreateHealthCheckGroups().addBinding().to(healthCheckGroupType);
         return this;
     }
 
-    protected MapBinder<String, HealthCheck> getOrCreateHealthChecksBinder() {
+    protected MapBinder<String, HealthCheck> getOrCreateHealthChecks() {
         if (healthChecks == null) {
             healthChecks = MapBinder.newMapBinder(binder, String.class, HealthCheck.class);
         }
@@ -53,11 +65,19 @@ public class HealthCheckModuleExtender extends ModuleExtender<HealthCheckModuleE
         return healthChecks;
     }
 
-    protected Multibinder<HealthCheckGroup> getOrCreateHealthCheckGroupsBinder() {
+    protected Multibinder<HealthCheckGroup> getOrCreateHealthCheckGroups() {
         if (healthCheckGroups == null) {
             healthCheckGroups = Multibinder.newSetBinder(binder, HealthCheckGroup.class);
         }
 
         return healthCheckGroups;
+    }
+
+    protected Multibinder<HeartbeatListener> getOrCreateHeartbeatListeners() {
+        if (heartbeatListeners == null) {
+            heartbeatListeners = Multibinder.newSetBinder(binder, HeartbeatListener.class);
+        }
+
+        return heartbeatListeners;
     }
 }

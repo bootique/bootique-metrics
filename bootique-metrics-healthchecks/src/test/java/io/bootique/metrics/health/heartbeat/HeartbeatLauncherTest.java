@@ -1,9 +1,9 @@
-package io.bootique.health.heartbeat;
+package io.bootique.metrics.health.heartbeat;
 
 import io.bootique.metrics.health.HealthCheck;
 import io.bootique.metrics.health.HealthCheckOutcome;
 import io.bootique.metrics.health.HealthCheckRegistry;
-import io.bootique.metrics.health.heartbeat.Heartbeat;
+import io.bootique.metrics.health.heartbeat.HeartbeatLauncher;
 import io.bootique.metrics.health.heartbeat.HeartbeatListener;
 import org.junit.After;
 import org.junit.Before;
@@ -19,7 +19,7 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class HeartbeatTest {
+public class HeartbeatLauncherTest {
 
     private HealthCheck success;
     private HealthCheck failure;
@@ -58,7 +58,7 @@ public class HeartbeatTest {
         HealthCheckRegistry registry = createRegistry(success, failure);
 
         this.threadPool = Executors.newFixedThreadPool(2);
-        this.timer = Heartbeat.builder(registry)
+        this.timer = new HeartbeatLauncher(registry)
                 .initialDelayMs(3)
                 .fixedDelayMs(50)
                 .listener(listener)

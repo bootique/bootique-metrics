@@ -4,6 +4,11 @@ import com.google.inject.Binder;
 import com.google.inject.Module;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
+import io.bootique.config.ConfigurationFactory;
+import io.bootique.metrics.health.heartbeat.Heartbeat;
+import io.bootique.metrics.health.heartbeat.HeartbeatFactory;
+import io.bootique.metrics.health.heartbeat.HeartbeatListener;
+import io.bootique.shutdown.ShutdownManager;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -37,5 +42,20 @@ public class HealthCheckModule implements Module {
         Map<String, HealthCheck> checks = new HashMap<>(healthChecks);
         groups.forEach(g -> checks.putAll(g.getHealthChecks()));
         return new HealthCheckRegistry(checks);
+    }
+
+    @Provides
+    @Singleton
+    Heartbeat provideHeartbeat(
+            ConfigurationFactory configurationFactory,
+            HealthCheckRegistry registry,
+            Set<HeartbeatListener> listeners,
+            ShutdownManager shutdownManager) {
+        Heartbeat hb = configurationFactory
+                .config(HeartbeatFactory.class, "heartbeat")
+                .createHeartbeat(registry, listeners);
+
+        shutdownManager.addShutdownHook(() -> hb.stop());
+        return hb;
     }
 }

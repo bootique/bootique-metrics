@@ -4,6 +4,7 @@
 * #16 "business transaction" ids for logs correlation
 * #17 Allow to run healthchecks in parallel
 * #18 ReporterFactory is not a PolymorphicConfiguration
+* #19 Implement "heartbeat" - a scheduler that executes a group of health checks
 * #20 Split healthchecks code to a new "bootique-metrics-healthchecks"
 * #21 Upgrade to Dropwizard metrics 3.2.5
 * #22 HealthCheckRegistry filtering

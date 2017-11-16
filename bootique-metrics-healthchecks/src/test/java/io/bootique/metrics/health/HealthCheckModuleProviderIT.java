@@ -1,4 +1,4 @@
-package io.bootique.health;
+package io.bootique.metrics.health;
 
 import io.bootique.metrics.health.HealthCheckModuleProvider;
 import io.bootique.test.junit.BQModuleProviderChecker;

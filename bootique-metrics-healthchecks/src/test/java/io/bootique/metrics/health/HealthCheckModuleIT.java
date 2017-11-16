@@ -1,10 +1,6 @@
-package io.bootique.health;
+package io.bootique.metrics.health;
 
 import io.bootique.BQRuntime;
-import io.bootique.metrics.health.HealthCheck;
-import io.bootique.metrics.health.HealthCheckModule;
-import io.bootique.metrics.health.HealthCheckOutcome;
-import io.bootique.metrics.health.HealthCheckRegistry;
 import io.bootique.test.junit.BQTestFactory;
 import org.junit.Rule;
 import org.junit.Test;

@@ -1,0 +1,8 @@
+heartbeat:
+  initialDelayMs: 3
+  fixedDelayMs: 100
+  threadPoolSize: 2
+  healthCheckTimeoutMs: 2000
+  healthChecks:
+     - "hc1"
+     - "hc2"
