@@ -3,7 +3,11 @@ package io.bootique.metrics.health;
 import com.google.inject.Binder;
 import com.google.inject.multibindings.MapBinder;
 import com.google.inject.multibindings.Multibinder;
+import io.bootique.BQCoreModule;
 import io.bootique.ModuleExtender;
+import io.bootique.command.Command;
+import io.bootique.command.CommandDecorator;
+import io.bootique.metrics.health.heartbeat.HeartbeatCommand;
 import io.bootique.metrics.health.heartbeat.HeartbeatListener;
 
 /**
@@ -24,6 +28,11 @@ public class HealthCheckModuleExtender extends ModuleExtender<HealthCheckModuleE
         getOrCreateHealthCheckGroups();
         getOrCreateHealthChecks();
         getOrCreateHeartbeatListeners();
+        return this;
+    }
+
+    public HealthCheckModuleExtender enabledHeartbeatFor(Class<? extends Command> commandType) {
+        BQCoreModule.extend(binder).decorateCommand(commandType, CommandDecorator.alsoRun(HeartbeatCommand.class));
         return this;
     }
 
