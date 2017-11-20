@@ -33,7 +33,7 @@ public class HeartbeatFactory {
 
     protected HealthCheckRegistry filterRegistry(HealthCheckRegistry registry) {
         // no explicit health checks means run all available health check...
-        return healthChecks.isEmpty() ? registry : registry.filtered(healthChecks::contains);
+        return healthChecks == null || healthChecks.isEmpty() ? registry : registry.filtered(healthChecks::contains);
     }
 
     protected Timer startHeartbeat(HealthCheckRegistry healthChecks, Set<HeartbeatListener> listeners) {
