@@ -2,8 +2,6 @@ package io.bootique.metrics.health.heartbeat;
 
 import org.junit.Test;
 
-import java.util.Timer;
-
 import static org.junit.Assert.assertSame;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -14,16 +12,16 @@ public class HeartbeatTest {
     @Test
     public void testStartStop() {
 
-        Timer mockTimer = mock(Timer.class);
+        Runnable mockStopper = mock(Runnable.class);
 
-        Heartbeat hb = new Heartbeat(() -> mockTimer);
-        verifyZeroInteractions(mockTimer);
+        Heartbeat hb = new Heartbeat(() -> mockStopper);
+        verifyZeroInteractions(mockStopper);
 
         hb.start();
-        verifyZeroInteractions(mockTimer);
-        assertSame(mockTimer, hb.heartbeatTimer);
+        verifyZeroInteractions(mockStopper);
+        assertSame(mockStopper, hb.heartbeatStopper);
 
         hb.stop();
-        verify(mockTimer).cancel();
+        verify(mockStopper).run();
     }
 }

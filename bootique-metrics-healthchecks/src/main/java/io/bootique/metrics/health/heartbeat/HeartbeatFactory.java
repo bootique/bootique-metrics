@@ -26,7 +26,10 @@ public class HeartbeatFactory {
         this.healthChecks = healthChecks;
     }
 
-    public Heartbeat createHeartbeat(HealthCheckRegistry registry, Set<HeartbeatListener> listeners) {
+    public Heartbeat createHeartbeat(
+            HealthCheckRegistry registry,
+            Set<HeartbeatListener> listeners) {
+
         HealthCheckRegistry filtered = filterRegistry(registry);
         return new Heartbeat(() -> startHeartbeat(filtered, listeners));
     }
@@ -36,15 +39,31 @@ public class HeartbeatFactory {
         return healthChecks == null || healthChecks.isEmpty() ? registry : registry.filtered(healthChecks::contains);
     }
 
-    protected Timer startHeartbeat(HealthCheckRegistry healthChecks, Set<HeartbeatListener> listeners) {
+    protected Runnable startHeartbeat(
+            HealthCheckRegistry healthChecks,
+            Set<HeartbeatListener> listeners) {
 
-        return new HeartbeatLauncher(healthChecks)
+        ExecutorService threadPool = startThreadPool();
+        Timer timer = new HeartbeatLauncher(healthChecks)
                 .initialDelayMs(getInitialDelayMs())
                 .fixedDelayMs(getFixedDelayMs())
                 .healthCheckTimeoutMs(getHealthCheckTimeoutMs())
                 .listeners(listeners)
-                .threadPool(startThreadPool())
+                .threadPool(threadPool)
                 .start();
+
+        return () -> {
+
+            try {
+                timer.cancel();
+            } catch (Throwable th) {
+            }
+
+            try {
+                threadPool.shutdownNow();
+            } catch (Throwable th) {
+            }
+        };
     }
 
     protected ExecutorService startThreadPool() {
@@ -79,7 +98,7 @@ public class HeartbeatFactory {
     }
 
     protected long getHealthCheckTimeoutMs() {
-        return healthCheckTimeoutMs >= 0 ? healthCheckTimeoutMs : HeartbeatLauncher.HEALTH_CHECK_TIMEOUT_DEFAULT;
+        return healthCheckTimeoutMs > 0 ? healthCheckTimeoutMs : HeartbeatLauncher.HEALTH_CHECK_TIMEOUT_DEFAULT;
     }
 
     @BQConfigProperty

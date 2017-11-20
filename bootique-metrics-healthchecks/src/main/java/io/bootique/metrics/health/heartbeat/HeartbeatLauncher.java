@@ -62,7 +62,7 @@ public class HeartbeatLauncher {
 
     public HeartbeatLauncher healthCheckTimeoutMs(long timeout) {
         if (timeout <= 0) {
-            throw new IllegalArgumentException("Healthcheck timeout must be positive");
+            throw new IllegalArgumentException("Health check timeout must be positive");
         }
 
         this.healthCheckTimeoutMs = timeout;

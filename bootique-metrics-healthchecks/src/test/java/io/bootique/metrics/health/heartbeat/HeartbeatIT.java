@@ -1,8 +1,9 @@
-package io.bootique.metrics.health;
+package io.bootique.metrics.health.heartbeat;
 
 import io.bootique.BQRuntime;
-import io.bootique.metrics.health.heartbeat.Heartbeat;
-import io.bootique.metrics.health.heartbeat.HeartbeatListener;
+import io.bootique.metrics.health.HealthCheck;
+import io.bootique.metrics.health.HealthCheckModule;
+import io.bootique.metrics.health.HealthCheckOutcome;
 import io.bootique.test.junit.BQTestFactory;
 import org.junit.Before;
 import org.junit.Rule;
@@ -14,11 +15,13 @@ import java.util.stream.Stream;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class HealthCheckModuleHeartbeatIT {
+public class HeartbeatIT {
 
     @Rule
     public BQTestFactory testFactory = new BQTestFactory();
@@ -36,6 +39,25 @@ public class HealthCheckModuleHeartbeatIT {
         when(failure.safeCheck()).thenReturn(HealthCheckOutcome.unhealthy("uh"));
 
         this.threadTester = new ThreadTester();
+    }
+
+    @Test
+    public void testHeartbeat_Defaults() throws InterruptedException {
+
+        BQRuntime runtime = testFactory.app()
+                .autoLoadModules()
+                .module(b -> HealthCheckModule.extend(b).addHealthCheck("hc1", success))
+                .createRuntime();
+
+
+        // defaults have 60 sec delay and 60 sec heartbeat interval.. We are not going to wait that long in the test
+        // so just check that everything starts ok...
+
+        Heartbeat hb = runtime.getInstance(Heartbeat.class);
+        assertNull("Heartbeat was started prematurely", hb.heartbeatStopper);
+
+        hb.start();
+        assertNotNull("Heartbeat hasn't started with default settings", hb.heartbeatStopper);
     }
 
     @Test
@@ -73,7 +95,7 @@ public class HealthCheckModuleHeartbeatIT {
         Thread.sleep(100);
         int c2 = listener.counter;
         assertTrue(c1 < c2);
-        
+
         Thread.sleep(100);
         int c3 = listener.counter;
         assertTrue(c2 < c3);
@@ -85,9 +107,6 @@ public class HealthCheckModuleHeartbeatIT {
     }
 
     private static class ThreadTester {
-
-
-        private static final String TIMER_THREAD = "bootique-heartbeat";
 
         public void assertNoHeartbeat() {
             long matched = allThreads().filter(this::isTimerThread).count();

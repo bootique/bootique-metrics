@@ -56,6 +56,7 @@ public class HealthCheckModule implements Module {
             HealthCheckRegistry registry,
             Set<HeartbeatListener> listeners,
             ShutdownManager shutdownManager) {
+
         Heartbeat hb = configurationFactory
                 .config(HeartbeatFactory.class, "heartbeat")
                 .createHeartbeat(registry, listeners);

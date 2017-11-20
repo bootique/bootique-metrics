@@ -1,6 +1,5 @@
 package io.bootique.metrics.health.heartbeat;
 
-import java.util.Timer;
 import java.util.function.Supplier;
 
 /**
@@ -10,10 +9,10 @@ import java.util.function.Supplier;
  */
 public class Heartbeat {
 
-    private final Supplier<Timer> heartbeatStarter;
-    Timer heartbeatTimer;
+    private final Supplier<Runnable> heartbeatStarter;
+    Runnable heartbeatStopper;
 
-    public Heartbeat(Supplier<Timer> heartbeatStarter) {
+    public Heartbeat(Supplier<Runnable> heartbeatStarter) {
         this.heartbeatStarter = heartbeatStarter;
     }
 
@@ -21,18 +20,18 @@ public class Heartbeat {
 
         // sanity check, but otherwise don't bother with startup race conditions, as Bootique infrastructure will
         // ensure single-threaded start
-        if (heartbeatTimer != null) {
+        if (heartbeatStopper != null) {
             throw new IllegalStateException("Heartbeat is already running.");
         }
 
-        this.heartbeatTimer = heartbeatStarter.get();
+        this.heartbeatStopper = heartbeatStarter.get();
     }
 
     public void stop() {
-        Timer local = this.heartbeatTimer;
+        Runnable local = this.heartbeatStopper;
         if (local != null) {
-            this.heartbeatTimer = null;
-            local.cancel();
+            this.heartbeatStopper = null;
+            local.run();
         }
     }
 }
