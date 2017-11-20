@@ -2,10 +2,13 @@ package io.bootique.metrics.health;
 
 import com.google.inject.Binder;
 import com.google.inject.Module;
+import com.google.inject.Provider;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
+import io.bootique.BQCoreModule;
 import io.bootique.config.ConfigurationFactory;
 import io.bootique.metrics.health.heartbeat.Heartbeat;
+import io.bootique.metrics.health.heartbeat.HeartbeatCommand;
 import io.bootique.metrics.health.heartbeat.HeartbeatFactory;
 import io.bootique.metrics.health.heartbeat.HeartbeatListener;
 import io.bootique.shutdown.ShutdownManager;
@@ -34,6 +37,8 @@ public class HealthCheckModule implements Module {
     @Override
     public void configure(Binder binder) {
         extend(binder).initAllExtensions();
+
+        BQCoreModule.extend(binder).addCommand(HeartbeatCommand.class);
     }
 
     @Provides
@@ -57,5 +62,11 @@ public class HealthCheckModule implements Module {
 
         shutdownManager.addShutdownHook(() -> hb.stop());
         return hb;
+    }
+
+    @Provides
+    @Singleton
+    HeartbeatCommand provideHeartbeatCommand(Provider<Heartbeat> heartbeatProvider) {
+        return new HeartbeatCommand(heartbeatProvider);
     }
 }

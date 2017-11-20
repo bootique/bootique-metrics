@@ -7,7 +7,8 @@ import io.bootique.command.CommandWithMetadata;
 import io.bootique.meta.application.CommandMetadata;
 
 /**
- * A command that starts the application heartbeat.
+ * A command that starts the application heartbeat. It is declared as a hidden command. To activate heartbeat, one would
+ * need to use {@link io.bootique.command.CommandDecorator} to attach it to some other command.
  *
  * @since 0.25
  */
@@ -23,7 +24,10 @@ public class HeartbeatCommand extends CommandWithMetadata {
     private static CommandMetadata createMetadata() {
         return CommandMetadata.builder(HeartbeatCommand.class)
                 .description("Schedules a \"heartbeat\" in-app process that wakes up periodically and runs a set of " +
-                        "preconfigured application healthchecks.")
+                        "preconfigured application health checks.")
+                // there are no practical scenarios when HeartbeatCommand needs to run standalone,
+                // so hide it from the app CLI.
+                .hidden()
                 .build();
     }
 
