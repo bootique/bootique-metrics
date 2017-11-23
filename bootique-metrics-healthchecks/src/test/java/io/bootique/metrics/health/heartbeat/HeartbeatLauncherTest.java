@@ -3,8 +3,6 @@ package io.bootique.metrics.health.heartbeat;
 import io.bootique.metrics.health.HealthCheck;
 import io.bootique.metrics.health.HealthCheckOutcome;
 import io.bootique.metrics.health.HealthCheckRegistry;
-import io.bootique.metrics.health.heartbeat.HeartbeatLauncher;
-import io.bootique.metrics.health.heartbeat.HeartbeatListener;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -29,10 +27,10 @@ public class HeartbeatLauncherTest {
     @Before
     public void before() {
         this.success = mock(HealthCheck.class);
-        when(success.safeCheck()).thenReturn(HealthCheckOutcome.healthy());
+        when(success.safeCheck()).thenReturn(HealthCheckOutcome.ok());
 
         this.failure = mock(HealthCheck.class);
-        when(failure.safeCheck()).thenReturn(HealthCheckOutcome.unhealthy("uh"));
+        when(failure.safeCheck()).thenReturn(HealthCheckOutcome.critical("uh"));
 
         this.timer = null;
         this.threadPool = null;

@@ -33,10 +33,10 @@ public class HeartbeatIT {
     @Before
     public void before() {
         this.success = mock(HealthCheck.class);
-        when(success.safeCheck()).thenReturn(HealthCheckOutcome.healthy());
+        when(success.safeCheck()).thenReturn(HealthCheckOutcome.ok());
 
         this.failure = mock(HealthCheck.class);
-        when(failure.safeCheck()).thenReturn(HealthCheckOutcome.unhealthy("uh"));
+        when(failure.safeCheck()).thenReturn(HealthCheckOutcome.critical("uh"));
 
         this.threadTester = new ThreadTester();
     }

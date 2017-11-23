@@ -24,7 +24,7 @@ public interface HealthCheck {
         try {
             return check();
         } catch (Throwable th) {
-            return HealthCheckOutcome.unhealthy(th);
+            return HealthCheckOutcome.critical(th);
         }
     }
 }

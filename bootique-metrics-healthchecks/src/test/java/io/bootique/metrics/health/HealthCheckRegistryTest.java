@@ -1,8 +1,5 @@
 package io.bootique.metrics.health;
 
-import io.bootique.metrics.health.HealthCheck;
-import io.bootique.metrics.health.HealthCheckOutcome;
-import io.bootique.metrics.health.HealthCheckRegistry;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -14,9 +11,7 @@ import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -30,18 +25,18 @@ public class HealthCheckRegistryTest {
     @Before
     public void before() {
         this.success = mock(HealthCheck.class);
-        when(success.safeCheck()).thenReturn(HealthCheckOutcome.healthy());
+        when(success.safeCheck()).thenReturn(HealthCheckOutcome.ok());
 
         this.failure = mock(HealthCheck.class);
-        when(failure.safeCheck()).thenReturn(HealthCheckOutcome.unhealthy("uh"));
+        when(failure.safeCheck()).thenReturn(HealthCheckOutcome.critical("uh"));
 
         this.failureTh = mock(HealthCheck.class);
-        when(failureTh.safeCheck()).thenReturn(HealthCheckOutcome.unhealthy(new Throwable("uh")));
+        when(failureTh.safeCheck()).thenReturn(HealthCheckOutcome.critical(new Throwable("uh")));
 
         this.slowSuccess = mock(HealthCheck.class);
         when(slowSuccess.safeCheck()).then(i -> {
             Thread.sleep(500);
-            return HealthCheckOutcome.healthy();
+            return HealthCheckOutcome.ok();
         });
     }
 
@@ -66,7 +61,7 @@ public class HealthCheckRegistryTest {
 
         assertEquals(2, originalResult.size());
         assertEquals(1, filteredResult.size());
-        assertFalse(filteredResult.get("1").isHealthy());
+        assertEquals(HealthCheckStatus.CRITICAL, filteredResult.get("1").getStatus());
     }
 
     @Test
@@ -75,8 +70,8 @@ public class HealthCheckRegistryTest {
 
         Map<String, HealthCheckOutcome> results = registry.runHealthChecks();
         assertEquals(2, results.size());
-        assertTrue(results.get("0").isHealthy());
-        assertFalse(results.get("1").isHealthy());
+        assertEquals(HealthCheckStatus.OK, results.get("0").getStatus());
+        assertEquals(HealthCheckStatus.CRITICAL, results.get("1").getStatus());
     }
 
     @Test
@@ -86,9 +81,9 @@ public class HealthCheckRegistryTest {
 
         Map<String, HealthCheckOutcome> results = registry.runHealthChecks(ForkJoinPool.commonPool());
         assertEquals(3, results.size());
-        assertTrue(results.get("0").isHealthy());
-        assertFalse(results.get("1").isHealthy());
-        assertFalse(results.get("2").isHealthy());
+        assertEquals(HealthCheckStatus.OK, results.get("0").getStatus());
+        assertEquals(HealthCheckStatus.CRITICAL, results.get("1").getStatus());
+        assertEquals(HealthCheckStatus.CRITICAL, results.get("2").getStatus());
     }
 
     @Test
@@ -99,12 +94,12 @@ public class HealthCheckRegistryTest {
 
         assertEquals(3, results.size());
 
-        assertFalse(results.get("0").isHealthy());
+        assertEquals(HealthCheckStatus.CRITICAL, results.get("0").getStatus());
         assertEquals("health check timed out", results.get("0").getMessage());
 
-        assertTrue(results.get("1").isHealthy());
+        assertEquals(HealthCheckStatus.OK, results.get("1").getStatus());
 
-        assertFalse(results.get("2").isHealthy());
+        assertEquals(HealthCheckStatus.CRITICAL, results.get("2").getStatus());
         assertEquals("health check timed out", results.get("2").getMessage());
     }
 

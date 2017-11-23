@@ -29,10 +29,10 @@ public class HealthCheckRegistry {
                 return hcRunner.get();
             } catch (Exception e) {
                 // unexpected... we should be done here...
-                return HealthCheckOutcome.unhealthy(e);
+                return HealthCheckOutcome.critical(e);
             }
         } else {
-            return HealthCheckOutcome.unhealthy("health check timed out");
+            return HealthCheckOutcome.critical("health check timed out");
         }
     }
 
