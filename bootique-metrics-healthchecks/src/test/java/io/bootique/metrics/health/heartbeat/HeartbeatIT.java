@@ -141,7 +141,10 @@ public class HeartbeatIT {
 
             Thread[] active = new Thread[tg.activeCount()];
             tg.enumerate(active);
-            return Arrays.stream(active);
+
+            // there is a small chance a thread becomes inactive between 'activeCount' and 'enumerate' calls,
+            // resulting in null threads in the array.. remove null threads from the result
+            return Arrays.stream(active).filter(t -> t != null);
         }
     }
 
