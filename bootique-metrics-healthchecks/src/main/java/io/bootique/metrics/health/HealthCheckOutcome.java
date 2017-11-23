@@ -18,7 +18,7 @@ public class HealthCheckOutcome implements Comparable<HealthCheckOutcome> {
     }
 
     /**
-     * @return a {@link HealthCheckOutcome} corresponding to the healthy state of the app.
+     * @return a {@link HealthCheckOutcome} corresponding to a healthy state of the app.
      * @since 0.25
      */
     public static HealthCheckOutcome ok() {
@@ -26,7 +26,7 @@ public class HealthCheckOutcome implements Comparable<HealthCheckOutcome> {
     }
 
     /**
-     * @return a {@link HealthCheckOutcome} corresponding to the healthy state of the app.
+     * @return a {@link HealthCheckOutcome} corresponding to a healthy state of the app.
      * @since 0.25
      */
     public static HealthCheckOutcome ok(String message) {
@@ -34,7 +34,7 @@ public class HealthCheckOutcome implements Comparable<HealthCheckOutcome> {
     }
 
     /**
-     * @return a {@link HealthCheckOutcome} corresponding to the "warning" state of the app, i.e. approaching critical.
+     * @return a {@link HealthCheckOutcome} corresponding to a "warning" state of the app, i.e. approaching critical.
      * @since 0.25
      */
     public static HealthCheckOutcome warning() {
@@ -42,7 +42,7 @@ public class HealthCheckOutcome implements Comparable<HealthCheckOutcome> {
     }
 
     /**
-     * @return a {@link HealthCheckOutcome} corresponding to the "warning" state of the app, i.e. approaching critical.
+     * @return a {@link HealthCheckOutcome} corresponding to a "warning" state of the app, i.e. approaching critical.
      * @since 0.25
      */
     public static HealthCheckOutcome warning(String message) {
@@ -50,7 +50,7 @@ public class HealthCheckOutcome implements Comparable<HealthCheckOutcome> {
     }
 
     /**
-     * @return a {@link HealthCheckOutcome} corresponding to the critical state of the app.
+     * @return a {@link HealthCheckOutcome} corresponding to a critical state of the app.
      * @since 0.25
      */
     public static HealthCheckOutcome critical() {
@@ -58,7 +58,7 @@ public class HealthCheckOutcome implements Comparable<HealthCheckOutcome> {
     }
 
     /**
-     * @return a {@link HealthCheckOutcome} corresponding to the critical state of the app.
+     * @return a {@link HealthCheckOutcome} corresponding to a critical state of the app.
      * @since 0.25
      */
     public static HealthCheckOutcome critical(String message) {
@@ -66,11 +66,35 @@ public class HealthCheckOutcome implements Comparable<HealthCheckOutcome> {
     }
 
     /**
-     * @return a {@link HealthCheckOutcome} corresponding to the critical state of the app.
+     * @return a {@link HealthCheckOutcome} corresponding to a critical state of the app.
      * @since 0.25
      */
     public static HealthCheckOutcome critical(Throwable th) {
         return new HealthCheckOutcome(HealthCheckStatus.CRITICAL, null, th);
+    }
+
+    /**
+     * @return a {@link HealthCheckOutcome} corresponding to a state of the app that can not be asserted.
+     * @since 0.25
+     */
+    public static HealthCheckOutcome unknown() {
+        return unknown((String) null);
+    }
+
+    /**
+     * @return a {@link HealthCheckOutcome} corresponding to a state of the app that can not be asserted.
+     * @since 0.25
+     */
+    public static HealthCheckOutcome unknown(String message) {
+        return new HealthCheckOutcome(HealthCheckStatus.UNKNOWN, message, null);
+    }
+
+    /**
+     * @return a {@link HealthCheckOutcome} corresponding to a state of the app that can not be asserted.
+     * @since 0.25
+     */
+    public static HealthCheckOutcome unknown(Throwable th) {
+        return new HealthCheckOutcome(HealthCheckStatus.UNKNOWN, null, th);
     }
 
     /**
