@@ -12,7 +12,7 @@ import java.util.StringTokenizer;
  */
 public class DoubleRange extends ValueRange<Double> {
 
-    protected DoubleRange(Double warningThreshold, Double criticalThreshold) {
+    public DoubleRange(Double warningThreshold, Double criticalThreshold) {
         super(warningThreshold, criticalThreshold);
     }
 

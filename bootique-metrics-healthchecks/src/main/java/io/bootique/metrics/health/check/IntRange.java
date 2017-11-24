@@ -12,7 +12,7 @@ import java.util.StringTokenizer;
  */
 public class IntRange extends ValueRange<Integer> {
 
-    protected IntRange(Integer warningThreshold, Integer criticalThreshold) {
+    public IntRange(Integer warningThreshold, Integer criticalThreshold) {
         super(warningThreshold, criticalThreshold);
     }
 
