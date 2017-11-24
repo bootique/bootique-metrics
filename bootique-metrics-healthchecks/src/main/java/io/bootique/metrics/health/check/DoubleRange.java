@@ -17,10 +17,10 @@ public class DoubleRange extends ValueRange<Double> {
     }
 
     /**
-     * Creates an {@link DoubleRange} from a comma-separated String.
+     * Creates an {@link DoubleRange} from a space-separated String string of numbers.
      *
-     * @param encoded a comma-separated String that defines health check thresholds for the range. Can be either
-     *                "", "double" or "double, double", specifying no thresholds, a critical threshold, warning and critical
+     * @param encoded a space-separated String that defines health check thresholds for the range. Can be either
+     *                "", "double" or "double double", specifying no thresholds, a critical threshold, warning and critical
      *                thresholds.
      * @return a non-null {@link Double} corresponding to the encoded String.
      */
@@ -32,7 +32,7 @@ public class DoubleRange extends ValueRange<Double> {
         }
 
         // comma-separated format; spaces are insignificant
-        StringTokenizer tokens = new StringTokenizer(encoded, ",");
+        StringTokenizer tokens = new StringTokenizer(encoded);
 
         switch (tokens.countTokens()) {
             case 0:

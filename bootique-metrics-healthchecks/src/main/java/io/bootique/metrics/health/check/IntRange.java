@@ -17,10 +17,10 @@ public class IntRange extends ValueRange<Integer> {
     }
 
     /**
-     * Creates an {@link IntRange} from a comma-separated String.
+     * Creates an {@link IntRange} from a space-separated String of numbers.
      *
-     * @param encoded a comma-separated String that defines health check thresholds for the range. Can be either
-     *                "", "int" or "int, int", specifying no thresholds, a critical threshold, warning and critical
+     * @param encoded a space-separated String that defines health check thresholds for the range. Can be either
+     *                "", "int" or "int int", specifying no thresholds, a critical threshold, warning and critical
      *                thresholds.
      * @return a non-null {@link IntRange} corresponding to the encoded String.
      */
@@ -32,7 +32,7 @@ public class IntRange extends ValueRange<Integer> {
         }
 
         // comma-separated format; spaces are insignificant
-        StringTokenizer tokens = new StringTokenizer(encoded, ",");
+        StringTokenizer tokens = new StringTokenizer(encoded);
 
         switch (tokens.countTokens()) {
             case 0:

@@ -39,7 +39,7 @@ public class DoubleRangeTest {
 
     @Test
     public void testParse_WarningCritical() {
-        DoubleRange r = DoubleRange.parse(" 3.55,  4 ");
+        DoubleRange r = DoubleRange.parse(" 3.55  4 ");
         assertNotNull(r);
         assertEquals(3.55, r.getWarningThreshold().doubleValue(), 0.00001);
         assertEquals(4.0, r.getCriticalThreshold().doubleValue(), 0.00001);
@@ -47,23 +47,23 @@ public class DoubleRangeTest {
 
     @Test(expected = RuntimeException.class)
     public void testParse_InvalidNumber() {
-        DoubleRange.parse(" 3.6, a");
+        DoubleRange.parse(" 3.6 a");
     }
 
     @Test(expected = RuntimeException.class)
     public void testParse_InvalidThresholds() {
-        DoubleRange.parse(" 3, 4, 5");
+        DoubleRange.parse(" 3 4 5");
     }
 
     @Test(expected = RuntimeException.class)
     public void testParse_InvalidRelativeThresholds() {
-        DoubleRange.parse(" 4, 3");
+        DoubleRange.parse(" 4 3");
     }
 
     @Test
     public void testParse_FromJson() throws IOException {
 
-        YAMLParser parser = new YAMLFactory().createParser("3.5, 4.5");
+        YAMLParser parser = new YAMLFactory().createParser("3.5 4.5");
         DoubleRange r = new ObjectMapper().readValue(parser, DoubleRange.class);
 
         assertNotNull(r);

@@ -52,7 +52,7 @@ public class IntRangeTest {
 
     @Test
     public void testParse_WarningCritical() {
-        IntRange r = IntRange.parse(" 3,  4 ");
+        IntRange r = IntRange.parse(" 3   4 ");
         assertNotNull(r);
         assertEquals(Integer.valueOf(3), r.getWarningThreshold());
         assertEquals(Integer.valueOf(4), r.getCriticalThreshold());
@@ -60,23 +60,23 @@ public class IntRangeTest {
 
     @Test(expected = RuntimeException.class)
     public void testParse_InvalidNumber() {
-        IntRange.parse(" 3, a");
+        IntRange.parse(" 3 a");
     }
 
     @Test(expected = RuntimeException.class)
     public void testParse_InvalidThresholds() {
-        IntRange.parse(" 3, 4, 5");
+        IntRange.parse(" 3 4 5");
     }
 
     @Test(expected = RuntimeException.class)
     public void testParse_InvalidRelativeThresholds() {
-        IntRange.parse(" 4, 3");
+        IntRange.parse(" 4 3");
     }
 
     @Test
     public void testParse_FromJson() throws IOException {
 
-        YAMLParser parser = new YAMLFactory().createParser("3, 4");
+        YAMLParser parser = new YAMLFactory().createParser("3 4");
         IntRange r = new ObjectMapper().readValue(parser, IntRange.class);
 
         assertNotNull(r);
