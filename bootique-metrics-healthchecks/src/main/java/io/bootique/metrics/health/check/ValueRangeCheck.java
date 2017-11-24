@@ -6,6 +6,10 @@ import io.bootique.metrics.health.HealthCheckStatus;
 
 import java.util.function.Supplier;
 
+/**
+ * @param <T> the type of value that the health check will verify.
+ * @since 0.25
+ */
 public class ValueRangeCheck<T extends Comparable<T>> implements HealthCheck {
 
     private ValueRange<T> range;
