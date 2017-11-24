@@ -11,7 +11,7 @@ import java.util.function.Supplier;
  *
  * @since 0.25
  */
-public abstract class IntValueCheck implements HealthCheck {
+public class IntValueCheck implements HealthCheck {
 
     private int warningThreshold;
     private int criticalThreshold;
