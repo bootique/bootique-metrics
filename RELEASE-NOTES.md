@@ -9,6 +9,7 @@
 * #21 Upgrade to Dropwizard metrics 3.2.5
 * #22 HealthCheckRegistry filtering
 * #23 Nagios-like health-check statuses
+* #24 Add reusable health checks that can read metrics Gauges
 
 ## 0.10
 
