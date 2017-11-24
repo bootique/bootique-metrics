@@ -9,7 +9,7 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class ValueInRangeCheckTest {
+public class ValueRangeCheckTest {
 
     @Test
     public void testCheck() {
@@ -18,7 +18,7 @@ public class ValueInRangeCheckTest {
         when(supplier.get()).thenReturn(-1, 0, 5, 6, 9);
 
         IntRange range = new IntRange(5, 8);
-        ValueInRangeCheck<Integer> check = new ValueInRangeCheck<>(range, supplier);
+        ValueRangeCheck<Integer> check = new ValueRangeCheck<>(range, supplier);
 
         assertEquals(HealthCheckStatus.OK, check.check().getStatus());
         assertEquals(HealthCheckStatus.OK, check.check().getStatus());

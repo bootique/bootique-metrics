@@ -6,12 +6,12 @@ import io.bootique.metrics.health.HealthCheckStatus;
 
 import java.util.function.Supplier;
 
-public class ValueInRangeCheck<T extends Comparable<T>> implements HealthCheck {
+public class ValueRangeCheck<T extends Comparable<T>> implements HealthCheck {
 
     private ValueRange<T> range;
     private Supplier<T> valueSupplier;
 
-    public ValueInRangeCheck(ValueRange<T> range, Supplier<T> valueSupplier) {
+    public ValueRangeCheck(ValueRange<T> range, Supplier<T> valueSupplier) {
         this.range = range;
         this.valueSupplier = valueSupplier;
     }
