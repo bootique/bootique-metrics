@@ -60,7 +60,7 @@ public class HeartbeatFactory {
             String badNames = healthChecks.stream()
                     .filter(hc -> !registry.containsHealthCheck(hc))
                     .collect(Collectors.joining(", "));
-            LOGGER.warn("The following health checks names are invalid and will be ignored: {}", badNames);
+            LOGGER.warn("The following health check names are invalid and will be ignored: {}", badNames);
         }
     }
 
