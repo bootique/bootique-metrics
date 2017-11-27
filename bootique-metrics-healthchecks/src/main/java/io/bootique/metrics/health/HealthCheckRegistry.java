@@ -37,6 +37,24 @@ public class HealthCheckRegistry {
     }
 
     /**
+     * @return whether a given named health check is present in the registry.
+     * @since 0.25
+     */
+    public boolean containsHealthCheck(String name) {
+        return healthChecks.containsKey(name);
+    }
+
+    /**
+     * Returns a number of health checks present in the registry.
+     *
+     * @return a number of health checks present in the registry.
+     * @since 0.25
+     */
+    public int size() {
+        return healthChecks.size();
+    }
+
+    /**
      * Returns a new registry that contains a subset of health checks from the current registry, whose names match the
      * provided criteria.
      *
@@ -49,7 +67,7 @@ public class HealthCheckRegistry {
         Map<String, HealthCheck> filtered = new HashMap<>();
 
         healthChecks.forEach((k, v) -> {
-            if(healthCheckFilter.test(k)) {
+            if (healthCheckFilter.test(k)) {
                 filtered.put(k, v);
             }
         });

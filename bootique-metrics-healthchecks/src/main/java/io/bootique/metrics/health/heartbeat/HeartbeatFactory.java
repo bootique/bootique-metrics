@@ -3,6 +3,8 @@ package io.bootique.metrics.health.heartbeat;
 import io.bootique.annotation.BQConfig;
 import io.bootique.annotation.BQConfigProperty;
 import io.bootique.metrics.health.HealthCheckRegistry;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Set;
@@ -11,9 +13,12 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 @BQConfig
 public class HeartbeatFactory {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(HeartbeatFactory.class);
 
     private long initialDelayMs;
     private long fixedDelayMs;
@@ -36,7 +41,27 @@ public class HeartbeatFactory {
 
     protected HealthCheckRegistry filterRegistry(HealthCheckRegistry registry) {
         // no explicit health checks means run all available health check...
-        return healthChecks == null || healthChecks.isEmpty() ? registry : registry.filtered(healthChecks::contains);
+        if (healthChecks == null || healthChecks.isEmpty()) {
+            return registry;
+        }
+
+        HealthCheckRegistry filtered = registry.filtered(healthChecks::contains);
+
+        // Report health checks configured in the factory, but missing from the registry.
+        // those are likely human errors and a warning is needed.
+        reportMissingHealthChecks(filtered);
+
+        return filtered;
+    }
+
+    private void reportMissingHealthChecks(HealthCheckRegistry registry) {
+        int bad = healthChecks.size() - registry.size();
+        if (bad > 0) {
+            String badNames = healthChecks.stream()
+                    .filter(hc -> !registry.containsHealthCheck(hc))
+                    .collect(Collectors.joining(", "));
+            LOGGER.warn("The following health checks names are invalid and will be ignored: {}", badNames);
+        }
     }
 
     protected Runnable startHeartbeat(
