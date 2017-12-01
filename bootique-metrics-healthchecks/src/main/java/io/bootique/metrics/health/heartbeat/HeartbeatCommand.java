@@ -35,14 +35,6 @@ public class HeartbeatCommand extends CommandWithMetadata {
     public CommandOutcome run(Cli cli) {
 
         heartbeatProvider.get().start();
-
-        // until "start and get out" strategy is implemented per https://github.com/bootique/bootique/issues/197
-        // let's block indefinitely like we do in Jetty and jobs modules.
-        try {
-            Thread.currentThread().join();
-        } catch (InterruptedException ie) {
-        }
-
-        return CommandOutcome.succeeded();
+        return CommandOutcome.succeededAndForkedToBackground();
     }
 }
