@@ -20,6 +20,10 @@ public class TransactionIdMDC {
         }
     }
 
+    public String get() {
+        return MDC.get(TRANSACTION_MDC_KEY);
+    }
+
     /**
      * Removes transaction ID from the logging MDC.
      */
