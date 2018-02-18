@@ -8,6 +8,6 @@ public class HealthCheckModuleProviderIT {
 
     @Test
     public void testAutoLoadable() {
-        BQModuleProviderChecker.testPresentInJar(HealthCheckModuleProvider.class);
+        BQModuleProviderChecker.testAutoLoadable(HealthCheckModuleProvider.class);
     }
 }

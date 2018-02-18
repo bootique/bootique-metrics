@@ -6,8 +6,8 @@ import org.junit.Test;
 public class MetricsModuleProviderIT {
 
 	@Test
-	public void testPresentInJar() {
-		BQModuleProviderChecker.testPresentInJar(MetricsModuleProvider.class);
+	public void testAutoLoadable() {
+		BQModuleProviderChecker.testAutoLoadable(MetricsModuleProvider.class);
 	}
 
 	@Test
