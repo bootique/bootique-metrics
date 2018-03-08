@@ -31,7 +31,6 @@ public class IntRange extends ValueRange<Integer> {
             return new IntRange(null, null);
         }
 
-        // comma-separated format; spaces are insignificant
         StringTokenizer tokens = new StringTokenizer(encoded);
 
         switch (tokens.countTokens()) {
