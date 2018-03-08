@@ -31,7 +31,6 @@ public class DoubleRange extends ValueRange<Double> {
             return new DoubleRange(null, null);
         }
 
-        // comma-separated format; spaces are insignificant
         StringTokenizer tokens = new StringTokenizer(encoded);
 
         switch (tokens.countTokens()) {
