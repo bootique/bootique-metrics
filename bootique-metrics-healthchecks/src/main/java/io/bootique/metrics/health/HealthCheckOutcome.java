@@ -142,7 +142,7 @@ public class HealthCheckOutcome implements Comparable<HealthCheckOutcome> {
     }
 
     /**
-     * Compares this and another outcome by severity. Less severe
+     * Compares this and another outcome by severity. Less severe outcomes are ordered prior to more severe ones.
      *
      * @param o another outcome to compare with.
      * @return an int according to {@link Comparable} contract.
