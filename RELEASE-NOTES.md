@@ -10,6 +10,7 @@
 * #22 HealthCheckRegistry filtering
 * #23 Nagios-like health-check statuses
 * #24 Add reusable health checks that can read metrics Gauges
+* #26 Upgrade to bootique-modules-parent 0.8
 
 ## 0.10
 
