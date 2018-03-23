@@ -1,8 +1,8 @@
 package io.bootique.metrics.health.check;
 
 import io.bootique.metrics.health.HealthCheck;
+import io.bootique.metrics.health.HealthCheckData;
 import io.bootique.metrics.health.HealthCheckOutcome;
-import io.bootique.metrics.health.HealthCheckStatus;
 
 import java.util.function.Supplier;
 
@@ -24,24 +24,40 @@ public class ValueRangeCheck<T extends Comparable<T>> implements HealthCheck {
     public HealthCheckOutcome check() {
 
         T val = valueSupplier.get();
-        HealthCheckStatus status = range.classify(val);
-        switch (status) {
-            case OK:
-                return HealthCheckOutcome.ok();
+        HealthCheckData<T> data = new HealthCheckData<>(val, range);
+
+        return range.reachedThreshold(val)
+                .map(t -> toOutcome(t, data))
+                .orElse(toUnknownOutcome(data));
+    }
+
+    protected HealthCheckOutcome toOutcome(Threshold<T> th, HealthCheckData<T> data) {
+
+        switch (th.getType()) {
+            case MIN:
+                return HealthCheckOutcome.ok().withData(data);
             case WARNING:
-                return forWarning(val);
+                return HealthCheckOutcome
+                        .warning("Value " + data.getValue() + " reaches or exceeds warning threshold of " + th.getValue())
+                        .withData(data);
             case CRITICAL:
-                return forCritical(val);
+                return HealthCheckOutcome
+                        .critical("Value " + data.getValue() + " reaches or exceeds critical threshold of " + th.getValue())
+                        .withData(data);
+            case MAX:
+                return HealthCheckOutcome
+                        .unknown("Value " + data.getValue() + " reaches or exceeds max threshold of " + th.getValue())
+                        .withData(data);
             default:
-                throw new RuntimeException("Unexpected status '" + status + "' for range position for value " + val);
+                throw new RuntimeException("Unexpected threshold type '"
+                        + th.getType()
+                        + "' for range position for value " + data.getValue());
         }
     }
 
-    protected HealthCheckOutcome forWarning(T val) {
-        return HealthCheckOutcome.warning("Value " + val + " exceeds warning threshold of " + range.getWarningThreshold());
-    }
-
-    protected HealthCheckOutcome forCritical(T val) {
-        return HealthCheckOutcome.critical("Value " + val + " exceeds critical threshold of " + range.getCriticalThreshold());
+    protected HealthCheckOutcome toUnknownOutcome(HealthCheckData<T> data) {
+        return HealthCheckOutcome
+                .unknown("Value " + data.getValue() + " is outside expected min/max range")
+                .withData(data);
     }
 }

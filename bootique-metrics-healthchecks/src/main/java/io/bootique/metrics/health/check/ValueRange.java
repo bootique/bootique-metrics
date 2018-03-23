@@ -1,89 +1,113 @@
 package io.bootique.metrics.health.check;
 
-import io.bootique.metrics.health.HealthCheckStatus;
-
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
-import java.util.function.Function;
+import java.util.Optional;
 
 /**
+ * Defines a range of incrementing values with optional min/max boundaries and internal thresholds.
+ *
  * @since 0.25
  */
-public abstract class ValueRange<T extends Comparable<T>> {
+public class ValueRange<T extends Comparable<T>> {
 
-    private T warningThreshold;
-    private T criticalThreshold;
-    private Function<T, HealthCheckStatus> checker;
+    private List<Threshold<T>> thresholdsHighestFirst;
 
-    protected ValueRange(T warningThreshold, T criticalThreshold) {
-        this.warningThreshold = warningThreshold;
-        this.criticalThreshold = criticalThreshold;
-
-        if (criticalThreshold == null) {
-            checker = i -> HealthCheckStatus.OK;
-        } else if (warningThreshold == null) {
-            checker = this::checkCritical;
-        } else {
-
-            // both thresholds are here... validate they do not overlap
-
-            if (warningThreshold.compareTo(criticalThreshold) >= 0) {
-                throw new RuntimeException("Warning threshold '" + warningThreshold
-                        + "' must be below critical '" + criticalThreshold + "'");
-            }
-
-            checker = this::checkWarningCritical;
-        }
+    protected ValueRange(List<Threshold<T>> thresholdsHighestFirst) {
+        this.thresholdsHighestFirst = thresholdsHighestFirst;
     }
 
-    protected HealthCheckStatus checkWarningCritical(T val) {
-
-        if (val.compareTo(warningThreshold) < 0) {
-            return HealthCheckStatus.OK;
-        } else if (val.compareTo(criticalThreshold) < 0) {
-            return HealthCheckStatus.WARNING;
-        } else {
-            return HealthCheckStatus.CRITICAL;
-        }
+    public static <T extends Comparable<T>> Builder<T> builder(Class<T> type) {
+        return new Builder<>();
     }
 
-    protected HealthCheckStatus checkCritical(T val) {
-        return val.compareTo(criticalThreshold) < 0 ? HealthCheckStatus.OK : HealthCheckStatus.CRITICAL;
+    public static <T extends Comparable<T>> ValueRange<T> create(T min, T warn, T critical, T max) {
+        Builder<T> builder = new Builder<>();
+        return builder.min(min).warning(warn).critical(critical).max(max).build();
     }
 
     /**
-     * Returns OK, WARNING or CRITICAL, depending on where the value falls within the defined range.
+     * Returns a threshold exceeded by this value. If value is below the lowest threshold, an empty optional is returned.
      *
-     * @return OK, WARNING or CRITICAL, depending on where the value falls within the defined range.
+     * @return a threshold exceeded by this value wrapped in an Optional or an empty Optional.
      */
-    public HealthCheckStatus classify(T val) {
+    public Optional<Threshold<T>> reachedThreshold(T val) {
         Objects.requireNonNull(val, "Value must be not null");
-        return checker.apply(val);
+
+        // return a matching status for the first exceeded threshold
+        for (Threshold<T> th : thresholdsHighestFirst) {
+
+            if (th.compareTo(val) <= 0) {
+                return Optional.of(th);
+            }
+        }
+
+        return Optional.empty();
     }
 
-    public T getWarningThreshold() {
-        return warningThreshold;
+    public List<Threshold<T>> getThresholdsHighestFirst() {
+        return thresholdsHighestFirst;
     }
 
-    public T getCriticalThreshold() {
-        return criticalThreshold;
+    public Threshold<T> getThreshold(ThresholdType type) {
+
+        for (Threshold<T> t : thresholdsHighestFirst) {
+            if (t.getType() == type) {
+                return t;
+            }
+        }
+
+        return null;
     }
 
     @Override
     public String toString() {
         StringBuilder out = new StringBuilder();
 
-        if (warningThreshold != null) {
-            out.append(warningThreshold);
-        }
-
-        if (criticalThreshold != null) {
-            if (warningThreshold != null) {
+        for (int i = thresholdsHighestFirst.size() - 1; i >= 0; i--) {
+            if (i > 0) {
                 out.append(", ");
             }
 
-            out.append(criticalThreshold);
+            out.append(thresholdsHighestFirst.get(i));
         }
 
         return out.toString();
+    }
+
+    public static class Builder<T extends Comparable<T>> {
+
+        private List<Threshold<T>> thresholds;
+
+        protected Builder() {
+            this.thresholds = new ArrayList<>(4);
+        }
+
+        public Builder<T> min(T min) {
+            thresholds.add(new Threshold<>(ThresholdType.MIN, min));
+            return this;
+        }
+
+        public Builder<T> max(T max) {
+            thresholds.add(new Threshold<>(ThresholdType.MAX, max));
+            return this;
+        }
+
+        public Builder<T> warning(T warning) {
+            thresholds.add(new Threshold<>(ThresholdType.WARNING, warning));
+            return this;
+        }
+
+        public Builder<T> critical(T critical) {
+            thresholds.add(new Threshold<>(ThresholdType.CRITICAL, critical));
+            return this;
+        }
+
+        public ValueRange<T> build() {
+            Collections.sort(thresholds, Collections.reverseOrder());
+            return new ValueRange<T>(thresholds);
+        }
     }
 }

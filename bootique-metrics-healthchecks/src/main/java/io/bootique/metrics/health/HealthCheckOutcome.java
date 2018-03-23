@@ -1,5 +1,7 @@
 package io.bootique.metrics.health;
 
+import java.util.Optional;
+
 /**
  * @since 0.8
  */
@@ -10,11 +12,13 @@ public class HealthCheckOutcome implements Comparable<HealthCheckOutcome> {
     private HealthCheckStatus status;
     private String message;
     private Throwable error;
+    private Optional<HealthCheckData<?>> data;
 
     private HealthCheckOutcome(HealthCheckStatus status, String message, Throwable error) {
         this.status = status;
         this.message = message;
         this.error = error;
+        this.data = Optional.empty();
     }
 
     /**
@@ -139,6 +143,28 @@ public class HealthCheckOutcome implements Comparable<HealthCheckOutcome> {
     @Deprecated
     public static HealthCheckOutcome unhealthy(Throwable th) {
         return new HealthCheckOutcome(HealthCheckStatus.CRITICAL, th.getMessage(), th);
+    }
+
+    /**
+     * @return a new {@link HealthCheckOutcome} with all the information from this outcome plus extra metrics data
+     * that was used to generate this outcome.
+     * @since 0.25
+     */
+    public HealthCheckOutcome withData(HealthCheckData<?> data) {
+        HealthCheckOutcome outcomeWithData = new HealthCheckOutcome(status, message, error);
+        outcomeWithData.data = Optional.of(data);
+        return outcomeWithData;
+    }
+
+    /**
+     * Returns an optional extra data for this health check, that may assist the caller in making sense of the system
+     * state. Kind of a metrics for health check.
+     *
+     * @return an optional extra data for this health check.
+     * @since 0.25
+     */
+    public Optional<HealthCheckData<?>> getData() {
+        return data;
     }
 
     /**

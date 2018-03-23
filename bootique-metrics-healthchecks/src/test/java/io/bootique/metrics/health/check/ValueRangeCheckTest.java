@@ -15,15 +15,17 @@ public class ValueRangeCheckTest {
     public void testCheck() {
 
         Supplier<Integer> supplier = mock(Supplier.class);
-        when(supplier.get()).thenReturn(-1, 0, 5, 6, 9);
+        when(supplier.get()).thenReturn(-1, 0, 5, 6, 9, 12);
 
-        IntRange range = new IntRange(5, 8);
+        ValueRange<Integer> range = ValueRange.create(0, 5, 8, 10);
+
         ValueRangeCheck<Integer> check = new ValueRangeCheck<>(range, supplier);
 
-        assertEquals(HealthCheckStatus.OK, check.check().getStatus());
+        assertEquals(HealthCheckStatus.UNKNOWN, check.check().getStatus());
         assertEquals(HealthCheckStatus.OK, check.check().getStatus());
         assertEquals(HealthCheckStatus.WARNING, check.check().getStatus());
         assertEquals(HealthCheckStatus.WARNING, check.check().getStatus());
         assertEquals(HealthCheckStatus.CRITICAL, check.check().getStatus());
+        assertEquals(HealthCheckStatus.UNKNOWN, check.check().getStatus());
     }
 }
