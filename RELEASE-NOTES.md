@@ -1,3 +1,7 @@
+## 0.26
+
+* #25 Metrics and thresholds data in healthchecks
+
 ## 0.25
 
 * #15 Supported reporters are not shown when the app is run with -H
