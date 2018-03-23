@@ -1,7 +1,7 @@
 package io.bootique.metrics.health.check;
 
 /**
- * @since 0.25
+ * @since 0.26
  */
 public class Threshold<T extends Comparable<T>> implements Comparable<Threshold<T>> {
 

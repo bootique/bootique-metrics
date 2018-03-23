@@ -4,7 +4,7 @@ import io.bootique.annotation.BQConfig;
 import io.bootique.annotation.BQConfigProperty;
 
 /**
- * @since 0.25
+ * @since 0.26
  */
 @BQConfig
 public class DoubleValueRangeFactory {

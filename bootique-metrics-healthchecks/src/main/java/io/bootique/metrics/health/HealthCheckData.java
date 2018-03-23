@@ -6,7 +6,7 @@ import io.bootique.metrics.health.check.ValueRange;
  * Contains information about the metric and thresholds used to calculate the health check.
  *
  * @param <T> the type of metrics value used by the health check.
- * @since 0.25
+ * @since 0.26
  */
 public class HealthCheckData<T extends Comparable<T>> {
 
