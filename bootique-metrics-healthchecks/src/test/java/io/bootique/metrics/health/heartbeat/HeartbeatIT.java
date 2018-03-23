@@ -103,6 +103,9 @@ public class HeartbeatIT {
         threadTester.assertPoolSize(2);
 
         runtime.shutdown();
+
+        // give a chance to stop ... without this the assertion below would fail occasionally
+        Thread.sleep(100);
         threadTester.assertNoHeartbeat();
     }
 
