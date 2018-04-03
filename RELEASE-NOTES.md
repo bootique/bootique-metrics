@@ -1,6 +1,7 @@
 ## 0.26
 
 * #25 Metrics and thresholds data in healthchecks
+* #28 Cleaning up APIs deprecated since <= 0.25
 
 ## 0.25
 

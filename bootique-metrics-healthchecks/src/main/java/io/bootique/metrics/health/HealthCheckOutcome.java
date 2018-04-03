@@ -110,42 +110,6 @@ public class HealthCheckOutcome implements Comparable<HealthCheckOutcome> {
     }
 
     /**
-     * @return a {@link HealthCheckOutcome} corresponding to the healthy state of the app.
-     * @deprecated since 0.25 in favor of {@link #ok()}.
-     */
-    @Deprecated
-    public static HealthCheckOutcome healthy() {
-        return ok();
-    }
-
-    /**
-     * @return a {@link HealthCheckOutcome} corresponding to the healthy state of the app.
-     * @deprecated since 0.25 in favor of {@link #ok(String)}.
-     */
-    @Deprecated
-    public static HealthCheckOutcome healthy(String message) {
-        return ok(message);
-    }
-
-    /**
-     * @return a {@link HealthCheckOutcome} corresponding to the critical state of the app.
-     * @deprecated since 0.25 in favor of {@link #critical(String)}.
-     */
-    @Deprecated
-    public static HealthCheckOutcome unhealthy(String message) {
-        return HealthCheckOutcome.critical(message);
-    }
-
-    /**
-     * @return a {@link HealthCheckOutcome} corresponding to the critical state of the app.
-     * @deprecated since 0.25 in favor of {@link #critical(Throwable)}.
-     */
-    @Deprecated
-    public static HealthCheckOutcome unhealthy(Throwable th) {
-        return new HealthCheckOutcome(HealthCheckStatus.CRITICAL, th.getMessage(), th);
-    }
-
-    /**
      * @return a new {@link HealthCheckOutcome} with all the information from this outcome plus extra metrics data
      * that was used to generate this outcome.
      * @since 0.26
@@ -176,15 +140,6 @@ public class HealthCheckOutcome implements Comparable<HealthCheckOutcome> {
     @Override
     public int compareTo(HealthCheckOutcome o) {
         return status.getSeverity() - o.status.getSeverity();
-    }
-
-    /**
-     * @return a boolean indicating whether the health check was fully successful.
-     * @deprecated since 0.25 in favor of {@link #getStatus()}.
-     */
-    @Deprecated
-    public boolean isHealthy() {
-        return status == HealthCheckStatus.OK;
     }
 
     public HealthCheckStatus getStatus() {
