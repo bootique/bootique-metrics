@@ -45,8 +45,9 @@ public class ValueRangeCheck<T extends Comparable<T>> implements HealthCheck {
                         .critical("Value " + data.getValue() + " reaches or exceeds critical threshold of " + th.getValue())
                         .withData(data);
             case MAX:
+                // report max as CRITICAL
                 return HealthCheckOutcome
-                        .unknown("Value " + data.getValue() + " reaches or exceeds max threshold of " + th.getValue())
+                        .critical("Value " + data.getValue() + " reaches or exceeds max threshold of " + th.getValue())
                         .withData(data);
             default:
                 throw new RuntimeException("Unexpected threshold type '"

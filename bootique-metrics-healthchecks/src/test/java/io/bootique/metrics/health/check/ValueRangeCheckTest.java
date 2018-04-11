@@ -26,6 +26,6 @@ public class ValueRangeCheckTest {
         assertEquals(HealthCheckStatus.WARNING, check.check().getStatus());
         assertEquals(HealthCheckStatus.WARNING, check.check().getStatus());
         assertEquals(HealthCheckStatus.CRITICAL, check.check().getStatus());
-        assertEquals(HealthCheckStatus.UNKNOWN, check.check().getStatus());
+        assertEquals(HealthCheckStatus.CRITICAL, check.check().getStatus());
     }
 }
