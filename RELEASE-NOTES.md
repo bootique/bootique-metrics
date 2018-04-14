@@ -2,6 +2,7 @@
 
 * #25 Metrics and thresholds data in healthchecks
 * #28 Cleaning up APIs deprecated since <= 0.25
+* #29 DeferredHealthCheck - a health checking proxy for services not available on startup
 
 ## 0.25
 
