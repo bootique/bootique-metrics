@@ -19,34 +19,28 @@ public class DeferredHealthCheck implements HealthCheck {
     private static final HealthCheckOutcome UNKNOWN_OUTCOME = HealthCheckOutcome.unknown();
     private static final HealthCheck FALLBACK_CHECK = () -> UNKNOWN_OUTCOME;
 
-    private Supplier<Optional<HealthCheck>> delegateSupplier;
-    private volatile Runnable delegateUpdater;
-    private volatile HealthCheck delegate;
+    private Supplier<Optional<HealthCheck>> maybeDelegateSupplier;
+    private volatile Supplier<HealthCheck> delegateSupplier;
 
-    public DeferredHealthCheck(Supplier<Optional<HealthCheck>> delegateSupplier) {
-        this.delegate = FALLBACK_CHECK;
-        this.delegateSupplier = delegateSupplier;
-        this.delegateUpdater = this::checkActivation;
+    public DeferredHealthCheck(Supplier<Optional<HealthCheck>> maybeDelegateSupplier) {
+        this.maybeDelegateSupplier = maybeDelegateSupplier;
+        this.delegateSupplier = this::checkActivation;
     }
 
     @Override
     public HealthCheckOutcome check() throws Exception {
-        delegateUpdater.run();
-        return delegate.check();
+        return delegateSupplier.get().check();
     }
 
-    private void checkActivation() {
-
-        // I guess the same health check should not be executed in parallel, so this synchronization is just for
-        // internal consistency and should not have much impact on performance.
-        // And once we are activated, this method is no longer called.
-        synchronized (this) {
-            Optional<HealthCheck> maybeRealHC = delegateSupplier.get();
-            if (maybeRealHC.isPresent()) {
-                this.delegate = maybeRealHC.get();
-                this.delegateUpdater = () -> {
-                };
-            }
+    private HealthCheck checkActivation() {
+        
+        Optional<HealthCheck> maybeDelegate = maybeDelegateSupplier.get();
+        if (maybeDelegate.isPresent()) {
+            HealthCheck delegate = maybeDelegate.get();
+            this.delegateSupplier = () -> delegate;
+            return delegate;
         }
+
+        return FALLBACK_CHECK;
     }
 }
