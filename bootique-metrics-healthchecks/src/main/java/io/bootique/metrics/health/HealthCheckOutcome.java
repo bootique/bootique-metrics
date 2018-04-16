@@ -42,7 +42,7 @@ public class HealthCheckOutcome implements Comparable<HealthCheckOutcome> {
      * @since 0.25
      */
     public static HealthCheckOutcome warning() {
-        return warning(null);
+        return warning((String) null);
     }
 
     /**
@@ -51,6 +51,14 @@ public class HealthCheckOutcome implements Comparable<HealthCheckOutcome> {
      */
     public static HealthCheckOutcome warning(String message) {
         return new HealthCheckOutcome(HealthCheckStatus.WARNING, message, null);
+    }
+
+    /**
+     * @return a {@link HealthCheckOutcome} corresponding to a "warning" state of the app, i.e. approaching critical.
+     * @since 0.26
+     */
+    public static HealthCheckOutcome warning(Throwable th) {
+        return new HealthCheckOutcome(HealthCheckStatus.WARNING, null, th);
     }
 
     /**
