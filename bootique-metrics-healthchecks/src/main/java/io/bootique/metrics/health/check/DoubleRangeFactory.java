@@ -7,7 +7,7 @@ import io.bootique.annotation.BQConfigProperty;
  * @since 0.26
  */
 @BQConfig
-public class DoubleValueRangeFactory {
+public class DoubleRangeFactory {
 
     private Double min;
     private Double warning;

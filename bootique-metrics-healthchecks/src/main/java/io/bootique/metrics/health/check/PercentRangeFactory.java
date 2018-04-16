@@ -6,14 +6,14 @@ import io.bootique.value.Percent;
 /**
  * @since 0.26
  */
-public class PercentValueRangeFactory {
+public class PercentRangeFactory {
 
     private Percent min;
     private Percent warning;
     private Percent critical;
     private Percent max;
 
-    public PercentValueRangeFactory() {
+    public PercentRangeFactory() {
         this.min = Percent.ZERO;
         this.max = Percent.HUNDRED;
     }

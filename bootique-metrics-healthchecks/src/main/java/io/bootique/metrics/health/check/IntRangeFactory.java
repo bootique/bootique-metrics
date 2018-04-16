@@ -7,7 +7,7 @@ import io.bootique.annotation.BQConfigProperty;
  * @since 0.26
  */
 @BQConfig
-public class IntValueRangeFactory {
+public class IntRangeFactory {
 
     private Integer min;
     private Integer warning;
