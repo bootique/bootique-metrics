@@ -16,6 +16,11 @@ public class MetricNaming {
             .stripSuffix("Instrumented")
             .build();
 
+    private String prefix;
+
+    protected MetricNaming(String prefix) {
+        this.prefix = prefix;
+    }
 
     public static String name(Class<? extends Module> metricSourceModule, String metricType, String metricName) {
         return fromParts("bq", MODULE_NAME_BUILDER.toName(metricSourceModule), metricType, metricName);
@@ -29,7 +34,22 @@ public class MetricNaming {
         return fromParts("bq", MODULE_NAME_BUILDER.toName(metricSourceModule), metricType, metricInstanceName, metricName);
     }
 
+    public static MetricNaming forModule(Class<? extends Module> metricSourceModule) {
+        return new MetricNaming("bq." + MODULE_NAME_BUILDER.toName(metricSourceModule));
+    }
+
     static String fromParts(String... parts) {
         return String.join(".", parts);
+    }
+
+    public String name(String metricType, String metricName) {
+        return fromParts(prefix, metricType, metricName);
+    }
+
+    public String name(
+            String metricType,
+            String metricInstanceName,
+            String metricName) {
+        return fromParts(prefix, metricType, metricInstanceName, metricName);
     }
 }
