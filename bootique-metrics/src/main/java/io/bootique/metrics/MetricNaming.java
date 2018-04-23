@@ -16,10 +16,10 @@ public class MetricNaming {
             .stripSuffix("Instrumented")
             .build();
 
-    private String prefix;
+    private String modulePrefix;
 
-    protected MetricNaming(String prefix) {
-        this.prefix = prefix;
+    protected MetricNaming(String modulePrefix) {
+        this.modulePrefix = modulePrefix;
     }
 
     public static String name(Class<? extends Module> metricSourceModule, String metricType, String metricName) {
@@ -49,14 +49,18 @@ public class MetricNaming {
         return String.join(".", parts);
     }
 
+    public String name(String metricName) {
+        return fromParts(modulePrefix, metricName);
+    }
+
     public String name(String metricType, String metricName) {
-        return fromParts(prefix, metricType, metricName);
+        return fromParts(modulePrefix, metricType, metricName);
     }
 
     public String name(
             String metricType,
             String metricInstanceName,
             String metricName) {
-        return fromParts(prefix, metricType, metricInstanceName, metricName);
+        return fromParts(modulePrefix, metricType, metricInstanceName, metricName);
     }
 }
