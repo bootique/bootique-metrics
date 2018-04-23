@@ -4,7 +4,7 @@ import com.google.inject.Module;
 import io.bootique.names.ClassToName;
 
 /**
- * A helper class to name metrics across Bootique modules. Helps somewhat to enforce consistent naming convention.
+ * A helper class to name metrics across Bootique modules. Helps somewhat to enforce consistent naming convention. Note that
  *
  * @since 0.26
  */
@@ -34,6 +34,13 @@ public class MetricNaming {
         return fromParts("bq", MODULE_NAME_BUILDER.toName(metricSourceModule), metricType, metricInstanceName, metricName);
     }
 
+    /**
+     * Creates a metrics naming builder for a root module class. Note that to generate a proper name, module class
+     * should follow a naming convention of "XyzModule" or "XyzInstrumentedModule".
+     *
+     * @param metricSourceModule a type of module where a given set of metrics originates.
+     * @return a {@link MetricNaming} name builder for a specific module.
+     */
     public static MetricNaming forModule(Class<? extends Module> metricSourceModule) {
         return new MetricNaming("bq." + MODULE_NAME_BUILDER.toName(metricSourceModule));
     }
