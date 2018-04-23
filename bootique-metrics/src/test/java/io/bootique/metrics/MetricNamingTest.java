@@ -9,24 +9,23 @@ import static org.junit.Assert.assertEquals;
 public class MetricNamingTest {
 
     @Test
-    public void testFromParts() {
-        assertEquals("", MetricNaming.fromParts());
-        assertEquals("", MetricNaming.fromParts(""));
-        assertEquals("a.bc.d", MetricNaming.fromParts("a", "bc", "d"));
-    }
+    public void testName() {
 
-    @Test
-    public void testName_NoInstance() {
-        assertEquals("bq.MetricNamingTestX.M1.N1", MetricNaming.name(MetricNamingTestXModule.class, "M1", "N1"));
-        assertEquals("bq.MetricNamingTestX.M1.N1", MetricNaming.name(MetricNamingTestXInstrumentedModule.class, "M1", "N1"));
-    }
+        assertEquals("bq.MetricNamingTestX", MetricNaming
+                .forModule(MetricNamingTestXModule.class)
+                .name());
 
-    @Test
-    public void testName_Instance() {
-        assertEquals("bq.MetricNamingTestX.M1.I1.N1", MetricNaming.name(MetricNamingTestXModule.class,
-                "M1", "I1", "N1"));
-        assertEquals("bq.MetricNamingTestX.M1.I1.N1", MetricNaming.name(MetricNamingTestXInstrumentedModule.class,
-                "M1", "I1", "N1"));
+        assertEquals("bq.MetricNamingTestX.M1", MetricNaming
+                .forModule(MetricNamingTestXModule.class)
+                .name("M1"));
+
+        assertEquals("bq.MetricNamingTestX.M1.I1.N1", MetricNaming
+                .forModule(MetricNamingTestXModule.class)
+                .name("M1", "I1", "N1"));
+
+        assertEquals("bq.MetricNamingTestX.M1.I1.N1", MetricNaming
+                .forModule(MetricNamingTestXInstrumentedModule.class)
+                .name("M1", "I1", "N1"));
     }
 
 }

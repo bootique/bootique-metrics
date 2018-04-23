@@ -3,6 +3,8 @@ package io.bootique.metrics;
 import com.google.inject.Module;
 import io.bootique.names.ClassToName;
 
+import java.util.StringJoiner;
+
 /**
  * A helper class to name metrics across Bootique modules. Helps somewhat to enforce consistent naming convention. Note that
  *
@@ -22,18 +24,6 @@ public class MetricNaming {
         this.modulePrefix = modulePrefix;
     }
 
-    public static String name(Class<? extends Module> metricSourceModule, String metricType, String metricName) {
-        return fromParts("bq", MODULE_NAME_BUILDER.toName(metricSourceModule), metricType, metricName);
-    }
-
-    public static String name(
-            Class<? extends Module> metricSourceModule,
-            String metricType,
-            String metricInstanceName,
-            String metricName) {
-        return fromParts("bq", MODULE_NAME_BUILDER.toName(metricSourceModule), metricType, metricInstanceName, metricName);
-    }
-
     /**
      * Creates a metrics naming builder for a root module class. Note that to generate a proper name, module class
      * should follow a naming convention of "XyzModule" or "XyzInstrumentedModule".
@@ -45,22 +35,14 @@ public class MetricNaming {
         return new MetricNaming("bq." + MODULE_NAME_BUILDER.toName(metricSourceModule));
     }
 
-    static String fromParts(String... parts) {
-        return String.join(".", parts);
-    }
+    public String name(String... names) {
 
-    public String name(String metricName) {
-        return fromParts(modulePrefix, metricName);
-    }
+        StringJoiner joiner = new StringJoiner(".").add(modulePrefix);
 
-    public String name(String metricType, String metricName) {
-        return fromParts(modulePrefix, metricType, metricName);
-    }
+        for (String name : names) {
+            joiner.add(name);
+        }
 
-    public String name(
-            String metricType,
-            String metricInstanceName,
-            String metricName) {
-        return fromParts(modulePrefix, metricType, metricInstanceName, metricName);
+        return joiner.toString();
     }
 }
