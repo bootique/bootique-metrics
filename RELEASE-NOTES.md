@@ -5,6 +5,7 @@
 * #28 Cleaning up APIs deprecated since <= 0.25
 * #29 DeferredHealthCheck - a health checking proxy for services not available on startup
 * #30 Metrics naming conventions
+* #31 Aligning health checks names with metrics names 
 
 ## 0.25
 
