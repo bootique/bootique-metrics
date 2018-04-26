@@ -3,6 +3,7 @@ package io.bootique.metrics.health;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
@@ -42,6 +43,14 @@ public class HealthCheckRegistry {
      */
     public boolean containsHealthCheck(String name) {
         return healthChecks.containsKey(name);
+    }
+
+    /**
+     * @return an immutable map of known health check names.
+     * @since 0.26
+     */
+    public Set<String> healthCheckNames() {
+        return Collections.unmodifiableSet(healthChecks.keySet());
     }
 
     /**
