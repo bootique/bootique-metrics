@@ -6,6 +6,7 @@
 * #29 DeferredHealthCheck - a health checking proxy for services not available on startup
 * #30 Metrics naming conventions
 * #31 Aligning health checks names with metrics names 
+* #32 MetricsModule uses SafeTxIdGenerator instead of StripedTransactionIdGenerator 
 
 ## 0.25
 

@@ -6,7 +6,7 @@ import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import io.bootique.ConfigModule;
 import io.bootique.config.ConfigurationFactory;
-import io.bootique.metrics.mdc.SafeTransactionIdGenerator;
+import io.bootique.metrics.mdc.StripedTransactionIdGenerator;
 import io.bootique.metrics.mdc.TransactionIdGenerator;
 import io.bootique.metrics.mdc.TransactionIdMDC;
 
@@ -44,7 +44,7 @@ public class MetricsModule extends ConfigModule {
             cpus = 4;
         }
 
-        return new SafeTransactionIdGenerator(cpus);
+        return new StripedTransactionIdGenerator(cpus);
     }
 
     @Provides
