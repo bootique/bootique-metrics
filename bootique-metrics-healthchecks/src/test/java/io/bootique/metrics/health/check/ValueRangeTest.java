@@ -30,4 +30,10 @@ public class ValueRangeTest {
         assertEquals(ThresholdType.WARNING, range.reachedThreshold(5.2).get().getType());
         assertEquals(ThresholdType.CRITICAL, range.reachedThreshold(9.).get().getType());
     }
+
+    @Test
+    public void testToString() {
+        ValueRange<Double> range = ValueRange.create(0., 5.1, 8.6, 11.);
+        assertEquals("min:0.0, warning:5.1, critical:8.6, max:11.0", range.toString());
+    }
 }

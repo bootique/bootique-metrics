@@ -67,7 +67,7 @@ public class ValueRange<T extends Comparable<T>> {
         StringBuilder out = new StringBuilder();
 
         for (int i = thresholdsHighestFirst.size() - 1; i >= 0; i--) {
-            if (i > 0) {
+            if (out.length() > 0) {
                 out.append(", ");
             }
 
