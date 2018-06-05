@@ -111,7 +111,7 @@ public class HealthCheckRegistryTest {
 
         Map<String, HealthCheckOutcome> results = registry.runHealthChecks(ForkJoinPool.commonPool());
         assertEquals(1, results.size());
-        assertEquals(HealthCheckStatus.OK, results.get("0").getStatus());
+        assertEquals("Unexpected HC: " + results.get("0"), HealthCheckStatus.OK, results.get("0").getStatus());
     }
 
     @Test
