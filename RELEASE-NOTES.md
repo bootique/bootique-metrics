@@ -7,6 +7,7 @@
 * #30 Metrics naming conventions
 * #31 Aligning health checks names with metrics names 
 * #32 MetricsModule uses SafeTxIdGenerator instead of StripedTransactionIdGenerator 
+* #33 Support for "active" flag on health checks
 
 ## 0.25
 

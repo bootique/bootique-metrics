@@ -18,6 +18,7 @@ import static org.mockito.Mockito.when;
 public class HealthCheckRegistryTest {
 
     private HealthCheck success;
+    private HealthCheck inactive;
     private HealthCheck failure;
     private HealthCheck failureTh;
     private HealthCheck slowSuccess;
@@ -26,14 +27,21 @@ public class HealthCheckRegistryTest {
     public void before() {
         this.success = mock(HealthCheck.class);
         when(success.safeCheck()).thenReturn(HealthCheckOutcome.ok());
+        when(success.isActive()).thenReturn(true);
+
+        this.inactive = mock(HealthCheck.class);
+        when(inactive.isActive()).thenReturn(false);
 
         this.failure = mock(HealthCheck.class);
         when(failure.safeCheck()).thenReturn(HealthCheckOutcome.critical("uh"));
+        when(failure.isActive()).thenReturn(true);
 
         this.failureTh = mock(HealthCheck.class);
         when(failureTh.safeCheck()).thenReturn(HealthCheckOutcome.critical(new Throwable("uh")));
+        when(failureTh.isActive()).thenReturn(true);
 
         this.slowSuccess = mock(HealthCheck.class);
+        when(slowSuccess.isActive()).thenReturn(true);
         when(slowSuccess.safeCheck()).then(i -> {
             Thread.sleep(500);
             return HealthCheckOutcome.ok();
@@ -75,6 +83,15 @@ public class HealthCheckRegistryTest {
     }
 
     @Test
+    public void testRunHealthChecks_Serial_Inactive() {
+        HealthCheckRegistry registry = createRegistry(success, inactive);
+
+        Map<String, HealthCheckOutcome> results = registry.runHealthChecks();
+        assertEquals(1, results.size());
+        assertEquals(HealthCheckStatus.OK, results.get("0").getStatus());
+    }
+
+    @Test
     public void testRunHealthChecks_Parallel() {
 
         HealthCheckRegistry registry = createRegistry(success, failure, failureTh);
@@ -84,6 +101,16 @@ public class HealthCheckRegistryTest {
         assertEquals(HealthCheckStatus.OK, results.get("0").getStatus());
         assertEquals(HealthCheckStatus.CRITICAL, results.get("1").getStatus());
         assertEquals(HealthCheckStatus.CRITICAL, results.get("2").getStatus());
+    }
+
+    @Test
+    public void testRunHealthChecks_Parallel_Inactive() {
+
+        HealthCheckRegistry registry = createRegistry(success, inactive);
+
+        Map<String, HealthCheckOutcome> results = registry.runHealthChecks(ForkJoinPool.commonPool());
+        assertEquals(1, results.size());
+        assertEquals(HealthCheckStatus.OK, results.get("0").getStatus());
     }
 
     @Test

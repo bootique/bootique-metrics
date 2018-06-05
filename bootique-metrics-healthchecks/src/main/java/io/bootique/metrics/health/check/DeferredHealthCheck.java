@@ -16,8 +16,7 @@ import java.util.function.Supplier;
  */
 public class DeferredHealthCheck implements HealthCheck {
 
-    private static final HealthCheckOutcome UNKNOWN_OUTCOME = HealthCheckOutcome.unknown();
-    private static final HealthCheck FALLBACK_CHECK = () -> UNKNOWN_OUTCOME;
+    private static final HealthCheck INACTIVE_CHECK = new InactiveCheck();
 
     private Supplier<Optional<HealthCheck>> maybeDelegateSupplier;
     private volatile Supplier<HealthCheck> delegateSupplier;
@@ -33,7 +32,7 @@ public class DeferredHealthCheck implements HealthCheck {
     }
 
     private HealthCheck checkActivation() {
-        
+
         Optional<HealthCheck> maybeDelegate = maybeDelegateSupplier.get();
         if (maybeDelegate.isPresent()) {
             HealthCheck delegate = maybeDelegate.get();
@@ -41,6 +40,21 @@ public class DeferredHealthCheck implements HealthCheck {
             return delegate;
         }
 
-        return FALLBACK_CHECK;
+        // returning inactive heath check results in the checking being skipped...
+        return INACTIVE_CHECK;
+    }
+
+    static class InactiveCheck implements HealthCheck {
+        private static final HealthCheckOutcome UNKNOWN_OUTCOME = HealthCheckOutcome.unknown();
+
+        @Override
+        public boolean isActive() {
+            return false;
+        }
+
+        @Override
+        public HealthCheckOutcome check() {
+            return UNKNOWN_OUTCOME;
+        }
     }
 }

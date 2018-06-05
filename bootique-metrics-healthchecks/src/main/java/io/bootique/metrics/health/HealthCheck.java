@@ -16,6 +16,16 @@ public interface HealthCheck {
     HealthCheckOutcome check() throws Exception;
 
     /**
+     * Returns whether this check should be executed during a registry health check run.
+     *
+     * @return this implementation always returns true.
+     * @since 0.26
+     */
+    default boolean isActive() {
+        return true;
+    }
+
+    /**
      * Runs this health check, catching all exceptions, turning them into unhealthy outcomes.
      *
      * @return outcome of the health check.

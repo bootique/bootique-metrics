@@ -100,7 +100,7 @@ public class HealthCheckRegistry {
     public Map<String, HealthCheckOutcome> runHealthChecks() {
 
         Map<String, HealthCheckOutcome> results = new HashMap<>();
-        healthChecks.forEach((n, hc) -> results.put(n, hc.safeCheck()));
+        getActive().forEach((n, hc) -> results.put(n, hc.safeCheck()));
         return results;
     }
 
@@ -130,28 +130,47 @@ public class HealthCheckRegistry {
             long timeout,
             TimeUnit timeoutUnit) {
 
-        if (healthChecks.isEmpty()) {
+        Map<String, HealthCheck> activeChecks = getActive();
+        if (activeChecks.isEmpty()) {
             return Collections.emptyMap();
         }
 
         // use the latch to ensure we can control the overall timeout, not individual health check timeouts...
         // note that if the health check pool is thread-starved, then a few slow checks would result in
         // faster checks reported as timeouts...
-        CountDownLatch doneSignal = new CountDownLatch(healthChecks.size());
+        CountDownLatch doneSignal = new CountDownLatch(activeChecks.size());
 
         Map<String, Future<HealthCheckOutcome>> futures = new HashMap<>();
-        healthChecks.forEach((n, hc) -> futures.put(n, threadPool.submit(() -> run(hc, doneSignal))));
+        activeChecks.forEach((n, hc) -> futures.put(n, threadPool.submit(() -> run(hc, doneSignal))));
 
         try {
             doneSignal.await(timeout, timeoutUnit);
         } catch (InterruptedException e) {
-            // let's still finish the healthcheck analysis on interrupt
+            // let's still finish the health check analysis on interrupt
         }
 
         Map<String, HealthCheckOutcome> results = new HashMap<>();
         futures.forEach((n, f) -> results.put(n, immediateOutcome(f)));
 
         return results;
+    }
+
+    // get health checks active at this instant
+    private Map<String, HealthCheck> getActive() {
+
+        if (healthChecks.isEmpty()) {
+            return Collections.emptyMap();
+        }
+
+        Map<String, HealthCheck> active = new HashMap<>((int) (healthChecks.size() / 0.75));
+
+        healthChecks.forEach((k, v) -> {
+            if (v.isActive()) {
+                active.put(k, v);
+            }
+        });
+
+        return active;
     }
 
     private HealthCheckOutcome run(HealthCheck hc, CountDownLatch doneSignal) {
