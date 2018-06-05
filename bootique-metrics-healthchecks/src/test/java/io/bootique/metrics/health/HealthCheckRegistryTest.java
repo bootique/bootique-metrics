@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertEquals;
@@ -97,7 +96,7 @@ public class HealthCheckRegistryTest {
 
         HealthCheckRegistry registry = createRegistry(success, failure, failureTh);
 
-        Map<String, HealthCheckOutcome> results = registry.runHealthChecks(ForkJoinPool.commonPool());
+        Map<String, HealthCheckOutcome> results = runParallel(registry, 3, 10000);
         assertEquals(3, results.size());
         assertEquals(HealthCheckStatus.OK, results.get("0").getStatus());
         assertEquals(HealthCheckStatus.CRITICAL, results.get("1").getStatus());
@@ -109,7 +108,7 @@ public class HealthCheckRegistryTest {
 
         HealthCheckRegistry registry = createRegistry(success, inactive);
 
-        Map<String, HealthCheckOutcome> results = registry.runHealthChecks(ForkJoinPool.commonPool());
+        Map<String, HealthCheckOutcome> results = runParallel(registry, 3, 10000);
         assertEquals(1, results.size());
         assertEquals("Unexpected HC: " + results.get("0"), HealthCheckStatus.OK, results.get("0").getStatus());
     }
