@@ -30,6 +30,7 @@ public class HealthCheckRegistryTest {
         when(success.isActive()).thenReturn(true);
 
         this.inactive = mock(HealthCheck.class);
+        when(inactive.safeCheck()).thenReturn(HealthCheckOutcome.ok());
         when(inactive.isActive()).thenReturn(false);
 
         this.failure = mock(HealthCheck.class);
