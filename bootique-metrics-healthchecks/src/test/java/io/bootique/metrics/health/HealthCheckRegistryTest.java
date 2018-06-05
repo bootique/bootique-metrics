@@ -106,11 +106,12 @@ public class HealthCheckRegistryTest {
     @Test
     public void testRunHealthChecks_Parallel_Inactive() {
 
-        HealthCheckRegistry registry = createRegistry(success, inactive);
+        HealthCheckRegistry registry = createRegistry(success, inactive, failure);
 
         Map<String, HealthCheckOutcome> results = runParallel(registry, 3, 10000);
-        assertEquals(1, results.size());
+        assertEquals(2, results.size());
         assertEquals("Unexpected HC: " + results.get("0"), HealthCheckStatus.OK, results.get("0").getStatus());
+        assertEquals("Unexpected HC: " + results.get("2"), HealthCheckStatus.CRITICAL, results.get("2").getStatus());
     }
 
     @Test
