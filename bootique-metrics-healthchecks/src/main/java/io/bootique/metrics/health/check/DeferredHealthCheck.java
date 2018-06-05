@@ -27,6 +27,11 @@ public class DeferredHealthCheck implements HealthCheck {
     }
 
     @Override
+    public boolean isActive() {
+        return delegateSupplier.get().isActive();
+    }
+
+    @Override
     public HealthCheckOutcome check() throws Exception {
         return delegateSupplier.get().check();
     }
@@ -40,7 +45,7 @@ public class DeferredHealthCheck implements HealthCheck {
             return delegate;
         }
 
-        // returning inactive heath check results in the checking being skipped...
+        // returning inactive health check results in the checking being skipped...
         return INACTIVE_CHECK;
     }
 
