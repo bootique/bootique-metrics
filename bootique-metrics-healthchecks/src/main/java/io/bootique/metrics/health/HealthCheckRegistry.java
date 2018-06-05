@@ -135,6 +135,9 @@ public class HealthCheckRegistry {
             return Collections.emptyMap();
         }
 
+        // TODO: noticed Travis failures (CountDownLatch timeout) when activeChecks.size() == 1... Anything special
+        // about CountDownLatch(1)?
+
         // use the latch to ensure we can control the overall timeout, not individual health check timeouts...
         // note that if the health check pool is thread-starved, then a few slow checks would result in
         // faster checks reported as timeouts...
