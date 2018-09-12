@@ -22,7 +22,7 @@ package io.bootique.metrics.health.check;
 import io.bootique.metrics.health.HealthCheckStatus;
 
 /**
- * @since 0.26
+ * @since 1.0.RC1
  */
 public enum ThresholdType {
 

@@ -31,7 +31,7 @@ import java.util.function.Supplier;
  * running the real underlying check. This allows to pre-register and execute health checks for services that are
  * not yet started.
  *
- * @since 0.26
+ * @since 1.0.RC1
  */
 public class DeferredHealthCheck implements HealthCheck {
 

@@ -38,7 +38,7 @@ public interface HealthCheck {
      * Returns whether this check should be executed during a registry health check run.
      *
      * @return this implementation always returns true.
-     * @since 0.26
+     * @since 1.0.RC1
      */
     default boolean isActive() {
         return true;

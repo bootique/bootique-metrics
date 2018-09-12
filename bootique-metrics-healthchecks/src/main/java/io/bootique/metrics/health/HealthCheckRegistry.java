@@ -66,7 +66,7 @@ public class HealthCheckRegistry {
 
     /**
      * @return an immutable map of known health check names.
-     * @since 0.26
+     * @since 1.0.RC1
      */
     public Set<String> healthCheckNames() {
         return Collections.unmodifiableSet(healthChecks.keySet());

@@ -1,4 +1,4 @@
-## 0.26
+## 1.0.RC1
 
 * #25 Metrics and thresholds data in healthchecks
 * #27 Support for unit of measurement in HealthCheckData
