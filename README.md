@@ -17,8 +17,8 @@
   under the License.
   -->
 
-[![Build Status](https://travis-ci.org/bootique/bootique-metrics.svg)](https://travis-ci.org/bootique/bootique-metrics)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.bootique.metrics/bootique-metrics/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.bootique.metrics/bootique-metrics/)
+[![Build Status](https://travis-ci.org/bootique/bootique-metrics.svg)](https://travis-ci.org/bootique/bootique-metrics)	
+[![Maven Central](https://img.shields.io/maven-central/v/io.bootique.metrics/bootique-metrics.svg?colorB=brightgreen)](https://search.maven.org/artifact/io.bootique.metrics/bootique-metrics/)
 
 # bootique-metrics
 
