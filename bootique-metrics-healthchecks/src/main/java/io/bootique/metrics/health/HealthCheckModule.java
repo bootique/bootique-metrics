@@ -30,6 +30,7 @@ import io.bootique.metrics.health.heartbeat.Heartbeat;
 import io.bootique.metrics.health.heartbeat.HeartbeatCommand;
 import io.bootique.metrics.health.heartbeat.HeartbeatFactory;
 import io.bootique.metrics.health.heartbeat.HeartbeatListener;
+import io.bootique.metrics.health.heartbeat.HeartbeatReporter;
 import io.bootique.shutdown.ShutdownManager;
 
 import java.util.HashMap;
@@ -70,18 +71,27 @@ public class HealthCheckModule implements Module {
 
     @Provides
     @Singleton
+    HeartbeatFactory provideHeartbeatFactory(ConfigurationFactory configurationFactory) {
+        return configurationFactory.config(HeartbeatFactory.class, "heartbeat");
+    }
+
+    @Provides
+    @Singleton
     Heartbeat provideHeartbeat(
-            ConfigurationFactory configurationFactory,
+            HeartbeatFactory heartbeatFactory,
             HealthCheckRegistry registry,
             Set<HeartbeatListener> listeners,
             ShutdownManager shutdownManager) {
 
-        Heartbeat hb = configurationFactory
-                .config(HeartbeatFactory.class, "heartbeat")
-                .createHeartbeat(registry, listeners);
-
+        Heartbeat hb = heartbeatFactory.createHeartbeat(registry, listeners);
         shutdownManager.addShutdownHook(() -> hb.stop());
         return hb;
+    }
+
+    @Provides
+    @Singleton
+    HeartbeatReporter provideHeartbeatReporter(HeartbeatFactory heartbeatFactory) {
+        return heartbeatFactory.createReporter();
     }
 
     @Provides

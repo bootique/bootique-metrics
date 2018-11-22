@@ -28,6 +28,7 @@ import io.bootique.command.Command;
 import io.bootique.command.CommandDecorator;
 import io.bootique.metrics.health.heartbeat.HeartbeatCommand;
 import io.bootique.metrics.health.heartbeat.HeartbeatListener;
+import io.bootique.metrics.health.heartbeat.HeartbeatReporter;
 
 /**
  * @since 0.25
@@ -63,6 +64,18 @@ public class HealthCheckModuleExtender extends ModuleExtender<HealthCheckModuleE
     public HealthCheckModuleExtender addHeartbeatListener(Class<? extends HeartbeatListener> listenerType) {
         getOrCreateHeartbeatListeners().addBinding().to(listenerType);
         return this;
+    }
+
+    /**
+     * Enables heartbeat reporting. The reporter may be additionally configured via YAML ("heartbeat.sink" and
+     * "heartbeat.writer" keys). Note that a presence or absence of configuration has no affect on whether the
+     * reporter is enabled. Enabling only happens after calling this method.
+     *
+     * @return this extender instance.
+     * @since 1.0.RC1
+     */
+    public HealthCheckModuleExtender addHeartbeatReporter() {
+        return addHeartbeatListener(HeartbeatReporter.class);
     }
 
     public HealthCheckModuleExtender addHealthCheck(String name, HealthCheck healthCheck) {

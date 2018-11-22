@@ -1,0 +1,5 @@
+io.bootique.metrics.health.sink.ReportSinkFactory
+io.bootique.metrics.health.sink.Slf4JReportSyncFactory
+io.bootique.metrics.health.sink.FileReportSinkFactory
+io.bootique.metrics.health.writer.ReportWriterFactory
+io.bootique.metrics.health.writer.NagiosReportWriterFactory

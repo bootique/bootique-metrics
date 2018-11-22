@@ -22,6 +22,10 @@ package io.bootique.metrics.health.heartbeat;
 import io.bootique.annotation.BQConfig;
 import io.bootique.annotation.BQConfigProperty;
 import io.bootique.metrics.health.HealthCheckRegistry;
+import io.bootique.metrics.health.sink.ReportSinkFactory;
+import io.bootique.metrics.health.sink.Slf4JReportSyncFactory;
+import io.bootique.metrics.health.writer.NagiosReportWriterFactory;
+import io.bootique.metrics.health.writer.ReportWriterFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,6 +48,8 @@ public class HeartbeatFactory {
     private int threadPoolSize;
     private long healthCheckTimeoutMs;
     private List<String> healthChecks;
+    private ReportSinkFactory sink;
+    private ReportWriterFactory writer;
 
     @BQConfigProperty
     public void setHealthChecks(List<String> healthChecks) {
@@ -56,6 +62,12 @@ public class HeartbeatFactory {
 
         HealthCheckRegistry filtered = filterRegistry(registry);
         return new Heartbeat(() -> startHeartbeat(filtered, listeners));
+    }
+
+    public HeartbeatReporter createReporter() {
+        return new HeartbeatReporter(
+                createSinkFactory().createReportSyncSupplier(),
+                createWriterFactory().createReportWriter());
     }
 
     protected HealthCheckRegistry filterRegistry(HealthCheckRegistry registry) {
@@ -150,6 +162,24 @@ public class HeartbeatFactory {
         this.healthCheckTimeoutMs = healthCheckTimeoutMs;
     }
 
+    @BQConfigProperty
+    public void setSink(ReportSinkFactory sink) {
+        this.sink = sink;
+    }
+
+    @BQConfigProperty
+    public void setWriter(ReportWriterFactory writer) {
+        this.writer = writer;
+    }
+
+    protected ReportSinkFactory createSinkFactory() {
+        return sink != null ? sink : new Slf4JReportSyncFactory();
+    }
+
+    protected ReportWriterFactory createWriterFactory() {
+        return writer != null ? writer : new NagiosReportWriterFactory();
+    }
+
     private static class HealthCheckThreadFactory implements ThreadFactory {
 
         private AtomicInteger counter = new AtomicInteger();
@@ -162,5 +192,4 @@ public class HeartbeatFactory {
             return t;
         }
     }
-
 }
