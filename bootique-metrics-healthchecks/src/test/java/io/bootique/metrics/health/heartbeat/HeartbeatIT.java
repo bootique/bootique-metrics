@@ -86,7 +86,7 @@ public class HeartbeatIT {
 
         TestListener listener = new TestListener();
 
-        BQRuntime runtime = testFactory.app("-c", "classpath:HealthCheckModuleHeartbeatIT.yml")
+        BQRuntime runtime = testFactory.app("-c", "classpath:io/bootique/metrics/health/heartbeat/HeartbeatIT.yml")
                 .autoLoadModules()
                 .module(b -> HealthCheckModule.extend(b)
                         .addHealthCheck("hc1", success)
