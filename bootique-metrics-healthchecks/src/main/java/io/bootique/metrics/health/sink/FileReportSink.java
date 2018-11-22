@@ -35,14 +35,14 @@ public class FileReportSink implements ReportSink {
 
     private File targetFile;
     private File tempFile;
-    private ReportSink delegate;
+    private ReportSink tempFileSink;
 
     public FileReportSink(File targetFile) {
         this.targetFile = targetFile;
 
         // write to temp file in the same directory... will replace the target file atomically on close...
         this.tempFile = createTempFile(targetFile);
-        this.delegate = new WriterReportSink(createWriter(tempFile));
+        this.tempFileSink = new WriterReportSink(createWriter(tempFile));
     }
 
     private static Writer createWriter(File file) {
@@ -63,19 +63,19 @@ public class FileReportSink implements ReportSink {
 
     @Override
     public ReportSink append(String string) {
-        delegate.append(string);
+        tempFileSink.append(string);
         return this;
     }
 
     @Override
     public ReportSink appendln(String string) {
-        delegate.appendln(string);
+        tempFileSink.appendln(string);
         return this;
     }
 
     @Override
     public void close() {
-        delegate.close();
+        tempFileSink.close();
 
         try {
             Files.move(tempFile.toPath(),

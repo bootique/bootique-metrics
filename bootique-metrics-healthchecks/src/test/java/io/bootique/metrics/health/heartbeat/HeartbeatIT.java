@@ -58,8 +58,6 @@ public class HeartbeatIT {
         this.failure = mock(HealthCheck.class);
         when(failure.safeCheck()).thenReturn(HealthCheckOutcome.critical("uh"));
         when(failure.isActive()).thenReturn(true);
-
-        this.threadTester = new ThreadTester();
     }
 
     @Test

@@ -25,7 +25,7 @@ public class PercentConverter implements ValueConverter<Percent> {
         if (percentPrecision > 0) {
             buffer.append(new BigDecimal(percent, new MathContext(percentPrecision, RoundingMode.HALF_UP)));
         } else {
-            buffer.append(Double.toString(percent));
+            buffer.append(percent);
         }
 
         if (includeUnits) {

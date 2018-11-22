@@ -74,7 +74,7 @@ public class HealthCheckModuleExtender extends ModuleExtender<HealthCheckModuleE
      * @return this extender instance.
      * @since 1.0.RC1
      */
-    public HealthCheckModuleExtender addHeartbeatReporter() {
+    public HealthCheckModuleExtender enableHeartbeatReporting() {
         return addHeartbeatListener(HeartbeatReporter.class);
     }
 
