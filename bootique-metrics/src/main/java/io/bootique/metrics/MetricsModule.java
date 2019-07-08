@@ -48,7 +48,7 @@ public class MetricsModule extends ConfigModule {
     @Provides
     @Singleton
     MetricRegistryFactory provideMetricRegistryFactory(ConfigurationFactory configFactory) {
-        return configFactory.config(MetricRegistryFactory.class, configPrefix);
+        return config(MetricRegistryFactory.class, configFactory);
     }
 
     @Provides
