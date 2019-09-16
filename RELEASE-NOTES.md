@@ -1,3 +1,9 @@
+## 1.1
+
+* #37 Too restrictive access permissions for sink file
+
+## 1.0
+
 ## 1.0.RC1
 
 * #25 Metrics and thresholds data in healthchecks

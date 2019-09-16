@@ -68,16 +68,14 @@ public class FileReportSinkFactory implements ReportSinkFactory {
     }
 
     /**
+     * @param permissions Nullable string representation of permissions to set
      * @see java.nio.file.Files#createTempFile(Path, String, String, FileAttribute[])
      * @see java.nio.file.attribute.PosixFilePermissions#fromString(String)
      * @since 1.1
-     * @param permissions Nullable string representation of permissions to set
      */
-    @BQConfigProperty("Unix permissions in symbolic notation for a sink file to set. " +
-            "A 9 character string with 3 sets of 'r', 'w', 'x', '-' symbols. " +
-            "Can be a null value, but a more restrictive permissions set are applied in that case by default." +
-            "Example: 'rw-r--r--'. " +
-            "See Java Docs for java.nio.file.attribute.PosixFilePermission#fromString(String) for details.")
+    @BQConfigProperty("Desired Unix permissions for the sink file. " +
+            "The format is a 9 character string with 3 sets of 'r', 'w', 'x', '-' symbols. E.g. 'rw-r--r--'." +
+            "Optional. If undefined, permissions will be controlled by 'umask' of the environment.")
     public void setPermissions(String permissions) {
         this.permissions = permissions;
     }

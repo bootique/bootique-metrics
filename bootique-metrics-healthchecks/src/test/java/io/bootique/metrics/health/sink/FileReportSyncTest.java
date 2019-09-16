@@ -32,6 +32,7 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.junit.Assert.*;
+import static org.junit.Assume.assumeFalse;
 
 public class FileReportSyncTest {
 
@@ -91,7 +92,10 @@ public class FileReportSyncTest {
     }
 
     @Test
-    public void testPermissions() throws IOException {
+    public void testPermissions1() throws IOException {
+
+        assumeFalse(System.getProperty("os.name").toLowerCase().startsWith("win"));
+
         File dir = newReportDir();
         File report = new File(dir, "hc1.txt");
 
@@ -112,6 +116,35 @@ public class FileReportSyncTest {
         assertFalse(perms.contains(PosixFilePermission.GROUP_EXECUTE));
 
         assertTrue(perms.contains(PosixFilePermission.OTHERS_READ));
+        assertFalse(perms.contains(PosixFilePermission.OTHERS_WRITE));
+        assertFalse(perms.contains(PosixFilePermission.OTHERS_EXECUTE));
+    }
+
+    @Test
+    public void testPermissions2() throws IOException {
+
+        assumeFalse(System.getProperty("os.name").toLowerCase().startsWith("win"));
+
+        File dir = newReportDir();
+        File report = new File(dir, "hc1.txt");
+
+        FileReportSink sink1 = new FileReportSink(report, "rwx--x---");
+        sink1.append("OK");
+        sink1.close();
+
+        assertTrue(report.isFile());
+
+        Set<PosixFilePermission> perms = Files.getPosixFilePermissions(Paths.get(report.getPath()));
+
+        assertTrue(perms.contains(PosixFilePermission.OWNER_READ));
+        assertTrue(perms.contains(PosixFilePermission.OWNER_WRITE));
+        assertTrue(perms.contains(PosixFilePermission.OWNER_EXECUTE));
+
+        assertFalse(perms.contains(PosixFilePermission.GROUP_READ));
+        assertFalse(perms.contains(PosixFilePermission.GROUP_WRITE));
+        assertTrue(perms.contains(PosixFilePermission.GROUP_EXECUTE));
+
+        assertFalse(perms.contains(PosixFilePermission.OTHERS_READ));
         assertFalse(perms.contains(PosixFilePermission.OTHERS_WRITE));
         assertFalse(perms.contains(PosixFilePermission.OTHERS_EXECUTE));
     }
