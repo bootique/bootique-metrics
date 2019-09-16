@@ -23,6 +23,8 @@ import io.bootique.annotation.BQConfig;
 import io.bootique.annotation.BQConfigProperty;
 
 import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.attribute.FileAttribute;
 import java.util.Objects;
 import java.util.function.Supplier;
 
@@ -34,6 +36,7 @@ import java.util.function.Supplier;
 public class FileReportSinkFactory implements ReportSinkFactory {
 
     private File file;
+    private String permissions;
 
     private static void setupReportDirectory(File file) {
         File parentDir = file.getParentFile();
@@ -50,7 +53,7 @@ public class FileReportSinkFactory implements ReportSinkFactory {
     @Override
     public Supplier<ReportSink> createReportSyncSupplier() {
         final File file = getFile();
-        return () -> new FileReportSink(file);
+        return () -> new FileReportSink(file, permissions);
     }
 
     private File getFile() {
@@ -62,5 +65,20 @@ public class FileReportSinkFactory implements ReportSinkFactory {
     @BQConfigProperty
     public void setFile(File file) {
         this.file = file;
+    }
+
+    /**
+     * @see java.nio.file.Files#createTempFile(Path, String, String, FileAttribute[])
+     * @see java.nio.file.attribute.PosixFilePermissions#fromString(String)
+     * @since 1.1
+     * @param permissions Nullable string representation of permissions to set
+     */
+    @BQConfigProperty("Unix permissions in symbolic notation for a sink file to set. " +
+            "A 9 character string with 3 sets of 'r', 'w', 'x', '-' symbols. " +
+            "Can be a null value, but a more restrictive permissions set are applied in that case by default." +
+            "Example: 'rw-r--r--'. " +
+            "See Java Docs for java.nio.file.attribute.PosixFilePermission#fromString(String) for details.")
+    public void setPermissions(String permissions) {
+        this.permissions = permissions;
     }
 }
