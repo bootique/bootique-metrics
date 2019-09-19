@@ -21,9 +21,6 @@ package io.bootique.metrics.health.sink;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
-import java.nio.file.attribute.FileAttribute;
-import java.nio.file.attribute.PosixFilePermissions;
-import java.util.Optional;
 
 /**
  * A {@link ReportSink} writing data to a temp file. Once closed, atomically replaces the target file with the new file.
@@ -37,17 +34,10 @@ public class FileReportSink implements ReportSink {
     private ReportSink tempFileSink;
 
     public FileReportSink(File targetFile) {
-        this(targetFile, null);
-    }
-
-    /**
-     * @since 1.1
-     */
-    public FileReportSink(File targetFile, String permissions) {
         this.targetFile = targetFile;
 
         // write to temp file in the same directory... will replace the target file atomically on close...
-        this.tempFile = createTempFile(targetFile, permissions);
+        this.tempFile = createTempFile(targetFile);
         this.tempFileSink = new WriterReportSink(createWriter(tempFile));
     }
 
@@ -59,22 +49,12 @@ public class FileReportSink implements ReportSink {
         }
     }
 
-    private static File createTempFile(File targetFile, String permissions) {
+    private static File createTempFile(File targetFile) {
         try {
-            return Files.createTempFile(targetFile.getParentFile().toPath(),
-                    targetFile.getName(), ".tmp", permissionsAsFileAttributes(permissions)).toFile();
+            return File.createTempFile(targetFile.getName(), ".tmp", targetFile.getParentFile());
         } catch (IOException e) {
             throw new RuntimeException("Error creating temp file for file " + targetFile, e);
         }
-    }
-
-    private static FileAttribute<?>[] permissionsAsFileAttributes(String permissions) {
-        if (permissions == null) {
-            return new FileAttribute<?>[]{};
-        }
-        return new FileAttribute<?>[]{
-                PosixFilePermissions.asFileAttribute(PosixFilePermissions.fromString(permissions))
-        };
     }
 
     @Override

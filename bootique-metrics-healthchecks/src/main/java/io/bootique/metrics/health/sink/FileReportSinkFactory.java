@@ -23,8 +23,6 @@ import io.bootique.annotation.BQConfig;
 import io.bootique.annotation.BQConfigProperty;
 
 import java.io.File;
-import java.nio.file.Path;
-import java.nio.file.attribute.FileAttribute;
 import java.util.Objects;
 import java.util.function.Supplier;
 
@@ -36,7 +34,6 @@ import java.util.function.Supplier;
 public class FileReportSinkFactory implements ReportSinkFactory {
 
     private File file;
-    private String permissions;
 
     private static void setupReportDirectory(File file) {
         File parentDir = file.getParentFile();
@@ -53,7 +50,7 @@ public class FileReportSinkFactory implements ReportSinkFactory {
     @Override
     public Supplier<ReportSink> createReportSyncSupplier() {
         final File file = getFile();
-        return () -> new FileReportSink(file, permissions);
+        return () -> new FileReportSink(file);
     }
 
     private File getFile() {
@@ -65,18 +62,5 @@ public class FileReportSinkFactory implements ReportSinkFactory {
     @BQConfigProperty
     public void setFile(File file) {
         this.file = file;
-    }
-
-    /**
-     * @param permissions Nullable string representation of permissions to set
-     * @see java.nio.file.Files#createTempFile(Path, String, String, FileAttribute[])
-     * @see java.nio.file.attribute.PosixFilePermissions#fromString(String)
-     * @since 1.1
-     */
-    @BQConfigProperty("Desired Unix permissions for the sink file. " +
-            "The format is a 9 character string with 3 sets of 'r', 'w', 'x', '-' symbols. E.g. 'rw-r--r--'." +
-            "Optional. If undefined, permissions will be controlled by 'umask' of the environment.")
-    public void setPermissions(String permissions) {
-        this.permissions = permissions;
     }
 }
