@@ -19,9 +19,10 @@
 
 package io.bootique.metrics;
 
+import javax.inject.Inject;
+import javax.inject.Provider;
+
 import com.codahale.metrics.MetricRegistry;
-import com.google.inject.Inject;
-import com.google.inject.Provider;
 import io.bootique.shutdown.ShutdownManager;
 
 public class MetricRegistryProvider implements Provider<MetricRegistry> {

@@ -19,7 +19,7 @@
 
 package io.bootique.metrics;
 
-import com.google.inject.Module;
+import io.bootique.di.BQModule;
 import io.bootique.names.ClassToName;
 
 import java.util.StringJoiner;
@@ -50,7 +50,7 @@ public class MetricNaming {
      * @param metricSourceModule a type of module where a given set of metrics originates.
      * @return a {@link MetricNaming} name builder for a specific module.
      */
-    public static MetricNaming forModule(Class<? extends Module> metricSourceModule) {
+    public static MetricNaming forModule(Class<? extends BQModule> metricSourceModule) {
         return new MetricNaming("bq." + MODULE_NAME_BUILDER.toName(metricSourceModule));
     }
 

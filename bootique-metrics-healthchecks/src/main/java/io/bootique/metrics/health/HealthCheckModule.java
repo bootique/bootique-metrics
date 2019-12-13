@@ -19,13 +19,11 @@
 
 package io.bootique.metrics.health;
 
-import com.google.inject.Binder;
-import com.google.inject.Module;
-import com.google.inject.Provider;
-import com.google.inject.Provides;
-import com.google.inject.Singleton;
 import io.bootique.BQCoreModule;
 import io.bootique.config.ConfigurationFactory;
+import io.bootique.di.Binder;
+import io.bootique.di.BQModule;
+import io.bootique.di.Provides;
 import io.bootique.metrics.health.heartbeat.Heartbeat;
 import io.bootique.metrics.health.heartbeat.HeartbeatCommand;
 import io.bootique.metrics.health.heartbeat.HeartbeatFactory;
@@ -36,11 +34,13 @@ import io.bootique.shutdown.ShutdownManager;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import javax.inject.Provider;
+import javax.inject.Singleton;
 
 /**
  * @since 0.25
  */
-public class HealthCheckModule implements Module {
+public class HealthCheckModule implements BQModule {
 
     /**
      * Returns an instance of {@link HealthCheckModuleExtender} used by downstream modules to load custom extensions for
@@ -84,7 +84,7 @@ public class HealthCheckModule implements Module {
             ShutdownManager shutdownManager) {
 
         Heartbeat hb = heartbeatFactory.createHeartbeat(registry, listeners);
-        shutdownManager.addShutdownHook(() -> hb.stop());
+        shutdownManager.addShutdownHook(hb::stop);
         return hb;
     }
 

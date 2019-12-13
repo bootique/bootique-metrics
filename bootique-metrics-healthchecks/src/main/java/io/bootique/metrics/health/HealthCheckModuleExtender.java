@@ -19,13 +19,13 @@
 
 package io.bootique.metrics.health;
 
-import com.google.inject.Binder;
-import com.google.inject.multibindings.MapBinder;
-import com.google.inject.multibindings.Multibinder;
 import io.bootique.BQCoreModule;
 import io.bootique.ModuleExtender;
 import io.bootique.command.Command;
 import io.bootique.command.CommandDecorator;
+import io.bootique.di.Binder;
+import io.bootique.di.MapBuilder;
+import io.bootique.di.SetBuilder;
 import io.bootique.metrics.health.heartbeat.HeartbeatCommand;
 import io.bootique.metrics.health.heartbeat.HeartbeatListener;
 import io.bootique.metrics.health.heartbeat.HeartbeatReporter;
@@ -35,9 +35,9 @@ import io.bootique.metrics.health.heartbeat.HeartbeatReporter;
  */
 public class HealthCheckModuleExtender extends ModuleExtender<HealthCheckModuleExtender> {
 
-    private MapBinder<String, HealthCheck> healthChecks;
-    private Multibinder<HealthCheckGroup> healthCheckGroups;
-    private Multibinder<HeartbeatListener> heartbeatListeners;
+    private MapBuilder<String, HealthCheck> healthChecks;
+    private SetBuilder<HealthCheckGroup> healthCheckGroups;
+    private SetBuilder<HeartbeatListener> heartbeatListeners;
 
     public HealthCheckModuleExtender(Binder binder) {
         super(binder);
@@ -57,12 +57,12 @@ public class HealthCheckModuleExtender extends ModuleExtender<HealthCheckModuleE
     }
 
     public HealthCheckModuleExtender addHeartbeatListener(HeartbeatListener listener) {
-        getOrCreateHeartbeatListeners().addBinding().toInstance(listener);
+        getOrCreateHeartbeatListeners().add(listener);
         return this;
     }
 
     public HealthCheckModuleExtender addHeartbeatListener(Class<? extends HeartbeatListener> listenerType) {
-        getOrCreateHeartbeatListeners().addBinding().to(listenerType);
+        getOrCreateHeartbeatListeners().add(listenerType);
         return this;
     }
 
@@ -79,44 +79,44 @@ public class HealthCheckModuleExtender extends ModuleExtender<HealthCheckModuleE
     }
 
     public HealthCheckModuleExtender addHealthCheck(String name, HealthCheck healthCheck) {
-        getOrCreateHealthChecks().addBinding(name).toInstance(healthCheck);
+        getOrCreateHealthChecks().put(name, healthCheck);
         return this;
     }
 
     public <T extends HealthCheck> HealthCheckModuleExtender addHealthCheck(String name, Class<T> healthCheckType) {
-        getOrCreateHealthChecks().addBinding(name).to(healthCheckType);
+        getOrCreateHealthChecks().put(name, healthCheckType);
         return this;
     }
 
     public HealthCheckModuleExtender addHealthCheckGroup(HealthCheckGroup healthCheckGroup) {
-        getOrCreateHealthCheckGroups().addBinding().toInstance(healthCheckGroup);
+        getOrCreateHealthCheckGroups().add(healthCheckGroup);
         return this;
     }
 
     public <T extends HealthCheckGroup> HealthCheckModuleExtender addHealthCheckGroup(Class<T> healthCheckGroupType) {
-        getOrCreateHealthCheckGroups().addBinding().to(healthCheckGroupType);
+        getOrCreateHealthCheckGroups().add(healthCheckGroupType);
         return this;
     }
 
-    protected MapBinder<String, HealthCheck> getOrCreateHealthChecks() {
+    protected MapBuilder<String, HealthCheck> getOrCreateHealthChecks() {
         if (healthChecks == null) {
-            healthChecks = MapBinder.newMapBinder(binder, String.class, HealthCheck.class);
+            healthChecks = newMap(String.class, HealthCheck.class);
         }
 
         return healthChecks;
     }
 
-    protected Multibinder<HealthCheckGroup> getOrCreateHealthCheckGroups() {
+    protected SetBuilder<HealthCheckGroup> getOrCreateHealthCheckGroups() {
         if (healthCheckGroups == null) {
-            healthCheckGroups = Multibinder.newSetBinder(binder, HealthCheckGroup.class);
+            healthCheckGroups = newSet(HealthCheckGroup.class);
         }
 
         return healthCheckGroups;
     }
 
-    protected Multibinder<HeartbeatListener> getOrCreateHeartbeatListeners() {
+    protected SetBuilder<HeartbeatListener> getOrCreateHeartbeatListeners() {
         if (heartbeatListeners == null) {
-            heartbeatListeners = Multibinder.newSetBinder(binder, HeartbeatListener.class);
+            heartbeatListeners = newSet(HeartbeatListener.class);
         }
 
         return heartbeatListeners;

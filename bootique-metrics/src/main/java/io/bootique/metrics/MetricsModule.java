@@ -19,12 +19,13 @@
 
 package io.bootique.metrics;
 
+import javax.inject.Singleton;
+
 import com.codahale.metrics.MetricRegistry;
-import com.google.inject.Binder;
-import com.google.inject.Provides;
-import com.google.inject.Singleton;
 import io.bootique.ConfigModule;
 import io.bootique.config.ConfigurationFactory;
+import io.bootique.di.Binder;
+import io.bootique.di.Provides;
 import io.bootique.metrics.mdc.StripedTransactionIdGenerator;
 import io.bootique.metrics.mdc.TransactionIdGenerator;
 import io.bootique.metrics.mdc.TransactionIdMDC;
@@ -42,7 +43,7 @@ public class MetricsModule extends ConfigModule {
     @Override
     public void configure(Binder binder) {
         // eager-load the registry. Otherwise it may never start...
-        binder.bind(MetricRegistry.class).toProvider(MetricRegistryProvider.class).asEagerSingleton();
+        binder.bind(MetricRegistry.class).toProvider(MetricRegistryProvider.class).initOnStartup();
     }
 
     @Provides

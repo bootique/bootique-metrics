@@ -19,8 +19,8 @@
 
 package io.bootique.metrics.health;
 
-import com.google.inject.Module;
 import io.bootique.BQModuleProvider;
+import io.bootique.di.BQModule;
 import io.bootique.metrics.health.heartbeat.HeartbeatFactory;
 
 import java.lang.reflect.Type;
@@ -30,7 +30,7 @@ import java.util.Map;
 public class HealthCheckModuleProvider implements BQModuleProvider {
 
     @Override
-    public Module module() {
+    public BQModule module() {
         return new HealthCheckModule();
     }
 

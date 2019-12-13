@@ -19,8 +19,8 @@
 
 package io.bootique.metrics;
 
-import com.google.inject.Binder;
-import com.google.inject.Module;
+import io.bootique.di.Binder;
+import io.bootique.di.BQModule;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -49,14 +49,14 @@ public class MetricNamingTest {
 
 }
 
-class MetricNamingTestXModule implements Module {
+class MetricNamingTestXModule implements BQModule {
     @Override
     public void configure(Binder binder) {
 
     }
 }
 
-class MetricNamingTestXInstrumentedModule implements Module {
+class MetricNamingTestXInstrumentedModule implements BQModule {
     @Override
     public void configure(Binder binder) {
 

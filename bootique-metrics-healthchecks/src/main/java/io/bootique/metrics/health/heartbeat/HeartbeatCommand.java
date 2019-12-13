@@ -19,7 +19,8 @@
 
 package io.bootique.metrics.health.heartbeat;
 
-import com.google.inject.Provider;
+import javax.inject.Provider;
+
 import io.bootique.cli.Cli;
 import io.bootique.command.CommandOutcome;
 import io.bootique.command.CommandWithMetadata;
