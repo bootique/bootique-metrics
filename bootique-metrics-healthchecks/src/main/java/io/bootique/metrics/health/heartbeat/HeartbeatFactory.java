@@ -96,9 +96,7 @@ public class HeartbeatFactory {
         }
     }
 
-    protected Runnable startHeartbeat(
-            HealthCheckRegistry healthChecks,
-            Set<HeartbeatListener> listeners) {
+    protected HeartbeatWatch startHeartbeat(HealthCheckRegistry healthChecks, Set<HeartbeatListener> listeners) {
 
         ExecutorService threadPool = startThreadPool();
         Timer timer = new HeartbeatLauncher(healthChecks)

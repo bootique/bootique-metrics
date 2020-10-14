@@ -73,10 +73,10 @@ public class HeartbeatIT {
         // so just check that everything starts ok...
 
         Heartbeat hb = runtime.getInstance(Heartbeat.class);
-        assertNull("Heartbeat was started prematurely", hb.heartbeatStopper);
+        assertNull("Heartbeat was started prematurely", hb.heartbeatWatch);
 
         hb.start();
-        assertNotNull("Heartbeat hasn't started with default settings", hb.heartbeatStopper);
+        assertNotNull("Heartbeat hasn't started with default settings", hb.heartbeatWatch);
     }
 
     @Test

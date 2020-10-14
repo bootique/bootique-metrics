@@ -16,31 +16,13 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-
 package io.bootique.metrics.health.heartbeat;
 
-import org.junit.Test;
+/**
+ * @since 2.0.B1
+ */
+@FunctionalInterface
+public interface HeartbeatWatch {
 
-import static org.junit.Assert.assertSame;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
-
-public class HeartbeatTest {
-
-    @Test
-    public void testStartStop() {
-
-        HeartbeatWatch mockStopper = mock(HeartbeatWatch.class);
-
-        Heartbeat hb = new Heartbeat(() -> mockStopper);
-        verifyZeroInteractions(mockStopper);
-
-        hb.start();
-        verifyZeroInteractions(mockStopper);
-        assertSame(mockStopper, hb.heartbeatWatch);
-
-        hb.stop();
-        verify(mockStopper).stop();
-    }
+    void stop();
 }
