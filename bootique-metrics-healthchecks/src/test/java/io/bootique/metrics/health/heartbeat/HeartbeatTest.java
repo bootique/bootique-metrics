@@ -22,9 +22,7 @@ package io.bootique.metrics.health.heartbeat;
 import org.junit.Test;
 
 import static org.junit.Assert.assertSame;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.*;
 
 public class HeartbeatTest {
 
@@ -34,10 +32,10 @@ public class HeartbeatTest {
         HeartbeatWatch mockStopper = mock(HeartbeatWatch.class);
 
         Heartbeat hb = new Heartbeat(() -> mockStopper);
-        verifyZeroInteractions(mockStopper);
+        verifyNoMoreInteractions(mockStopper);
 
         hb.start();
-        verifyZeroInteractions(mockStopper);
+        verifyNoMoreInteractions(mockStopper);
         assertSame(mockStopper, hb.heartbeatWatch);
 
         hb.stop();
