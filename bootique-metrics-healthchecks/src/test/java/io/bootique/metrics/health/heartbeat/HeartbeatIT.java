@@ -45,7 +45,7 @@ public class HeartbeatIT {
     @Rule
     public BQTestFactory testFactory = new BQTestFactory();
 
-    private ThreadTester threadTester = new ThreadTester();
+    private final ThreadTester threadTester = new ThreadTester();
     private HealthCheck success;
     private HealthCheck failure;
 
@@ -61,7 +61,7 @@ public class HeartbeatIT {
     }
 
     @Test
-    public void testHeartbeat_Defaults() throws InterruptedException {
+    public void testHeartbeat_Defaults() {
 
         BQRuntime runtime = testFactory.app()
                 .autoLoadModules()
@@ -170,7 +170,7 @@ public class HeartbeatIT {
         }
     }
 
-    class TestListener implements HeartbeatListener {
+    static class TestListener implements HeartbeatListener {
 
         int counter;
 
