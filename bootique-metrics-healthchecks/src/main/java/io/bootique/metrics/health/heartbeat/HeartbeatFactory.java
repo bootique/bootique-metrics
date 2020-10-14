@@ -26,6 +26,7 @@ import io.bootique.metrics.health.sink.ReportSinkFactory;
 import io.bootique.metrics.health.sink.Slf4JReportSyncFactory;
 import io.bootique.metrics.health.writer.NagiosReportWriterFactory;
 import io.bootique.metrics.health.writer.ReportWriterFactory;
+import io.bootique.value.Duration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,10 +44,10 @@ public class HeartbeatFactory {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(HeartbeatFactory.class);
 
-    private long initialDelayMs;
-    private long fixedDelayMs;
+    private Duration initialDelay;
+    private Duration fixedDelay;
     private int threadPoolSize;
-    private long healthCheckTimeoutMs;
+    private Duration healthCheckTimeout;
     private List<String> healthChecks;
     private ReportSinkFactory sink;
     private ReportWriterFactory writer;
@@ -136,30 +137,30 @@ public class HeartbeatFactory {
     }
 
     protected long getFixedDelayMs() {
-        return fixedDelayMs > 0 ? fixedDelayMs : HeartbeatLauncher.FIXED_DELAY_MS_DEFAULT;
+        return fixedDelay != null ? fixedDelay.getDuration().toMillis() : HeartbeatLauncher.FIXED_DELAY_MS_DEFAULT;
     }
 
     @BQConfigProperty
-    public void setFixedDelayMs(long fixedDelayMs) {
-        this.fixedDelayMs = fixedDelayMs;
+    public void setFixedDelay(Duration fixedDelay) {
+        this.fixedDelay = fixedDelay;
     }
 
     protected long getInitialDelayMs() {
-        return initialDelayMs >= 0 ? initialDelayMs : HeartbeatLauncher.INITIAL_DELAY_MS_DEFAULT;
+        return initialDelay != null ? initialDelay.getDuration().toMillis() : HeartbeatLauncher.INITIAL_DELAY_MS_DEFAULT;
     }
 
     @BQConfigProperty
-    public void setInitialDelayMs(long initialDelayMs) {
-        this.initialDelayMs = initialDelayMs;
+    public void setInitialDelay(Duration initialDelay) {
+        this.initialDelay = initialDelay;
     }
 
     protected long getHealthCheckTimeoutMs() {
-        return healthCheckTimeoutMs > 0 ? healthCheckTimeoutMs : HeartbeatLauncher.HEALTH_CHECK_TIMEOUT_DEFAULT;
+        return healthCheckTimeout != null ? healthCheckTimeout.getDuration().toMillis() : HeartbeatLauncher.HEALTH_CHECK_TIMEOUT_DEFAULT;
     }
 
     @BQConfigProperty
-    public void setHealthCheckTimeoutMs(long healthCheckTimeoutMs) {
-        this.healthCheckTimeoutMs = healthCheckTimeoutMs;
+    public void setHealthCheckTimeout(Duration healthCheckTimeout) {
+        this.healthCheckTimeout = healthCheckTimeout;
     }
 
     @BQConfigProperty

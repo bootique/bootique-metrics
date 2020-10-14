@@ -1,3 +1,7 @@
+## 2.0.B1
+
+* #41 HeartbeatFactory: replace all "Ms" properties with Duration objects
+
 ## 1.1
 
 * #37 Too restrictive access permissions for sink file

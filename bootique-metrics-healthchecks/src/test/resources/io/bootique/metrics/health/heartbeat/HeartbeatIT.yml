@@ -14,10 +14,10 @@
 # limitations under the License.
 
 heartbeat:
-  initialDelayMs: 3
-  fixedDelayMs: 100
+  initialDelay: 3ms
+  fixedDelay: 100ms
   threadPoolSize: 2
-  healthCheckTimeoutMs: 2000
+  healthCheckTimeout: 2sec
   healthChecks:
      - "hc1"
      - "hc2"
