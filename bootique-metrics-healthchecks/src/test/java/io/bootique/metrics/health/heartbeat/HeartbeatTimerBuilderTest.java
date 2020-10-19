@@ -36,7 +36,7 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class HeartbeatLauncherTest {
+public class HeartbeatTimerBuilderTest {
 
     private HealthCheck success;
     private HealthCheck failure;
@@ -75,7 +75,7 @@ public class HeartbeatLauncherTest {
         HealthCheckRegistry registry = createRegistry(success, failure);
 
         this.threadPool = Executors.newFixedThreadPool(2);
-        this.timer = new HeartbeatLauncher(registry)
+        this.timer = new HeartbeatTimerBuilder(registry)
                 .initialDelayMs(3)
                 .fixedDelayMs(50)
                 .listener(listener)

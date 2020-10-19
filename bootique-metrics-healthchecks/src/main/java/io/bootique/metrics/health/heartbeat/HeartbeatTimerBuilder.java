@@ -39,7 +39,7 @@ import java.util.function.Supplier;
  *
  * @since 0.25
  */
-public class HeartbeatLauncher {
+public class HeartbeatTimerBuilder {
 
     static final long INITIAL_DELAY_MS_DEFAULT = 60_000L;
     static final long FIXED_DELAY_MS_DEFAULT = 60_000L;
@@ -52,7 +52,7 @@ public class HeartbeatLauncher {
     private Set<HeartbeatListener> listeners;
     private HealthCheckRegistry heartbeatChecks;
 
-    public HeartbeatLauncher(HealthCheckRegistry heartbeatChecks) {
+    public HeartbeatTimerBuilder(HealthCheckRegistry heartbeatChecks) {
         this.heartbeatChecks = Objects.requireNonNull(heartbeatChecks);
         this.initialDelayMs = INITIAL_DELAY_MS_DEFAULT;
         this.fixedDelayMs = FIXED_DELAY_MS_DEFAULT;
@@ -61,7 +61,7 @@ public class HeartbeatLauncher {
         this.listeners = new HashSet<>();
     }
 
-    public HeartbeatLauncher initialDelayMs(long delay) {
+    public HeartbeatTimerBuilder initialDelayMs(long delay) {
         if (delay < 0) {
             throw new IllegalArgumentException("Initial delay can't be negative");
         }
@@ -70,7 +70,7 @@ public class HeartbeatLauncher {
         return this;
     }
 
-    public HeartbeatLauncher fixedDelayMs(long delay) {
+    public HeartbeatTimerBuilder fixedDelayMs(long delay) {
         if (delay <= 0) {
             throw new IllegalArgumentException("Delay between heartbeats must be positive");
         }
@@ -79,7 +79,7 @@ public class HeartbeatLauncher {
         return this;
     }
 
-    public HeartbeatLauncher healthCheckTimeoutMs(long timeout) {
+    public HeartbeatTimerBuilder healthCheckTimeoutMs(long timeout) {
         if (timeout <= 0) {
             throw new IllegalArgumentException("Health check timeout must be positive");
         }
@@ -88,17 +88,17 @@ public class HeartbeatLauncher {
         return this;
     }
 
-    public HeartbeatLauncher threadPool(ExecutorService threadPool) {
+    public HeartbeatTimerBuilder threadPool(ExecutorService threadPool) {
         this.threadPool = Objects.requireNonNull(threadPool);
         return this;
     }
 
-    public HeartbeatLauncher listener(HeartbeatListener listener) {
+    public HeartbeatTimerBuilder listener(HeartbeatListener listener) {
         this.listeners.add(Objects.requireNonNull(listener));
         return this;
     }
 
-    public HeartbeatLauncher listeners(Collection<? extends HeartbeatListener> listeners) {
+    public HeartbeatTimerBuilder listeners(Collection<? extends HeartbeatListener> listeners) {
         listeners.forEach(this::listener);
         return this;
     }

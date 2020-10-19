@@ -35,8 +35,6 @@ import java.util.Set;
 import java.util.Timer;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 @BQConfig
@@ -51,11 +49,6 @@ public class HeartbeatFactory {
     private List<String> healthChecks;
     private ReportSinkFactory sink;
     private ReportWriterFactory writer;
-
-    @BQConfigProperty
-    public void setHealthChecks(List<String> healthChecks) {
-        this.healthChecks = healthChecks;
-    }
 
     public Heartbeat createHeartbeat(
             HealthCheckRegistry registry,
@@ -99,7 +92,7 @@ public class HeartbeatFactory {
     protected HeartbeatWatch startHeartbeat(HealthCheckRegistry healthChecks, Set<HeartbeatListener> listeners) {
 
         ExecutorService threadPool = startThreadPool();
-        Timer timer = new HeartbeatLauncher(healthChecks)
+        Timer timer = new HeartbeatTimerBuilder(healthChecks)
                 .initialDelayMs(getInitialDelayMs())
                 .fixedDelayMs(getFixedDelayMs())
                 .healthCheckTimeoutMs(getHealthCheckTimeoutMs())
@@ -125,8 +118,9 @@ public class HeartbeatFactory {
         return Executors.newFixedThreadPool(getThreadPoolSize(), new HealthCheckThreadFactory());
     }
 
-    protected int getThreadPoolSize() {
-        return threadPoolSize > 0 ? threadPoolSize : 2;
+    @BQConfigProperty
+    public void setHealthChecks(List<String> healthChecks) {
+        this.healthChecks = healthChecks;
     }
 
     @BQConfigProperty
@@ -134,26 +128,14 @@ public class HeartbeatFactory {
         this.threadPoolSize = threadPoolSize;
     }
 
-    protected long getFixedDelayMs() {
-        return fixedDelay != null ? fixedDelay.getDuration().toMillis() : HeartbeatLauncher.FIXED_DELAY_MS_DEFAULT;
-    }
-
     @BQConfigProperty
     public void setFixedDelay(Duration fixedDelay) {
         this.fixedDelay = fixedDelay;
     }
 
-    protected long getInitialDelayMs() {
-        return initialDelay != null ? initialDelay.getDuration().toMillis() : HeartbeatLauncher.INITIAL_DELAY_MS_DEFAULT;
-    }
-
     @BQConfigProperty
     public void setInitialDelay(Duration initialDelay) {
         this.initialDelay = initialDelay;
-    }
-
-    protected long getHealthCheckTimeoutMs() {
-        return healthCheckTimeout != null ? healthCheckTimeout.getDuration().toMillis() : HeartbeatLauncher.HEALTH_CHECK_TIMEOUT_DEFAULT;
     }
 
     @BQConfigProperty
@@ -171,24 +153,27 @@ public class HeartbeatFactory {
         this.writer = writer;
     }
 
+    protected int getThreadPoolSize() {
+        return threadPoolSize > 0 ? threadPoolSize : 2;
+    }
+
+    protected long getFixedDelayMs() {
+        return fixedDelay != null ? fixedDelay.getDuration().toMillis() : HeartbeatTimerBuilder.FIXED_DELAY_MS_DEFAULT;
+    }
+
+    protected long getInitialDelayMs() {
+        return initialDelay != null ? initialDelay.getDuration().toMillis() : HeartbeatTimerBuilder.INITIAL_DELAY_MS_DEFAULT;
+    }
+
+    protected long getHealthCheckTimeoutMs() {
+        return healthCheckTimeout != null ? healthCheckTimeout.getDuration().toMillis() : HeartbeatTimerBuilder.HEALTH_CHECK_TIMEOUT_DEFAULT;
+    }
+
     protected ReportSinkFactory createSinkFactory() {
         return sink != null ? sink : new Slf4JReportSyncFactory();
     }
 
     protected ReportWriterFactory createWriterFactory() {
         return writer != null ? writer : new NagiosReportWriterFactory();
-    }
-
-    private static class HealthCheckThreadFactory implements ThreadFactory {
-
-        private AtomicInteger counter = new AtomicInteger();
-
-        @Override
-        public Thread newThread(Runnable r) {
-            Thread t = new Thread(r);
-            t.setName("bootique-healthcheck-" + counter.getAndIncrement());
-            t.setDaemon(true);
-            return t;
-        }
     }
 }
