@@ -57,7 +57,7 @@ public class HealthCheckModuleExtender extends ModuleExtender<HealthCheckModuleE
     }
 
     public HealthCheckModuleExtender addHeartbeatListener(HeartbeatListener listener) {
-        getOrCreateHeartbeatListeners().add(listener);
+        getOrCreateHeartbeatListeners().addInstance(listener);
         return this;
     }
 
@@ -79,7 +79,7 @@ public class HealthCheckModuleExtender extends ModuleExtender<HealthCheckModuleE
     }
 
     public HealthCheckModuleExtender addHealthCheck(String name, HealthCheck healthCheck) {
-        getOrCreateHealthChecks().put(name, healthCheck);
+        getOrCreateHealthChecks().putInstance(name, healthCheck);
         return this;
     }
 
@@ -89,7 +89,7 @@ public class HealthCheckModuleExtender extends ModuleExtender<HealthCheckModuleE
     }
 
     public HealthCheckModuleExtender addHealthCheckGroup(HealthCheckGroup healthCheckGroup) {
-        getOrCreateHealthCheckGroups().add(healthCheckGroup);
+        getOrCreateHealthCheckGroups().addInstance(healthCheckGroup);
         return this;
     }
 
