@@ -26,27 +26,27 @@ import org.slf4j.MDC;
  */
 public class TransactionIdMDC {
 
-    private static final String TRANSACTION_MDC_KEY = "txid";
+    public static final String MDC_KEY = "txid";
 
     /**
      * Initializes SLF4J MDC with the current transaction ID.
      */
     public void reset(String transactionId) {
         if (transactionId == null) {
-            MDC.remove(TRANSACTION_MDC_KEY);
+            MDC.remove(MDC_KEY);
         } else {
-            MDC.put(TRANSACTION_MDC_KEY, transactionId);
+            MDC.put(MDC_KEY, transactionId);
         }
     }
 
     public String get() {
-        return MDC.get(TRANSACTION_MDC_KEY);
+        return MDC.get(MDC_KEY);
     }
 
     /**
      * Removes transaction ID from the logging MDC.
      */
     public void clear() {
-        MDC.remove(TRANSACTION_MDC_KEY);
+        MDC.remove(MDC_KEY);
     }
 }
