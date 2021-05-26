@@ -21,9 +21,7 @@ package io.bootique.metrics.health.check;
 
 import io.bootique.metrics.health.HealthCheckStatus;
 
-/**
- * @since 1.0.RC1
- */
+
 public enum ThresholdType {
 
     MIN(HealthCheckStatus.OK),

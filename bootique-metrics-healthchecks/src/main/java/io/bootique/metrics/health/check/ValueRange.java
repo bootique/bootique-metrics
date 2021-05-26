@@ -27,8 +27,6 @@ import java.util.Optional;
 
 /**
  * Defines a range of incrementing values with optional min/max boundaries and internal thresholds.
- *
- * @since 0.25
  */
 public class ValueRange<T extends Comparable<T>> {
 

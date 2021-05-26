@@ -22,8 +22,6 @@ import org.slf4j.Logger;
 
 /**
  * A {@link ReportSink} writing to an Slf4J logger.
- *
- * @since 1.0.RC1
  */
 public class Slf4JReportSink implements ReportSink {
 

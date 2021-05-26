@@ -15,8 +15,6 @@ import java.util.Map;
 
 /**
  * A {@link ReportWriter} that produces a report in a Nagios-like format.
- *
- * @since 1.0.RC1
  */
 public class NagiosReportWriter implements ReportWriter {
 

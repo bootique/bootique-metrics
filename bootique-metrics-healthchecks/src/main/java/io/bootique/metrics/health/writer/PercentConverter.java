@@ -6,9 +6,7 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
 
-/**
- * @since 1.0.RC1
- */
+
 public class PercentConverter implements ValueConverter<Percent> {
 
     private int percentPrecision;

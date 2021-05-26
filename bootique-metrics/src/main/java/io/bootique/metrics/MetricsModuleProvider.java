@@ -36,7 +36,6 @@ public class MetricsModuleProvider implements BQModuleProvider {
 
     /**
      * @return a single entry map with {@link MetricRegistryFactory}.
-     * @since 0.9
      */
     @Override
     public Map<String, Type> configs() {

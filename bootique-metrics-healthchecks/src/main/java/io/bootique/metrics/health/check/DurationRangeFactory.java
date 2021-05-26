@@ -23,9 +23,7 @@ import io.bootique.annotation.BQConfig;
 import io.bootique.annotation.BQConfigProperty;
 import io.bootique.value.Duration;
 
-/**
- * @since 1.0.RC1
- */
+
 @BQConfig
 public class DurationRangeFactory {
     private Duration min;

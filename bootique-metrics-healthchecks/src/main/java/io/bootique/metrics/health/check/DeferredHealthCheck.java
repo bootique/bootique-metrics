@@ -30,8 +30,6 @@ import java.util.function.Supplier;
  * provides a non-null HealthCheck. At that point the health check is considered "activated", and will be
  * running the real underlying check. This allows to pre-register and execute health checks for services that are
  * not yet started.
- *
- * @since 1.0.RC1
  */
 public class DeferredHealthCheck implements HealthCheck {
 

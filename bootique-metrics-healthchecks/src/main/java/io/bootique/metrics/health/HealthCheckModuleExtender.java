@@ -30,9 +30,6 @@ import io.bootique.metrics.health.heartbeat.HeartbeatCommand;
 import io.bootique.metrics.health.heartbeat.HeartbeatListener;
 import io.bootique.metrics.health.heartbeat.HeartbeatReporter;
 
-/**
- * @since 0.25
- */
 public class HealthCheckModuleExtender extends ModuleExtender<HealthCheckModuleExtender> {
 
     private MapBuilder<String, HealthCheck> healthChecks;
@@ -72,7 +69,6 @@ public class HealthCheckModuleExtender extends ModuleExtender<HealthCheckModuleE
      * reporter is enabled. Enabling only happens after calling this method.
      *
      * @return this extender instance.
-     * @since 1.0.RC1
      */
     public HealthCheckModuleExtender enableHeartbeatReporting() {
         return addHeartbeatListener(HeartbeatReporter.class);

@@ -25,9 +25,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.function.Supplier;
 
-/**
- * @since 1.0.RC1
- */
+
 @BQConfig
 @JsonTypeName("slf4j")
 public class Slf4JReportSyncFactory implements ReportSinkFactory {

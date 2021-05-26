@@ -24,8 +24,6 @@ import java.nio.file.StandardCopyOption;
 
 /**
  * A {@link ReportSink} writing data to a temp file. Once closed, atomically replaces the target file with the new file.
- *
- * @since 1.0.RC1
  */
 public class FileReportSink implements ReportSink {
 

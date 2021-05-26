@@ -21,8 +21,6 @@ package io.bootique.metrics.health;
 
 /**
  * Represents a single system health check.
- *
- * @since 0.8
  */
 public interface HealthCheck {
 
@@ -38,7 +36,6 @@ public interface HealthCheck {
      * Returns whether this check should be executed during a registry health check run.
      *
      * @return this implementation always returns true.
-     * @since 1.0.RC1
      */
     default boolean isActive() {
         return true;

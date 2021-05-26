@@ -22,9 +22,7 @@ package io.bootique.metrics.health.check;
 import io.bootique.annotation.BQConfigProperty;
 import io.bootique.value.Percent;
 
-/**
- * @since 1.0.RC1
- */
+
 public class PercentRangeFactory {
 
     private Percent min;

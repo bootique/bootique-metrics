@@ -21,9 +21,7 @@ package io.bootique.metrics.health;
 
 import java.util.Optional;
 
-/**
- * @since 0.8
- */
+
 public class HealthCheckOutcome implements Comparable<HealthCheckOutcome> {
 
     private static final HealthCheckOutcome OK = new HealthCheckOutcome(HealthCheckStatus.OK, null, null);
@@ -42,7 +40,6 @@ public class HealthCheckOutcome implements Comparable<HealthCheckOutcome> {
 
     /**
      * @return a {@link HealthCheckOutcome} corresponding to a healthy state of the app.
-     * @since 0.25
      */
     public static HealthCheckOutcome ok() {
         return OK;
@@ -50,7 +47,6 @@ public class HealthCheckOutcome implements Comparable<HealthCheckOutcome> {
 
     /**
      * @return a {@link HealthCheckOutcome} corresponding to a healthy state of the app.
-     * @since 0.25
      */
     public static HealthCheckOutcome ok(String message) {
         return new HealthCheckOutcome(HealthCheckStatus.OK, message, null);
@@ -58,7 +54,6 @@ public class HealthCheckOutcome implements Comparable<HealthCheckOutcome> {
 
     /**
      * @return a {@link HealthCheckOutcome} corresponding to a "warning" state of the app, i.e. approaching critical.
-     * @since 0.25
      */
     public static HealthCheckOutcome warning() {
         return warning((String) null);
@@ -66,7 +61,6 @@ public class HealthCheckOutcome implements Comparable<HealthCheckOutcome> {
 
     /**
      * @return a {@link HealthCheckOutcome} corresponding to a "warning" state of the app, i.e. approaching critical.
-     * @since 0.25
      */
     public static HealthCheckOutcome warning(String message) {
         return new HealthCheckOutcome(HealthCheckStatus.WARNING, message, null);
@@ -74,7 +68,6 @@ public class HealthCheckOutcome implements Comparable<HealthCheckOutcome> {
 
     /**
      * @return a {@link HealthCheckOutcome} corresponding to a "warning" state of the app, i.e. approaching critical.
-     * @since 1.0.RC1
      */
     public static HealthCheckOutcome warning(Throwable th) {
         return new HealthCheckOutcome(HealthCheckStatus.WARNING, null, th);
@@ -82,7 +75,6 @@ public class HealthCheckOutcome implements Comparable<HealthCheckOutcome> {
 
     /**
      * @return a {@link HealthCheckOutcome} corresponding to a critical state of the app.
-     * @since 0.25
      */
     public static HealthCheckOutcome critical() {
         return critical((String) null);
@@ -90,7 +82,6 @@ public class HealthCheckOutcome implements Comparable<HealthCheckOutcome> {
 
     /**
      * @return a {@link HealthCheckOutcome} corresponding to a critical state of the app.
-     * @since 0.25
      */
     public static HealthCheckOutcome critical(String message) {
         return new HealthCheckOutcome(HealthCheckStatus.CRITICAL, message, null);
@@ -98,7 +89,6 @@ public class HealthCheckOutcome implements Comparable<HealthCheckOutcome> {
 
     /**
      * @return a {@link HealthCheckOutcome} corresponding to a critical state of the app.
-     * @since 0.25
      */
     public static HealthCheckOutcome critical(Throwable th) {
         return new HealthCheckOutcome(HealthCheckStatus.CRITICAL, null, th);
@@ -106,7 +96,6 @@ public class HealthCheckOutcome implements Comparable<HealthCheckOutcome> {
 
     /**
      * @return a {@link HealthCheckOutcome} corresponding to a state of the app that can not be asserted.
-     * @since 0.25
      */
     public static HealthCheckOutcome unknown() {
         return unknown((String) null);
@@ -114,7 +103,6 @@ public class HealthCheckOutcome implements Comparable<HealthCheckOutcome> {
 
     /**
      * @return a {@link HealthCheckOutcome} corresponding to a state of the app that can not be asserted.
-     * @since 0.25
      */
     public static HealthCheckOutcome unknown(String message) {
         return new HealthCheckOutcome(HealthCheckStatus.UNKNOWN, message, null);
@@ -122,7 +110,6 @@ public class HealthCheckOutcome implements Comparable<HealthCheckOutcome> {
 
     /**
      * @return a {@link HealthCheckOutcome} corresponding to a state of the app that can not be asserted.
-     * @since 0.25
      */
     public static HealthCheckOutcome unknown(Throwable th) {
         return new HealthCheckOutcome(HealthCheckStatus.UNKNOWN, null, th);
@@ -130,7 +117,6 @@ public class HealthCheckOutcome implements Comparable<HealthCheckOutcome> {
 
     /**
      * @return a {@link HealthCheckOutcome} with provided parameters.
-     * @since 0.25
      */
     public static HealthCheckOutcome outcome(HealthCheckStatus status, String message, Throwable th) {
         return new HealthCheckOutcome(status, message, th);
@@ -139,7 +125,6 @@ public class HealthCheckOutcome implements Comparable<HealthCheckOutcome> {
     /**
      * @return a new {@link HealthCheckOutcome} with all the information from this outcome plus extra metrics data
      * that was used to generate this outcome.
-     * @since 1.0.RC1
      */
     public HealthCheckOutcome withData(HealthCheckData<?> data) {
         HealthCheckOutcome outcomeWithData = new HealthCheckOutcome(status, message, error);
@@ -152,7 +137,6 @@ public class HealthCheckOutcome implements Comparable<HealthCheckOutcome> {
      * state. Kind of a metrics for health check.
      *
      * @return an optional extra data for this health check.
-     * @since 1.0.RC1
      */
     public Optional<HealthCheckData<?>> getData() {
         return data;

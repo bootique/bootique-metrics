@@ -28,8 +28,6 @@ import java.util.function.Supplier;
 /**
  * A {@link HeartbeatListener} that writes heartbeat information to a preconfigured {@link ReportSink} using format
  * determined by the internal {@link ReportWriter}.
- *
- * @since 1.0.RC1
  */
 public class HeartbeatReporter implements HeartbeatListener {
 

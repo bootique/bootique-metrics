@@ -24,9 +24,7 @@ import io.bootique.config.PolymorphicConfiguration;
 
 import java.util.function.Supplier;
 
-/**
- * @since 1.0.RC1
- */
+
 @BQConfig
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type", defaultImpl = Slf4JReportSyncFactory.class)
 public interface ReportSinkFactory extends PolymorphicConfiguration {

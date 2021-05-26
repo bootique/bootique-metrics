@@ -25,8 +25,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * A {@link TransactionIdGenerator} that needs to be checked for possible overflow by the caller.
- *
- * @since 0.25
  */
 public class UnsafeTransactionIdGenerator implements TransactionIdGenerator {
 

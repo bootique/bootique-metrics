@@ -25,8 +25,6 @@ package io.bootique.metrics.health.sink;
  * <p>Somewhat similar to
  * Java {@link Appendable} or {@link java.io.Writer}, only Exception-free and targeted to the health checking use
  * case. E.g. an implementing {@link FileReportSink} would override health check files atomically.</p>
- *
- * @since 1.0.RC1
  */
 public interface ReportSink extends AutoCloseable {
 

@@ -21,25 +21,18 @@ package io.bootique.metrics.health;
 
 import io.bootique.BQCoreModule;
 import io.bootique.config.ConfigurationFactory;
-import io.bootique.di.Binder;
 import io.bootique.di.BQModule;
+import io.bootique.di.Binder;
 import io.bootique.di.Provides;
-import io.bootique.metrics.health.heartbeat.Heartbeat;
-import io.bootique.metrics.health.heartbeat.HeartbeatCommand;
-import io.bootique.metrics.health.heartbeat.HeartbeatFactory;
-import io.bootique.metrics.health.heartbeat.HeartbeatListener;
-import io.bootique.metrics.health.heartbeat.HeartbeatReporter;
+import io.bootique.metrics.health.heartbeat.*;
 import io.bootique.shutdown.ShutdownManager;
 
+import javax.inject.Provider;
+import javax.inject.Singleton;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-import javax.inject.Provider;
-import javax.inject.Singleton;
 
-/**
- * @since 0.25
- */
 public class HealthCheckModule implements BQModule {
 
     /**
@@ -48,7 +41,6 @@ public class HealthCheckModule implements BQModule {
      *
      * @param binder DI binder passed to the Module that invokes this method.
      * @return an instance of {@link HealthCheckModuleExtender} that can be used to load HealthCheckModule custom extensions.
-     * @since 0.9
      */
     public static HealthCheckModuleExtender extend(Binder binder) {
         return new HealthCheckModuleExtender(binder);

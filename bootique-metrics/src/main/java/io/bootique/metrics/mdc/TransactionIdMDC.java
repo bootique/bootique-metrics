@@ -21,9 +21,6 @@ package io.bootique.metrics.mdc;
 
 import org.slf4j.MDC;
 
-/**
- * @since 0.25
- */
 public class TransactionIdMDC {
 
     public static final String MDC_KEY = "txid";

@@ -21,9 +21,7 @@ package io.bootique.metrics.health.writer;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import io.bootique.annotation.BQConfig;
 
-/**
- * @since 1.0.RC1
- */
+
 @BQConfig
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type", defaultImpl = NagiosReportWriterFactory.class)
 public interface ReportWriterFactory {

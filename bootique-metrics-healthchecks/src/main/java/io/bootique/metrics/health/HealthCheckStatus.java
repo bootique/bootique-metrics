@@ -24,8 +24,6 @@ package io.bootique.metrics.health;
  * are taken from the
  * <a href="https://assets.nagios.com/downloads/nagioscore/docs/nagioscore/3/en/pluginapi.html">Nagios plugin spec</a>,
  * and their ordinals correspond to the Nagios plugin return codes.
- *
- * @since 0.25
  */
 public enum HealthCheckStatus {
     OK(0), WARNING(1), CRITICAL(3), UNKNOWN(2);

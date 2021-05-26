@@ -21,8 +21,6 @@ package io.bootique.metrics.health.heartbeat;
 
 /**
  * Startable heartbeat object.
- *
- * @since 0.25
  */
 public class Heartbeat {
 

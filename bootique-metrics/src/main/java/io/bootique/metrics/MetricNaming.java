@@ -26,8 +26,6 @@ import java.util.StringJoiner;
 
 /**
  * A helper class to name metrics across Bootique modules. Helps somewhat to enforce consistent naming convention. Note that
- *
- * @since 1.0.RC1
  */
 public class MetricNaming {
 

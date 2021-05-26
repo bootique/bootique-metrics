@@ -24,8 +24,6 @@ import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * An overflow-free implementation of {@link TransactionIdGenerator}.
- *
- * @since 0.25
  */
 public class SafeTransactionIdGenerator implements TransactionIdGenerator {
 

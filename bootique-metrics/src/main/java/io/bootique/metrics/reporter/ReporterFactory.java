@@ -27,8 +27,6 @@ import io.bootique.shutdown.ShutdownManager;
 
 /**
  * Superinterface of reporter factories.
- *
- * @since 0.7
  */
 @BQConfig
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type", defaultImpl = Slf4jReporterFactory.class)

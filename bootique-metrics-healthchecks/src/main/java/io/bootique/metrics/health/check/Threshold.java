@@ -19,9 +19,7 @@
 
 package io.bootique.metrics.health.check;
 
-/**
- * @since 1.0.RC1
- */
+
 public class Threshold<T extends Comparable<T>> implements Comparable<Threshold<T>> {
 
     private ThresholdType type;

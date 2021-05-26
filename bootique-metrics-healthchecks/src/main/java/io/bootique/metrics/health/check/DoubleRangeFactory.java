@@ -22,9 +22,7 @@ package io.bootique.metrics.health.check;
 import io.bootique.annotation.BQConfig;
 import io.bootique.annotation.BQConfigProperty;
 
-/**
- * @since 1.0.RC1
- */
+
 @BQConfig
 public class DoubleRangeFactory {
 

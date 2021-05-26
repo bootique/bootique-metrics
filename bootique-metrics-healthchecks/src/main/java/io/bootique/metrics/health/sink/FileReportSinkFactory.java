@@ -26,9 +26,7 @@ import java.io.File;
 import java.util.Objects;
 import java.util.function.Supplier;
 
-/**
- * @since 1.0.RC1
- */
+
 @BQConfig
 @JsonTypeName("file")
 public class FileReportSinkFactory implements ReportSinkFactory {

@@ -36,8 +36,6 @@ import java.util.function.Supplier;
 
 /**
  * A builder of a Timer object that runs periodic health checks that constitute an application "heartbeat".
- *
- * @since 0.25
  */
 public class HeartbeatTimerBuilder {
 

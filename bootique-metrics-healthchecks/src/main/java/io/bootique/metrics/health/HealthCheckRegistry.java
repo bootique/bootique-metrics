@@ -31,8 +31,6 @@ import java.util.function.Predicate;
 
 /**
  * An immutable registry of HealthChecks.
- *
- * @since 0.8
  */
 public class HealthCheckRegistry {
 
@@ -58,7 +56,6 @@ public class HealthCheckRegistry {
 
     /**
      * @return whether a given named health check is present in the registry.
-     * @since 0.25
      */
     public boolean containsHealthCheck(String name) {
         return healthChecks.containsKey(name);
@@ -66,7 +63,6 @@ public class HealthCheckRegistry {
 
     /**
      * @return an immutable map of known health check names.
-     * @since 1.0.RC1
      */
     public Set<String> healthCheckNames() {
         return Collections.unmodifiableSet(healthChecks.keySet());
@@ -76,7 +72,6 @@ public class HealthCheckRegistry {
      * Returns a number of health checks present in the registry.
      *
      * @return a number of health checks present in the registry.
-     * @since 0.25
      */
     public int size() {
         return healthChecks.size();
@@ -89,7 +84,6 @@ public class HealthCheckRegistry {
      * @param healthCheckFilter filtering criteria for health checks.
      * @return a new registry that contains a subset of health checks from the current registry, whose names match the
      * provided criteria.
-     * @since 0.25
      */
     public HealthCheckRegistry filtered(Predicate<String> healthCheckFilter) {
         Map<String, HealthCheck> filtered = new HashMap<>();
@@ -128,7 +122,6 @@ public class HealthCheckRegistry {
      *
      * @param threadPool a thread pool to use for parallel execution of health checks.
      * @return health checks execution results.
-     * @since 0.25
      */
     public Map<String, HealthCheckOutcome> runHealthChecks(ExecutorService threadPool) {
         return runHealthChecks(threadPool, 10, TimeUnit.SECONDS);
@@ -142,7 +135,6 @@ public class HealthCheckRegistry {
      * @param timeout     combined time to run all health checks.
      * @param timeoutUnit time unit for "timeout" value.
      * @return health checks execution results.
-     * @since 0.25
      */
     public Map<String, HealthCheckOutcome> runHealthChecks(
             ExecutorService threadPool,

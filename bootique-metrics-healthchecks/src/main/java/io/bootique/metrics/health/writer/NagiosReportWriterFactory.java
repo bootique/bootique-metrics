@@ -9,9 +9,7 @@ import io.bootique.value.Percent;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * @since 1.0.RC1
- */
+
 @BQConfig
 @JsonTypeName("nagios")
 public class NagiosReportWriterFactory implements ReportWriterFactory {

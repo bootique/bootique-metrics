@@ -23,8 +23,6 @@ import java.io.Writer;
 
 /**
  * A sink outputting to a {@link Writer}.
- *
- * @since 1.0.RC1
  */
 public class WriterReportSink implements ReportSink {
 

@@ -19,18 +19,16 @@
 
 package io.bootique.metrics.health.heartbeat;
 
-import javax.inject.Provider;
-
 import io.bootique.cli.Cli;
 import io.bootique.command.CommandOutcome;
 import io.bootique.command.CommandWithMetadata;
 import io.bootique.meta.application.CommandMetadata;
 
+import javax.inject.Provider;
+
 /**
  * A command that starts the application heartbeat. It is declared as a hidden command. To activate heartbeat, one would
  * need to use {@link io.bootique.command.CommandDecorator} to attach it to some other command.
- *
- * @since 0.25
  */
 public class HeartbeatCommand extends CommandWithMetadata {
 
