@@ -16,7 +16,6 @@
   specific language governing permissions and limitations
   under the License.
   -->
-
 [![build test deploy](https://github.com/bootique/bootique-metrics/actions/workflows/maven.yml/badge.svg)](https://github.com/bootique/bootique-metrics/actions/workflows/maven.yml)	
 [![Maven Central](https://img.shields.io/maven-central/v/io.bootique.metrics/bootique-metrics.svg?colorB=brightgreen)](https://search.maven.org/artifact/io.bootique.metrics/bootique-metrics/)
 
