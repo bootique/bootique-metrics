@@ -23,9 +23,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
 
@@ -36,24 +34,10 @@ import java.util.function.Predicate;
  */
 public class HealthCheckRegistry {
 
-    private Map<String, HealthCheck> healthChecks;
+    private final Map<String, HealthCheck> healthChecks;
 
     public HealthCheckRegistry(Map<String, HealthCheck> healthChecks) {
         this.healthChecks = healthChecks;
-    }
-
-    private static HealthCheckOutcome immediateOutcome(Future<HealthCheckOutcome> hcRunner) {
-
-        if (hcRunner.isDone()) {
-            try {
-                return hcRunner.get();
-            } catch (Exception e) {
-                // unexpected... we should be done here...
-                return HealthCheckOutcome.critical(e);
-            }
-        } else {
-            return HealthCheckOutcome.critical("health check timed out");
-        }
     }
 
     /**
@@ -154,27 +138,8 @@ public class HealthCheckRegistry {
             return Collections.emptyMap();
         }
 
-        // TODO: noticed Travis failures (CountDownLatch timeout) when activeChecks.size() == 1... Anything special
-        // about CountDownLatch(1)?
-
-        // use the latch to ensure we can control the overall timeout, not individual health check timeouts...
-        // note that if the health check pool is thread-starved, then a few slow checks would result in
-        // faster checks reported as timeouts...
-        CountDownLatch doneSignal = new CountDownLatch(activeChecks.size());
-
-        Map<String, Future<HealthCheckOutcome>> futures = new HashMap<>();
-        activeChecks.forEach((n, hc) -> futures.put(n, threadPool.submit(() -> run(hc, doneSignal))));
-
-        try {
-            doneSignal.await(timeout, timeoutUnit);
-        } catch (InterruptedException e) {
-            // let's still finish the health check analysis on interrupt
-        }
-
-        Map<String, HealthCheckOutcome> results = new HashMap<>();
-        futures.forEach((n, f) -> results.put(n, immediateOutcome(f)));
-
-        return results;
+        HealthCheckExecutor healthCheckExecutor = new HealthCheckExecutor(activeChecks, threadPool);
+        return healthCheckExecutor.runChecks(timeout, timeoutUnit);
     }
 
     // get health checks active at this instant
@@ -193,11 +158,5 @@ public class HealthCheckRegistry {
         });
 
         return active;
-    }
-
-    private HealthCheckOutcome run(HealthCheck hc, CountDownLatch doneSignal) {
-        HealthCheckOutcome outcome = hc.safeCheck();
-        doneSignal.countDown();
-        return outcome;
     }
 }
