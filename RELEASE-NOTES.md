@@ -1,4 +1,4 @@
-## 2.0.B2
+## 2.0.RC1
 
 * #42 Possible race condition in a HealthCheckRegistry
 
