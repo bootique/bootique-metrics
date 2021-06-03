@@ -1,3 +1,7 @@
+## 2.0.B2
+
+* #42 Possible race condition in a HealthCheckRegistry
+
 ## 2.0.B1
 
 * #41 HeartbeatFactory: replace all "Ms" properties with Duration objects
