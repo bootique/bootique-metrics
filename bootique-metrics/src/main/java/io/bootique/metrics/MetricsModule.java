@@ -19,8 +19,6 @@
 
 package io.bootique.metrics;
 
-import javax.inject.Singleton;
-
 import com.codahale.metrics.MetricRegistry;
 import io.bootique.ConfigModule;
 import io.bootique.config.ConfigurationFactory;
@@ -30,15 +28,9 @@ import io.bootique.metrics.mdc.StripedTransactionIdGenerator;
 import io.bootique.metrics.mdc.TransactionIdGenerator;
 import io.bootique.metrics.mdc.TransactionIdMDC;
 
+import javax.inject.Singleton;
+
 public class MetricsModule extends ConfigModule {
-
-    public MetricsModule(String configPrefix) {
-        super(configPrefix);
-    }
-
-    public MetricsModule() {
-    }
-
 
     @Override
     public void configure(Binder binder) {
