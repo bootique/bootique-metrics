@@ -21,22 +21,20 @@ package io.bootique.metrics;
 
 import com.codahale.metrics.MetricRegistry;
 import io.bootique.BQRuntime;
+import io.bootique.junit5.BQTest;
+import io.bootique.junit5.BQTestFactory;
+import io.bootique.junit5.BQTestTool;
 import io.bootique.metrics.reporter.JmxReporterFactory;
 import io.bootique.metrics.reporter.Slf4jReporterFactory;
-import io.bootique.test.junit.BQTestFactory;
-import io.bootique.value.Duration;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
+@BQTest
 public class MetricsModuleIT {
 
-    @Rule
-    public final BQTestFactory testFactory = new BQTestFactory();
+    @BQTestTool
+    final BQTestFactory testFactory = new BQTestFactory();
 
     protected BQRuntime createRuntime(String... args) {
         return testFactory.app(args).module(MetricsModule.class).createRuntime();
@@ -51,11 +49,11 @@ public class MetricsModuleIT {
         assertEquals(3, factory.getReporters().size());
         assertTrue(factory.getReporters().get(0) instanceof Slf4jReporterFactory);
         assertEquals(java.time.Duration.ofSeconds(30),
-                ((Slf4jReporterFactory)factory.getReporters().get(0)).getPeriod().getDuration());
+                ((Slf4jReporterFactory) factory.getReporters().get(0)).getPeriod().getDuration());
         assertTrue(factory.getReporters().get(1) instanceof JmxReporterFactory);
         assertTrue(factory.getReporters().get(2) instanceof Slf4jReporterFactory);
         assertEquals(java.time.Duration.ofSeconds(4),
-                ((Slf4jReporterFactory)factory.getReporters().get(2)).getPeriod().getDuration());
+                ((Slf4jReporterFactory) factory.getReporters().get(2)).getPeriod().getDuration());
     }
 
     @Test
@@ -66,6 +64,6 @@ public class MetricsModuleIT {
         MetricRegistry r1 = runtime.getInstance(MetricRegistry.class);
         MetricRegistry r2 = runtime.getInstance(MetricRegistry.class);
         assertNotNull(r1);
-        assertSame("MetricRegistry must be a singleton", r1, r2);
+        assertSame(r1, r2, "MetricRegistry must be a singleton");
     }
 }

@@ -21,7 +21,7 @@ package io.bootique.metrics.health.heartbeat;
 import io.bootique.metrics.health.HealthCheckOutcome;
 import io.bootique.metrics.health.sink.ReportSink;
 import io.bootique.metrics.health.writer.ReportWriter;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.Map;

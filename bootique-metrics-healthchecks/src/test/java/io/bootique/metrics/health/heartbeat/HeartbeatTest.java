@@ -19,10 +19,10 @@
 
 package io.bootique.metrics.health.heartbeat;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertSame;
 import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class HeartbeatTest {
 

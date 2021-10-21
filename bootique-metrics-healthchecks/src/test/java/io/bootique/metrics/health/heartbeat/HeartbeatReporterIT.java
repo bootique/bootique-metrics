@@ -19,28 +19,30 @@
 package io.bootique.metrics.health.heartbeat;
 
 import io.bootique.BQRuntime;
+import io.bootique.junit5.BQTest;
+import io.bootique.junit5.BQTestFactory;
+import io.bootique.junit5.BQTestTool;
 import io.bootique.metrics.health.HealthCheck;
 import io.bootique.metrics.health.HealthCheckData;
 import io.bootique.metrics.health.HealthCheckModule;
 import io.bootique.metrics.health.HealthCheckOutcome;
 import io.bootique.metrics.health.check.ValueRange;
-import io.bootique.test.junit.BQTestFactory;
 import io.bootique.value.Percent;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+@BQTest
 public class HeartbeatReporterIT {
 
-    @Rule
-    public BQTestFactory testFactory = new BQTestFactory();
+    @BQTestTool
+    final BQTestFactory testFactory = new BQTestFactory();
 
     private HealthCheck success;
 
-    @Before
+    @BeforeEach
     public void before() {
 
         TestInMemorySinkFactory.reset();

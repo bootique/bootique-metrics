@@ -20,20 +20,21 @@
 package io.bootique.metrics.health;
 
 import io.bootique.BQRuntime;
-import io.bootique.test.junit.BQTestFactory;
-import org.junit.Rule;
-import org.junit.Test;
+import io.bootique.junit5.BQTest;
+import io.bootique.junit5.BQTestFactory;
+import io.bootique.junit5.BQTestTool;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertSame;
+import static org.junit.jupiter.api.Assertions.*;
+
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+@BQTest
 public class HealthCheckModuleIT {
 
-    @Rule
-    public final BQTestFactory testFactory = new BQTestFactory();
-
+    @BQTestTool
+    final BQTestFactory testFactory = new BQTestFactory();
 
     @Test
     public void testHealthcheckRegistry() {
@@ -43,9 +44,8 @@ public class HealthCheckModuleIT {
         HealthCheckRegistry r1 = runtime.getInstance(HealthCheckRegistry.class);
         HealthCheckRegistry r2 = runtime.getInstance(HealthCheckRegistry.class);
         assertNotNull(r1);
-        assertSame("HealthCheckRegistry must be a singleton", r1, r2);
+        assertSame(r1, r2, "HealthCheckRegistry must be a singleton");
     }
-
 
     @Test
     public void testHealthcheckRegistry_Contributions() {

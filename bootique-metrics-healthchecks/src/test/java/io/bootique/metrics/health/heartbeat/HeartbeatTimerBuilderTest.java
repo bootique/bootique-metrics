@@ -22,9 +22,9 @@ package io.bootique.metrics.health.heartbeat;
 import io.bootique.metrics.health.HealthCheck;
 import io.bootique.metrics.health.HealthCheckOutcome;
 import io.bootique.metrics.health.HealthCheckRegistry;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -32,7 +32,7 @@ import java.util.Timer;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -43,7 +43,7 @@ public class HeartbeatTimerBuilderTest {
     private ExecutorService threadPool;
     private Timer timer;
 
-    @Before
+    @BeforeEach
     public void before() {
         this.success = mock(HealthCheck.class);
         when(success.safeCheck()).thenReturn(HealthCheckOutcome.ok());
@@ -55,7 +55,7 @@ public class HeartbeatTimerBuilderTest {
         this.threadPool = null;
     }
 
-    @After
+    @AfterEach
     public void after() {
         if (timer != null) {
             timer.cancel();

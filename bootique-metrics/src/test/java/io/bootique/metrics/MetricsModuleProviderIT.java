@@ -19,8 +19,8 @@
 
 package io.bootique.metrics;
 
-import io.bootique.test.junit.BQModuleProviderChecker;
-import org.junit.Test;
+import io.bootique.junit5.BQModuleProviderChecker;
+import org.junit.jupiter.api.Test;
 
 public class MetricsModuleProviderIT {
 

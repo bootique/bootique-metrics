@@ -26,14 +26,14 @@ import io.bootique.metrics.health.sink.ReportSink;
 import io.bootique.metrics.health.sink.WriterReportSink;
 import io.bootique.value.Duration;
 import io.bootique.value.Percent;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.StringWriter;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class NagiosReportWriterTest {
 
@@ -139,7 +139,7 @@ public class NagiosReportWriterTest {
         assertEquals("", writer.scrubMessage(""));
         assertEquals("abc def", writer.scrubMessage(" abc def "));
         assertEquals("abc  def", writer.scrubMessage("\rabc\n def "));
-        assertEquals("'|' is a separator in Nagios. Must replace.", "a b", writer.scrubMessage("a|b"));
+        assertEquals("a b", writer.scrubMessage("a|b"), "'|' is a separator in Nagios. Must replace.");
     }
 
     static class ReportTester {
@@ -155,7 +155,7 @@ public class NagiosReportWriterTest {
             int expectedLines = checkLines.length + 1;
 
             String[] lines = out.toString().split(System.lineSeparator());
-            assertEquals("Unexpected number of lines in the report", expectedLines, lines.length);
+            assertEquals(expectedLines, lines.length, "Unexpected number of lines in the report");
 
             // first line is an overall status
             if (expectedLines > 0) {

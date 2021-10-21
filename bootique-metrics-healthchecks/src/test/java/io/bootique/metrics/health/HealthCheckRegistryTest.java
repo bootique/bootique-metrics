@@ -19,8 +19,8 @@
 
 package io.bootique.metrics.health;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -28,8 +28,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotSame;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -41,7 +40,7 @@ public class HealthCheckRegistryTest {
     private HealthCheck failureTh;
     private HealthCheck slowSuccess;
 
-    @Before
+    @BeforeEach
     public void before() {
         this.success = mock(HealthCheck.class);
         when(success.safeCheck()).thenReturn(HealthCheckOutcome.ok());
@@ -129,8 +128,8 @@ public class HealthCheckRegistryTest {
 
         Map<String, HealthCheckOutcome> results = runParallel(registry, 3, 10000);
         assertEquals(2, results.size());
-        assertEquals("Unexpected HC: " + results.get("0"), HealthCheckStatus.OK, results.get("0").getStatus());
-        assertEquals("Unexpected HC: " + results.get("2"), HealthCheckStatus.CRITICAL, results.get("2").getStatus());
+        assertEquals(HealthCheckStatus.OK, results.get("0").getStatus(), () -> "Unexpected HC: " + results.get("0"));
+        assertEquals(HealthCheckStatus.CRITICAL, results.get("2").getStatus(), () -> "Unexpected HC: " + results.get("2"));
     }
 
     @Test

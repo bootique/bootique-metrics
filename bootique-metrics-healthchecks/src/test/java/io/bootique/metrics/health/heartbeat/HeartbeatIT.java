@@ -20,36 +20,34 @@
 package io.bootique.metrics.health.heartbeat;
 
 import io.bootique.BQRuntime;
+import io.bootique.junit5.BQTest;
+import io.bootique.junit5.BQTestFactory;
+import io.bootique.junit5.BQTestTool;
 import io.bootique.metrics.health.HealthCheck;
 import io.bootique.metrics.health.HealthCheckModule;
 import io.bootique.metrics.health.HealthCheckOutcome;
-import io.bootique.test.junit.BQTestFactory;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.Map;
 import java.util.stream.Stream;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+@BQTest
 public class HeartbeatIT {
 
-    @Rule
-    public BQTestFactory testFactory = new BQTestFactory();
+    @BQTestTool
+    final BQTestFactory testFactory = new BQTestFactory();
 
     private final ThreadTester threadTester = new ThreadTester();
     private HealthCheck success;
     private HealthCheck failure;
 
-    @Before
+    @BeforeEach
     public void before() {
         this.success = mock(HealthCheck.class);
         when(success.safeCheck()).thenReturn(HealthCheckOutcome.ok());
@@ -73,10 +71,10 @@ public class HeartbeatIT {
         // so just check that everything starts ok...
 
         Heartbeat hb = runtime.getInstance(Heartbeat.class);
-        assertNull("Heartbeat was started prematurely", hb.heartbeatWatch);
+        assertNull(hb.heartbeatWatch, "Heartbeat was started prematurely");
 
         hb.start();
-        assertNotNull("Heartbeat hasn't started with default settings", hb.heartbeatWatch);
+        assertNotNull(hb.heartbeatWatch, "Heartbeat hasn't started with default settings");
     }
 
     @Test

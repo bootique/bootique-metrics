@@ -20,13 +20,14 @@
 package io.bootique.metrics.health.check;
 
 import io.bootique.metrics.health.HealthCheckStatus;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.function.Supplier;
 
-import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class ValueRangeCheckTest {
 

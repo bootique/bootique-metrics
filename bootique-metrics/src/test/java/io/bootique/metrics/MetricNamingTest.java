@@ -19,11 +19,11 @@
 
 package io.bootique.metrics;
 
-import io.bootique.di.Binder;
 import io.bootique.di.BQModule;
-import org.junit.Test;
+import io.bootique.di.Binder;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class MetricNamingTest {
 

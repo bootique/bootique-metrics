@@ -25,7 +25,7 @@ import io.bootique.metrics.health.sink.ReportSinkFactory;
 import java.util.Objects;
 import java.util.function.Supplier;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 @JsonTypeName("test-in-memory")
 public class TestInMemorySinkFactory implements ReportSinkFactory {

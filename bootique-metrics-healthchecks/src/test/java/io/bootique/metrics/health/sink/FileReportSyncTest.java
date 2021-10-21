@@ -18,8 +18,9 @@
  */
 package io.bootique.metrics.health.sink;
 
-import org.junit.BeforeClass;
-import org.junit.Test;
+
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
@@ -28,15 +29,14 @@ import java.nio.file.Path;
 import java.util.Comparator;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class FileReportSyncTest {
-
 
     private static final File REPORTS_DIR = new File("target/health-reports/");
     private static final AtomicInteger COUNTER = new AtomicInteger();
 
-    @BeforeClass
+    @BeforeAll
     public static void beforeClass() throws IOException {
 
         if (REPORTS_DIR.exists()) {
@@ -48,7 +48,7 @@ public class FileReportSyncTest {
     }
 
     private static void assertReport(File report, String... expectedLines) {
-        assertEquals("Temp file was not deleted", 1, report.getParentFile().listFiles().length);
+        assertEquals(1, report.getParentFile().listFiles().length, "Temp file was not deleted");
 
         String[] lines;
         try {
