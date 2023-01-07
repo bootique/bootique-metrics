@@ -1,3 +1,7 @@
+## 3.0.M2
+
+* #45 Upgrade to metrics 4.2.15
+
 ## 2.0.B1
 
 * #41 HeartbeatFactory: replace all "Ms" properties with Duration objects
