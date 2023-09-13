@@ -176,8 +176,13 @@ public class HealthCheckOutcome implements Comparable<HealthCheckOutcome> {
 
         StringBuilder buffer = new StringBuilder().append("[").append(status.name());
         if (message != null) {
-            buffer.append(": ").append(message);
+            buffer.append(", ").append(message);
         }
+
+        if (data.isPresent()) {
+            buffer.append(", ").append(data.get());
+        }
+
 
         return buffer.append("]").toString();
     }

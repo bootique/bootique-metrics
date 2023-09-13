@@ -43,4 +43,9 @@ public class HealthCheckData<T extends Comparable<T>> {
     public ValueRange<T> getThresholds() {
         return thresholds;
     }
+
+    @Override
+    public String toString() {
+        return "value=" + value + ", thresholds=[" + thresholds + "]";
+    }
 }
