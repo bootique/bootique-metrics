@@ -1,6 +1,7 @@
 ## 3.0.M2
 
 * #45 Upgrade to metrics 4.2.15
+* #46 Convert TransactionIdMDC to static API
 
 ## 2.0.B1
 

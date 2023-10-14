@@ -21,14 +21,19 @@ package io.bootique.metrics.mdc;
 
 import org.slf4j.MDC;
 
+/**
+ * Manages "txid" key in the SLF4J MDC.
+ */
 public class TransactionIdMDC {
 
     public static final String MDC_KEY = "txid";
 
     /**
      * Initializes SLF4J MDC with the current transaction ID.
+     *
+     * @since 3.0
      */
-    public void reset(String transactionId) {
+    public static void setId(String transactionId) {
         if (transactionId == null) {
             MDC.remove(MDC_KEY);
         } else {
@@ -36,14 +41,48 @@ public class TransactionIdMDC {
         }
     }
 
-    public String get() {
+    /**
+     * Returns transaction ID for the current thread.
+     *
+     * @since 3.0
+     */
+    public static String getId() {
         return MDC.get(MDC_KEY);
     }
 
+
     /**
      * Removes transaction ID from the logging MDC.
+     *
+     * @since 3.0
      */
-    public void clear() {
+    public static void clearId() {
         MDC.remove(MDC_KEY);
+    }
+
+    /**
+     * Initializes SLF4J MDC with the current transaction ID.
+     *
+     * @deprecated in favor of static {@link #setId(String)}
+     */
+    @Deprecated(since = "3.0")
+    public void reset(String transactionId) {
+        TransactionIdMDC.setId(transactionId);
+    }
+
+    /**
+     * @deprecated since 3.0 in favor of the static {@link #getId()}
+     */
+    @Deprecated(since = "3.0")
+    public String get() {
+        return getId();
+    }
+
+    /**
+     * @deprecated since 3.0 in favor of the static {@link #clearId()}
+     */
+    @Deprecated(since = "3.0")
+    public void clear() {
+        clearId();
     }
 }

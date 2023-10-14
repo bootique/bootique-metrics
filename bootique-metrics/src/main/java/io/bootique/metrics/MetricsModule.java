@@ -34,7 +34,7 @@ public class MetricsModule extends ConfigModule {
 
     @Override
     public void configure(Binder binder) {
-        // eager-load the registry. Otherwise it may never start...
+        // eager-load the registry. Otherwise, it may never start...
         binder.bind(MetricRegistry.class).toProvider(MetricRegistryProvider.class).initOnStartup();
     }
 
