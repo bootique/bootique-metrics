@@ -59,6 +59,9 @@ public class MetricsModule extends ConfigModule {
         return new StripedTransactionIdGenerator(cpus);
     }
 
+    // TransactionIdMDC is now static, so it doesn't need to be injectable. This stays around for now until we
+    // remove all non-static methods
+    @Deprecated(since = "3.0", forRemoval = true)
     @Provides
     @Singleton
     TransactionIdMDC provideTransactionIdMDC() {
