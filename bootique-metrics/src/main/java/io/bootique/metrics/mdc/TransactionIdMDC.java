@@ -65,7 +65,7 @@ public class TransactionIdMDC {
      *
      * @deprecated in favor of static {@link #setId(String)}
      */
-    @Deprecated(since = "3.0")
+    @Deprecated(since = "3.0", forRemoval = true)
     public void reset(String transactionId) {
         TransactionIdMDC.setId(transactionId);
     }
@@ -73,7 +73,7 @@ public class TransactionIdMDC {
     /**
      * @deprecated since 3.0 in favor of the static {@link #getId()}
      */
-    @Deprecated(since = "3.0")
+    @Deprecated(since = "3.0", forRemoval = true)
     public String get() {
         return getId();
     }
@@ -81,7 +81,7 @@ public class TransactionIdMDC {
     /**
      * @deprecated since 3.0 in favor of the static {@link #clearId()}
      */
-    @Deprecated(since = "3.0")
+    @Deprecated(since = "3.0", forRemoval = true)
     public void clear() {
         clearId();
     }
