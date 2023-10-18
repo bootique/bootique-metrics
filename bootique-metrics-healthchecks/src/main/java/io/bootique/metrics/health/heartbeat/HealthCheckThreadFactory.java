@@ -23,7 +23,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 class HealthCheckThreadFactory implements ThreadFactory {
 
-    private AtomicInteger counter = new AtomicInteger();
+    private final AtomicInteger counter = new AtomicInteger();
 
     @Override
     public Thread newThread(Runnable r) {

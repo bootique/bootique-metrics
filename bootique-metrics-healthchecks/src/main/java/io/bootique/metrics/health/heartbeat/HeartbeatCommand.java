@@ -32,7 +32,7 @@ import javax.inject.Provider;
  */
 public class HeartbeatCommand extends CommandWithMetadata {
 
-    private Provider<Heartbeat> heartbeatProvider;
+    private final Provider<Heartbeat> heartbeatProvider;
 
     public HeartbeatCommand(Provider<Heartbeat> heartbeatProvider) {
         super(createMetadata());

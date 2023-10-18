@@ -31,8 +31,8 @@ import java.util.function.Supplier;
  */
 public class HeartbeatReporter implements HeartbeatListener {
 
-    Supplier<ReportSink> sinkSupplier;
-    private ReportWriter writer;
+    private final Supplier<ReportSink> sinkSupplier;
+    private final ReportWriter writer;
 
     public HeartbeatReporter(Supplier<ReportSink> sinkSupplier, ReportWriter writer) {
         this.sinkSupplier = sinkSupplier;

@@ -47,11 +47,11 @@ public class HeartbeatTimerBuilder {
     private long fixedDelayMs;
     private ExecutorService threadPool;
     private long healthCheckTimeoutMs;
-    private Set<HeartbeatListener> listeners;
-    private HealthCheckRegistry heartbeatChecks;
+    private final Set<HeartbeatListener> listeners;
+    private final HealthCheckRegistry healthCheckRegistry;
 
-    public HeartbeatTimerBuilder(HealthCheckRegistry heartbeatChecks) {
-        this.heartbeatChecks = Objects.requireNonNull(heartbeatChecks);
+    public HeartbeatTimerBuilder(HealthCheckRegistry healthCheckRegistry) {
+        this.healthCheckRegistry = Objects.requireNonNull(healthCheckRegistry);
         this.initialDelayMs = INITIAL_DELAY_MS_DEFAULT;
         this.fixedDelayMs = FIXED_DELAY_MS_DEFAULT;
         this.healthCheckTimeoutMs = HEALTH_CHECK_TIMEOUT_DEFAULT;
@@ -117,7 +117,7 @@ public class HeartbeatTimerBuilder {
     }
 
     protected Supplier<Map<String, HealthCheckOutcome>> createHeartbeatAction() {
-        return () -> heartbeatChecks
+        return () -> healthCheckRegistry
                 .runHealthChecks(threadPool, healthCheckTimeoutMs, TimeUnit.MILLISECONDS);
     }
 }

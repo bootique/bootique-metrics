@@ -25,7 +25,7 @@ package io.bootique.metrics.health.heartbeat;
 public class Heartbeat {
 
     private final HeartbeatRunner heartbeatRunner;
-    HeartbeatWatch heartbeatWatch;
+    private HeartbeatWatch heartbeatWatch;
 
     public Heartbeat(HeartbeatRunner heartbeatRunner) {
         this.heartbeatRunner = heartbeatRunner;

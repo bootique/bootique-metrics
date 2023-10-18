@@ -35,8 +35,8 @@ public class HeartbeatTask extends TimerTask {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(HeartbeatTask.class);
 
-    private Supplier<Map<String, HealthCheckOutcome>> heartbeatAction;
-    private Set<HeartbeatListener> listeners;
+    private final Supplier<Map<String, HealthCheckOutcome>> heartbeatAction;
+    private final Set<HeartbeatListener> listeners;
 
     public HeartbeatTask(Supplier<Map<String, HealthCheckOutcome>> heartbeatAction, Set<HeartbeatListener> listeners) {
         this.heartbeatAction = heartbeatAction;

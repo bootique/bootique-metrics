@@ -89,10 +89,10 @@ public class HeartbeatFactory {
         }
     }
 
-    protected HeartbeatWatch startHeartbeat(HealthCheckRegistry healthChecks, Set<HeartbeatListener> listeners) {
+    protected HeartbeatWatch startHeartbeat(HealthCheckRegistry healthCheckRegistry, Set<HeartbeatListener> listeners) {
 
         ExecutorService threadPool = startThreadPool();
-        Timer timer = new HeartbeatTimerBuilder(healthChecks)
+        Timer timer = new HeartbeatTimerBuilder(healthCheckRegistry)
                 .initialDelayMs(getInitialDelayMs())
                 .fixedDelayMs(getFixedDelayMs())
                 .healthCheckTimeoutMs(getHealthCheckTimeoutMs())
