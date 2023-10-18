@@ -21,6 +21,7 @@ package io.bootique.metrics.health.heartbeat;
 
 import io.bootique.annotation.BQConfig;
 import io.bootique.annotation.BQConfigProperty;
+import io.bootique.metrics.health.HealthCheck;
 import io.bootique.metrics.health.HealthCheckRegistry;
 import io.bootique.metrics.health.sink.ReportSinkFactory;
 import io.bootique.metrics.health.sink.Slf4JReportSyncFactory;
@@ -30,8 +31,7 @@ import io.bootique.value.Duration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @BQConfig
@@ -46,7 +46,11 @@ public class HeartbeatFactory {
     private Duration fixedDelay;
     private int threadPoolSize;
     private Duration healthCheckTimeout;
+
+    @Deprecated(forRemoval = true)
     private List<String> healthChecks;
+    private Map<String, HeartbeatHealthCheckFactory> checks;
+
     private ReportSinkFactory sink;
     private ReportWriterFactory writer;
 
@@ -54,9 +58,9 @@ public class HeartbeatFactory {
             HealthCheckRegistry registry,
             Set<HeartbeatListener> listeners) {
 
-        HealthCheckRegistry filtered = filterRegistry(registry);
+        HealthCheckRegistry heartbeatRegistry = heartbeatRegistry(registry);
         HeartbeatRunner runner = new HeartbeatRunner(
-                filtered,
+                heartbeatRegistry,
                 listeners,
                 getInitialDelayMs(),
                 getFixedDelayMs(),
@@ -72,34 +76,66 @@ public class HeartbeatFactory {
                 createWriterFactory().createReportWriter());
     }
 
-    protected HealthCheckRegistry filterRegistry(HealthCheckRegistry registry) {
-        // no explicit health checks means run all available health check...
-        if (healthChecks == null || healthChecks.isEmpty()) {
+    protected HealthCheckRegistry heartbeatRegistry(HealthCheckRegistry registry) {
+
+        // no explicit health checks means run all available health checks...
+        if ((checks == null || checks.isEmpty()) && (healthChecks == null || healthChecks.isEmpty())) {
             return registry;
         }
 
-        HealthCheckRegistry filtered = registry.filtered(healthChecks::contains);
-
-        // Report health checks configured in the factory, but missing from the registry.
-        // those are likely human errors and a warning is needed.
-        reportMissingHealthChecks(filtered);
-
-        return filtered;
+        Map<String, HealthCheck> checks = new HashMap<>();
+        getCheckFactories(registry).forEach((k, v) -> checks.put(k, v.createHeartbeatCheck(k, registry)));
+        return new HealthCheckRegistry(checks);
     }
 
-    private void reportMissingHealthChecks(HealthCheckRegistry registry) {
-        int bad = healthChecks.size() - registry.size();
-        if (bad > 0) {
-            String badNames = healthChecks.stream()
-                    .filter(hc -> !registry.containsHealthCheck(hc))
-                    .collect(Collectors.joining(", "));
-            LOGGER.warn("The following health check names are invalid and will be ignored: {}", badNames);
+    private Map<String, HeartbeatHealthCheckFactory> getCheckFactories(HealthCheckRegistry registry) {
+
+        // filter valid, report invalid (due to user errors)
+        Map<String, HeartbeatHealthCheckFactory> result = new HashMap<>();
+        Set<String> badNames = new HashSet<>();
+
+        if (checks != null && !checks.isEmpty()) {
+            for (Map.Entry<String, HeartbeatHealthCheckFactory> e : checks.entrySet()) {
+                if (registry.containsHealthCheck(e.getKey())) {
+                    result.put(e.getKey(), e.getValue());
+                } else {
+                    badNames.add(e.getKey());
+                }
+            }
         }
+
+        // merge "checks" with deprecated "healthChecks"
+        if (healthChecks != null && !healthChecks.isEmpty()) {
+
+            LOGGER.warn("The use of 'heartbeat.healthChecks' configuration is deprecated. Use 'heartbeat.checks' map instead.");
+
+            for (String check : healthChecks) {
+                if (registry.containsHealthCheck(check)) {
+                    result.put(check, new HeartbeatHealthCheckFactory());
+                } else {
+                    badNames.add(check);
+                }
+            }
+        }
+
+        // report missing checks
+        if (!badNames.isEmpty()) {
+            String s = badNames.stream().collect(Collectors.joining(", "));
+            LOGGER.warn("The following health check name(s) are invalid and will be ignored: {}", s);
+        }
+
+        return result;
     }
 
-    @BQConfigProperty
+    @Deprecated(since = "3.0", forRemoval = true)
+    @BQConfigProperty("Deprecated since 3.0 in favor of the 'checks' map that allows to specify extra properties of heartbeat health checks")
     public void setHealthChecks(List<String> healthChecks) {
         this.healthChecks = healthChecks;
+    }
+
+    @BQConfigProperty("Configures health checks to be included in heartbeat. If omitted, all known health checks will be used")
+    public void setChecks(Map<String, HeartbeatHealthCheckFactory> checks) {
+        this.checks = checks;
     }
 
     @BQConfigProperty

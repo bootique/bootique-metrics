@@ -46,6 +46,13 @@ public class HealthCheckRegistry {
     }
 
     /**
+     * @since 3.0
+     */
+    public HealthCheck getHealthCheck(String name) {
+        return healthChecks.get(name);
+    }
+
+    /**
      * @return an immutable map of known health check names.
      */
     public Set<String> healthCheckNames() {

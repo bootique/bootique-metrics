@@ -37,8 +37,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+@Deprecated
 @BQTest
-public class HeartbeatIT {
+public class HeartbeatLegacyIT {
 
     @BQTestTool
     final BQTestFactory testFactory = new BQTestFactory();
@@ -59,30 +60,11 @@ public class HeartbeatIT {
     }
 
     @Test
-    public void testHeartbeat_Defaults() {
-
-        BQRuntime runtime = testFactory.app()
-                .autoLoadModules()
-                .module(b -> HealthCheckModule.extend(b).addHealthCheck("hc1", success))
-                .createRuntime();
-
-
-        // defaults have 60 sec delay and 60 sec heartbeat interval.. We are not going to wait that long in the test
-        // so just check that everything starts ok...
-
-        Heartbeat hb = runtime.getInstance(Heartbeat.class);
-        assertNull(hb.heartbeatWatch, "Heartbeat was started prematurely");
-
-        hb.start();
-        assertNotNull(hb.heartbeatWatch, "Heartbeat hasn't started with default settings");
-    }
-
-    @Test
     public void testHeartbeat() throws InterruptedException {
 
         TestListener listener = new TestListener();
 
-        BQRuntime runtime = testFactory.app("-c", "classpath:io/bootique/metrics/health/heartbeat/HeartbeatIT.yml")
+        BQRuntime runtime = testFactory.app("-c", "classpath:io/bootique/metrics/health/heartbeat/HeartbeatLegacyIT.yml")
                 .autoLoadModules()
                 .module(b -> HealthCheckModule.extend(b)
                         .addHealthCheck("hc1", success)
@@ -126,59 +108,7 @@ public class HeartbeatIT {
         threadTester.assertNoHeartbeat();
     }
 
-    @Test
-    public void testHeartbeat_Skip() throws InterruptedException {
-
-        TestListener listener = new TestListener();
-        CountingHealthCheck hc1 = new CountingHealthCheck();
-        CountingHealthCheck hc2 = new CountingHealthCheck();
-
-        BQRuntime runtime = testFactory.app("-c", "classpath:io/bootique/metrics/health/heartbeat/HeartbeatSkippedIT.yml")
-                .autoLoadModules()
-                .module(b -> HealthCheckModule.extend(b)
-                        .addHealthCheck("hc1", hc1)
-                        .addHealthCheck("hc2", hc2)
-                        .addHeartbeatListener(listener))
-                .createRuntime();
-
-        threadTester.assertNoHeartbeat();
-
-        Heartbeat hb = runtime.getInstance(Heartbeat.class);
-
-        Thread.sleep(100);
-
-        // not started yet...
-        threadTester.assertNoHeartbeat();
-
-        // start..
-        hb.start();
-        Thread.sleep(100);
-        threadTester.assertHasHeartbeat();
-
-        // we can't reliably predict the exact number of invocations at any given moment in the test, but we can
-        // check that the heart is beating...
-
-        int c1 = listener.counter;
-
-        Thread.sleep(100);
-        int c2 = listener.counter;
-        assertTrue(c1 < c2);
-
-        Thread.sleep(100);
-        int c3 = listener.counter;
-        assertTrue(c2 < c3);
-
-        runtime.shutdown();
-
-        // give a chance to stop ... without this the assertion below would fail occasionally
-        Thread.sleep(100);
-        threadTester.assertNoHeartbeat();
-
-        assertTrue(hc1.counter > hc2.counter);
-        assertTrue(hc2.counter > 0);
-    }
-
-    static class ThreadTester {
+    private static class ThreadTester {
 
         public void assertNoHeartbeat() {
             long matched = allThreads().filter(this::isTimerThread).count();
@@ -227,24 +157,10 @@ public class HeartbeatIT {
         @Override
         public void healthChecksFinished(Map<String, HealthCheckOutcome> result) {
             counter++;
+
+            // check filtering
             assertTrue(result.containsKey("hc1"));
             assertFalse(result.containsKey("ignored"));
-        }
-    }
-
-    static class CountingHealthCheck implements HealthCheck {
-
-        int counter;
-
-        @Override
-        public HealthCheckOutcome check() throws Exception {
-            counter++;
-            return HealthCheckOutcome.ok();
-        }
-
-        @Override
-        public boolean isActive() {
-            return true;
         }
     }
 
