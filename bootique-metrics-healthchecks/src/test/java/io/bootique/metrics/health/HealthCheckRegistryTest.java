@@ -76,6 +76,7 @@ public class HealthCheckRegistryTest {
         return new HealthCheckRegistry(healthChecks);
     }
 
+    @Deprecated
     @Test
     public void testFiltered() {
         HealthCheckRegistry original = createRegistry(success, failure);

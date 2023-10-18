@@ -75,7 +75,9 @@ public class HealthCheckRegistry {
      * @param healthCheckFilter filtering criteria for health checks.
      * @return a new registry that contains a subset of health checks from the current registry, whose names match the
      * provided criteria.
+     * @deprecated as the preferred way to construct a sub-registry is via the public constructor.
      */
+    @Deprecated(since = "3.0", forRemoval = true)
     public HealthCheckRegistry filtered(Predicate<String> healthCheckFilter) {
         Map<String, HealthCheck> filtered = new HashMap<>();
 
