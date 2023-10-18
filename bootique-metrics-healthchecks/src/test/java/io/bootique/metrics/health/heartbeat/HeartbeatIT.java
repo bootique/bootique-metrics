@@ -31,6 +31,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -216,7 +217,7 @@ public class HeartbeatIT {
 
             // there is a small chance a thread becomes inactive between 'activeCount' and 'enumerate' calls,
             // resulting in null threads in the array.. remove null threads from the result
-            return Arrays.stream(active).filter(t -> t != null);
+            return Arrays.stream(active).filter(Objects::nonNull);
         }
     }
 
@@ -240,11 +241,6 @@ public class HeartbeatIT {
         public HealthCheckOutcome check() throws Exception {
             counter++;
             return HealthCheckOutcome.ok();
-        }
-
-        @Override
-        public boolean isActive() {
-            return true;
         }
     }
 

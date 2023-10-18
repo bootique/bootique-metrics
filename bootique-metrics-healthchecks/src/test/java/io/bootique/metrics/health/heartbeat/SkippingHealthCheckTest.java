@@ -77,10 +77,5 @@ public class SkippingHealthCheckTest {
             counter++;
             return HealthCheckOutcome.ok();
         }
-
-        @Override
-        public boolean isActive() {
-            return true;
-        }
     }
 }
