@@ -102,7 +102,7 @@ public class HealthCheckRegistry {
     }
 
     /**
-     * Runs registered health checks in parallel using provided thread pool.
+     * Runs registered health checks in parallel using provided thread pool, with a default timeout of 10 seconds.
      *
      * @param threadPool a thread pool to use for parallel execution of health checks.
      * @return health checks execution results.
@@ -130,8 +130,7 @@ public class HealthCheckRegistry {
             return Collections.emptyMap();
         }
 
-        HealthCheckExecutor healthCheckExecutor = new HealthCheckExecutor(activeChecks, threadPool);
-        return healthCheckExecutor.runChecks(timeout, timeoutUnit);
+        return new HealthCheckExecutor(activeChecks, threadPool).runChecks(timeout, timeoutUnit);
     }
 
     // get health checks active at this instant
