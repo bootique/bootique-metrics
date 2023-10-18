@@ -18,11 +18,31 @@
  */
 package io.bootique.metrics.health.heartbeat;
 
-/**
- * @since 2.0.B1
- */
-@FunctionalInterface
-public interface HeartbeatWatch {
+import java.util.Timer;
+import java.util.concurrent.ExecutorService;
 
-    void stop();
+/**
+ * @since 3.0 converted to a class from an interface
+ */
+public class HeartbeatWatch {
+
+    private final Timer timer;
+    private final ExecutorService threadPool;
+
+    public HeartbeatWatch(Timer timer, ExecutorService threadPool) {
+        this.timer = timer;
+        this.threadPool = threadPool;
+    }
+
+    public void stop() {
+        try {
+            timer.cancel();
+        } catch (Throwable th) {
+        }
+
+        try {
+            threadPool.shutdownNow();
+        } catch (Throwable th) {
+        }
+    }
 }

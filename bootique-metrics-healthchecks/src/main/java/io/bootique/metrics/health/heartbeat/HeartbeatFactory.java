@@ -32,15 +32,15 @@ import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Set;
-import java.util.Timer;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 @BQConfig
 public class HeartbeatFactory {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(HeartbeatFactory.class);
+    private static final long INITIAL_DELAY_MS_DEFAULT = 60_000L;
+    private static final long FIXED_DELAY_MS_DEFAULT = 60_000L;
+    private static final long HEALTH_CHECK_TIMEOUT_DEFAULT = 5_000L;
 
     private Duration initialDelay;
     private Duration fixedDelay;
@@ -55,7 +55,15 @@ public class HeartbeatFactory {
             Set<HeartbeatListener> listeners) {
 
         HealthCheckRegistry filtered = filterRegistry(registry);
-        return new Heartbeat(() -> startHeartbeat(filtered, listeners));
+        HeartbeatRunner runner = new HeartbeatRunner(
+                filtered,
+                listeners,
+                getInitialDelayMs(),
+                getFixedDelayMs(),
+                getHealthCheckTimeoutMs(),
+                getThreadPoolSize()
+        );
+        return new Heartbeat(runner);
     }
 
     public HeartbeatReporter createReporter() {
@@ -87,35 +95,6 @@ public class HeartbeatFactory {
                     .collect(Collectors.joining(", "));
             LOGGER.warn("The following health check names are invalid and will be ignored: {}", badNames);
         }
-    }
-
-    protected HeartbeatWatch startHeartbeat(HealthCheckRegistry healthCheckRegistry, Set<HeartbeatListener> listeners) {
-
-        ExecutorService threadPool = startThreadPool();
-        Timer timer = new HeartbeatTimerBuilder(healthCheckRegistry)
-                .initialDelayMs(getInitialDelayMs())
-                .fixedDelayMs(getFixedDelayMs())
-                .healthCheckTimeoutMs(getHealthCheckTimeoutMs())
-                .listeners(listeners)
-                .threadPool(threadPool)
-                .start();
-
-        return () -> {
-
-            try {
-                timer.cancel();
-            } catch (Throwable th) {
-            }
-
-            try {
-                threadPool.shutdownNow();
-            } catch (Throwable th) {
-            }
-        };
-    }
-
-    protected ExecutorService startThreadPool() {
-        return Executors.newFixedThreadPool(getThreadPoolSize(), new HealthCheckThreadFactory());
     }
 
     @BQConfigProperty
@@ -158,15 +137,15 @@ public class HeartbeatFactory {
     }
 
     protected long getFixedDelayMs() {
-        return fixedDelay != null ? fixedDelay.getDuration().toMillis() : HeartbeatTimerBuilder.FIXED_DELAY_MS_DEFAULT;
+        return fixedDelay != null ? fixedDelay.getDuration().toMillis() : FIXED_DELAY_MS_DEFAULT;
     }
 
     protected long getInitialDelayMs() {
-        return initialDelay != null ? initialDelay.getDuration().toMillis() : HeartbeatTimerBuilder.INITIAL_DELAY_MS_DEFAULT;
+        return initialDelay != null ? initialDelay.getDuration().toMillis() : INITIAL_DELAY_MS_DEFAULT;
     }
 
     protected long getHealthCheckTimeoutMs() {
-        return healthCheckTimeout != null ? healthCheckTimeout.getDuration().toMillis() : HeartbeatTimerBuilder.HEALTH_CHECK_TIMEOUT_DEFAULT;
+        return healthCheckTimeout != null ? healthCheckTimeout.getDuration().toMillis() : HEALTH_CHECK_TIMEOUT_DEFAULT;
     }
 
     protected ReportSinkFactory createSinkFactory() {

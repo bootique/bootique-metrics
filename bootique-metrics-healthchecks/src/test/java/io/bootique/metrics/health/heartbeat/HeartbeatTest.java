@@ -30,8 +30,10 @@ public class HeartbeatTest {
     public void testStartStop() {
 
         HeartbeatWatch mockStopper = mock(HeartbeatWatch.class);
+        HeartbeatRunner mockRunner = mock(HeartbeatRunner.class);
+        when(mockRunner.start()).thenReturn(mockStopper);
 
-        Heartbeat hb = new Heartbeat(() -> mockStopper);
+        Heartbeat hb = new Heartbeat(mockRunner);
         verifyNoMoreInteractions(mockStopper);
 
         hb.start();

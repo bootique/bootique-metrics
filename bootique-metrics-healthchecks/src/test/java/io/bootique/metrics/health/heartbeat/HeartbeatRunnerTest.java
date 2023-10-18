@@ -28,20 +28,17 @@ import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Timer;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class HeartbeatTimerBuilderTest {
+public class HeartbeatRunnerTest {
 
     private HealthCheck success;
     private HealthCheck failure;
-    private ExecutorService threadPool;
-    private Timer timer;
+    private HeartbeatWatch watch;
 
     @BeforeEach
     public void before() {
@@ -51,21 +48,15 @@ public class HeartbeatTimerBuilderTest {
         this.failure = mock(HealthCheck.class);
         when(failure.safeCheck()).thenReturn(HealthCheckOutcome.critical("uh"));
 
-        this.timer = null;
-        this.threadPool = null;
+        this.watch = null;
     }
 
     @AfterEach
     public void after() {
-        if (timer != null) {
-            timer.cancel();
-        }
-
-        if (threadPool != null) {
-            threadPool.shutdownNow();
+        if (watch != null) {
+            watch.stop();
         }
     }
-
 
     @Test
     public void testStart() throws InterruptedException {
@@ -74,11 +65,13 @@ public class HeartbeatTimerBuilderTest {
 
         HealthCheckRegistry registry = createRegistry(success, failure);
 
-        this.threadPool = Executors.newFixedThreadPool(2);
-        this.timer = new HeartbeatTimerBuilder(registry)
-                .initialDelayMs(3)
-                .fixedDelayMs(50)
-                .listener(listener)
+        this.watch = new HeartbeatRunner(
+                registry,
+                Set.of(listener),
+                3,
+                50,
+                5_000L,
+                2)
                 .start();
 
         // we can't reliably predict the exact number of invocations at any given moment in the test, but we can

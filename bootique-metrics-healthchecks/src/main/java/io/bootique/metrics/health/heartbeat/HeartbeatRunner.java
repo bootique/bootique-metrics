@@ -18,11 +18,72 @@
  */
 package io.bootique.metrics.health.heartbeat;
 
-/**
- * @since 2.0.B1
- */
-@FunctionalInterface
-public interface HeartbeatRunner {
+import io.bootique.metrics.health.HealthCheckRegistry;
 
-    HeartbeatWatch start();
+import java.util.Objects;
+import java.util.Set;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+/**
+ * @since 3.0 converted to a class from an interface
+ */
+public class HeartbeatRunner {
+
+    private final HealthCheckRegistry registry;
+    private final Set<HeartbeatListener> listeners;
+    private final long initialDelayMs;
+    private final long fixedDelayMs;
+    private final long healthCheckTimeoutMs;
+    private final int threadPoolSize;
+
+    public HeartbeatRunner(
+            HealthCheckRegistry registry,
+            Set<HeartbeatListener> listeners,
+            long initialDelayMs,
+            long fixedDelayMs,
+            long healthCheckTimeoutMs,
+            int threadPoolSize) {
+
+        this.registry = Objects.requireNonNull(registry);
+        this.listeners = Objects.requireNonNull(listeners);
+
+        if (initialDelayMs < 0) {
+            throw new IllegalArgumentException("Initial delay can't be negative");
+        }
+        this.initialDelayMs = initialDelayMs;
+
+        this.fixedDelayMs = fixedDelayMs;
+        if (fixedDelayMs <= 0) {
+            throw new IllegalArgumentException("Delay between heartbeats must be positive");
+        }
+
+        this.healthCheckTimeoutMs = healthCheckTimeoutMs;
+        if (healthCheckTimeoutMs <= 0) {
+            throw new IllegalArgumentException("Health check timeout must be positive");
+        }
+
+        this.threadPoolSize = threadPoolSize;
+    }
+
+    public HeartbeatWatch start() {
+
+        ExecutorService threadPool = startThreadPool();
+
+        TimerTask heartbeat = createHeartbeatTask(threadPool);
+        Timer timer = new Timer("bootique-heartbeat", true);
+        timer.schedule(heartbeat, initialDelayMs, fixedDelayMs);
+
+        return new HeartbeatWatch(timer, threadPool);
+    }
+
+    protected ExecutorService startThreadPool() {
+        return Executors.newFixedThreadPool(threadPoolSize, new HealthCheckThreadFactory());
+    }
+
+    protected TimerTask createHeartbeatTask(ExecutorService threadPool) {
+        return new HeartbeatTask(registry, threadPool, healthCheckTimeoutMs, listeners);
+    }
 }

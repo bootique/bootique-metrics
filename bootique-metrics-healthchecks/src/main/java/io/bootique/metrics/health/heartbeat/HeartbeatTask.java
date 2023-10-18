@@ -20,13 +20,15 @@
 package io.bootique.metrics.health.heartbeat;
 
 import io.bootique.metrics.health.HealthCheckOutcome;
+import io.bootique.metrics.health.HealthCheckRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 import java.util.Set;
 import java.util.TimerTask;
-import java.util.function.Supplier;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * A {@link TimerTask} that executes heartbeat actions and notifies listeners of the results.
@@ -35,17 +37,27 @@ public class HeartbeatTask extends TimerTask {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(HeartbeatTask.class);
 
-    private final Supplier<Map<String, HealthCheckOutcome>> heartbeatAction;
+    private final HealthCheckRegistry registry;
+    private final ExecutorService threadPool;
+    private final long healthCheckTimeoutMs;
     private final Set<HeartbeatListener> listeners;
 
-    public HeartbeatTask(Supplier<Map<String, HealthCheckOutcome>> heartbeatAction, Set<HeartbeatListener> listeners) {
-        this.heartbeatAction = heartbeatAction;
+    public HeartbeatTask(
+            HealthCheckRegistry registry,
+            ExecutorService threadPool,
+            long healthCheckTimeoutMs,
+            Set<HeartbeatListener> listeners) {
+
+        this.registry = registry;
+        this.threadPool = threadPool;
+        this.healthCheckTimeoutMs = healthCheckTimeoutMs;
         this.listeners = listeners;
     }
 
     @Override
     public void run() {
-        Map<String, HealthCheckOutcome> result = heartbeatAction.get();
+        Map<String, HealthCheckOutcome> result = registry
+                .runHealthChecks(threadPool, healthCheckTimeoutMs, TimeUnit.MILLISECONDS);
         listeners.forEach(l -> notifyListener(l, result));
     }
 
