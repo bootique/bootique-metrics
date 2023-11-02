@@ -3,6 +3,7 @@
 * #40 Heartbeat to support skipping individual health checks
 * #45 Upgrade to metrics 4.2.15
 * #46 Convert TransactionIdMDC to static API
+* #47 API to wrap tasks in MDC-aware context
 
 ## 2.0.B1
 

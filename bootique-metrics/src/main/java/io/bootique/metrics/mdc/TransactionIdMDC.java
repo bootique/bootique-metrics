@@ -21,12 +21,50 @@ package io.bootique.metrics.mdc;
 
 import org.slf4j.MDC;
 
+import java.util.concurrent.Callable;
+import java.util.function.Supplier;
+
 /**
  * Manages "txid" key in the SLF4J MDC.
  */
 public class TransactionIdMDC {
 
     public static final String MDC_KEY = "txid";
+
+    /**
+     * Wraps a runnable with a code that initializes SLF4J MDC with the current transaction ID, and clears it after
+     * the call. Intended to wrap parameters to ExecutorService.submit(..), CompletableFuture.runAsync(..) or similar
+     * methods.
+     *
+     * @since 3.0
+     */
+    public static Runnable runnable(Runnable runnable) {
+        String txId = getId();
+        return txId != null ? new MDCRunnable(runnable, txId) : runnable;
+    }
+
+    /**
+     * Wraps a runnable with a code that initializes SLF4J MDC with the current transaction ID, and clears it after
+     * the call. Intended to wrap parameters to ExecutorService.submit(..), CompletableFuture.runAsync(..) or similar
+     * methods.
+     *
+     * @since 3.0
+     */
+    public static <T> Callable<T> callable(Callable<T> callable) {
+        String txId = getId();
+        return txId != null ? new MDCCallable(callable, txId) : callable;
+    }
+
+    /**
+     * Wraps a supplier with a code that initializes SLF4J MDC with the current transaction ID, and clears it after
+     * the call. Intended to wrap parameters to CompletableFuture.supplyAsync(..) method or similar.
+     *
+     * @since 3.0
+     */
+    public static <T> Supplier<T> supplier(Supplier<T> supplier) {
+        String txId = getId();
+        return txId != null ? new MDCSupplier<>(supplier, txId) : supplier;
+    }
 
     /**
      * Initializes SLF4J MDC with the current transaction ID.
