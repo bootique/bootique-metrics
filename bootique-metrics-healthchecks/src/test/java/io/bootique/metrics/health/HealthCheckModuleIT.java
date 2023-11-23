@@ -37,7 +37,7 @@ public class HealthCheckModuleIT {
     final BQTestFactory testFactory = new BQTestFactory();
 
     @Test
-    public void testHealthcheckRegistry() {
+    public void healthcheckRegistry() {
 
         BQRuntime runtime = testFactory.app().autoLoadModules().createRuntime();
 
@@ -48,7 +48,7 @@ public class HealthCheckModuleIT {
     }
 
     @Test
-    public void testHealthcheckRegistry_Contributions() {
+    public void healthcheckRegistry_Contributions() {
 
         HealthCheckOutcome hcr = mock(HealthCheckOutcome.class);
         HealthCheck hc = mock(HealthCheck.class);

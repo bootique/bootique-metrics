@@ -31,7 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertNotSame;
 public class Slf4JReportSinkFactoryTest {
 
     @Test
-    public void testCreateReportSyncSupplier() {
+    public void createReportSyncSupplier() {
         Supplier<ReportSink> sinkSupplier = new Slf4JReportSyncFactory().createReportSyncSupplier();
 
         Map<String, HealthCheckOutcome> results = new HashMap<>();

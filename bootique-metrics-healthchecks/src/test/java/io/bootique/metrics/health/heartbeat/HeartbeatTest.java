@@ -27,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class HeartbeatTest {
 
     @Test
-    public void testStartStop() {
+    public void startStop() {
 
         HeartbeatWatch mockStopper = mock(HeartbeatWatch.class);
         HeartbeatRunner mockRunner = mock(HeartbeatRunner.class);

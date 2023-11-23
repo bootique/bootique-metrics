@@ -47,7 +47,7 @@ public class TransactionIdMDCIT {
             .createRuntime();
 
     @Test
-    public void testRunnable() throws ExecutionException, InterruptedException {
+    public void runnable() throws ExecutionException, InterruptedException {
         AtomicReference<String> txId = new AtomicReference<>();
 
 
@@ -69,7 +69,7 @@ public class TransactionIdMDCIT {
     }
 
     @Test
-    public void testCallable() throws ExecutionException, InterruptedException {
+    public void callable() throws ExecutionException, InterruptedException {
         AtomicReference<String> txId = new AtomicReference<>();
 
         TransactionIdMDC.setId("_TXID_");
@@ -92,7 +92,7 @@ public class TransactionIdMDCIT {
     }
 
     @Test
-    public void testSupplier() throws ExecutionException, InterruptedException {
+    public void supplier() throws ExecutionException, InterruptedException {
         AtomicReference<String> txId = new AtomicReference<>();
 
         TransactionIdMDC.setId("_TXID_");
@@ -112,26 +112,26 @@ public class TransactionIdMDCIT {
     }
 
     @Test
-    public void testRunnable_NoMDC() {
+    public void runnable_NoMDC() {
         Runnable r = () -> {
         };
         assertSame(r, TransactionIdMDC.runnable(r));
     }
 
     @Test
-    public void testSupplier_NoMDC() {
+    public void supplier_NoMDC() {
         Supplier<String> s = () -> "a";
         assertSame(s, TransactionIdMDC.supplier(s));
     }
 
     @Test
-    public void testCallable_NoMDC() {
+    public void callable_NoMDC() {
         Callable<String> s = () -> "a";
         assertSame(s, TransactionIdMDC.callable(s));
     }
 
     @Test
-    public void testRunnable_DontOverrideExisting() throws ExecutionException, InterruptedException {
+    public void runnable_DontOverrideExisting() throws ExecutionException, InterruptedException {
         AtomicReference<String> txId = new AtomicReference<>();
 
         TransactionIdMDC.setId("_TXID_");

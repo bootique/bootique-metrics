@@ -28,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class MetricNamingTest {
 
     @Test
-    public void testName() {
+    public void name() {
 
         assertEquals("bq.MetricNamingTestX", MetricNaming
                 .forModule(MetricNamingTestXModule.class)

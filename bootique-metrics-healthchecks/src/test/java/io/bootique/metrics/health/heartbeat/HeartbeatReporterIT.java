@@ -61,7 +61,7 @@ public class HeartbeatReporterIT {
     }
 
     @Test
-    public void testHeartbeat_Enabled() throws InterruptedException {
+    public void heartbeat_Enabled() throws InterruptedException {
 
         BQRuntime runtime = testFactory.app("-c", "classpath:io/bootique/metrics/health/heartbeat/HeartbeatReporterIT.yml")
                 .autoLoadModules()
@@ -90,7 +90,7 @@ public class HeartbeatReporterIT {
     }
 
     @Test
-    public void testHeartbeat_Disabled() throws InterruptedException {
+    public void heartbeat_Disabled() throws InterruptedException {
 
         BQRuntime runtime = testFactory.app("-c", "classpath:io/bootique/metrics/health/heartbeat/HeartbeatReporterIT.yml")
                 .autoLoadModules()

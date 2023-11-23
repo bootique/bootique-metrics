@@ -60,7 +60,7 @@ public class HeartbeatLegacyIT {
     }
 
     @Test
-    public void testHeartbeat() throws InterruptedException {
+    public void heartbeat() throws InterruptedException {
 
         TestListener listener = new TestListener();
 

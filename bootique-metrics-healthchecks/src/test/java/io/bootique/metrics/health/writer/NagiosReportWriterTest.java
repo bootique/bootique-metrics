@@ -38,14 +38,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class NagiosReportWriterTest {
 
     @Test
-    public void testWrite_Empty() {
+    public void write_Empty() {
         ReportTester tester = new ReportTester();
         new NagiosReportWriter(Collections.emptyMap()).write(Collections.emptyMap(), tester.getSink());
         tester.testReport(HealthCheckStatus.OK);
     }
 
     @Test
-    public void testWrite() {
+    public void write() {
         Map<String, HealthCheckOutcome> results = new HashMap<>();
         results.put("m.n", HealthCheckOutcome.ok());
         results.put("c.d", HealthCheckOutcome.warning("I am warning"));
@@ -63,7 +63,7 @@ public class NagiosReportWriterTest {
     }
 
     @Test
-    public void testWrite_PerfData() {
+    public void write_PerfData() {
         Map<String, HealthCheckOutcome> results = new HashMap<>();
 
         ValueRange<Integer> mnRange = ValueRange.builder(Integer.class).min(0).critical(8).build();
@@ -90,7 +90,7 @@ public class NagiosReportWriterTest {
     }
 
     @Test
-    public void testWrite_PerfData_Percent_Units() {
+    public void write_PerfData_Percent_Units() {
         Map<String, HealthCheckOutcome> results = new HashMap<>();
 
         ValueRange<Percent> range = ValueRange
@@ -112,7 +112,7 @@ public class NagiosReportWriterTest {
     }
 
     @Test
-    public void testWrite_PerfData_Duration_Units() {
+    public void write_PerfData_Duration_Units() {
         Map<String, HealthCheckOutcome> results = new HashMap<>();
 
         ValueRange<Duration> range = ValueRange
@@ -134,7 +134,7 @@ public class NagiosReportWriterTest {
     }
 
     @Test
-    public void testScrubMessage() {
+    public void scrubMessage() {
         NagiosReportWriter writer = new NagiosReportWriter(Collections.emptyMap());
         assertEquals("", writer.scrubMessage(""));
         assertEquals("abc def", writer.scrubMessage(" abc def "));

@@ -32,7 +32,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class ValueRangeCheckTest {
 
     @Test
-    public void testCheck() {
+    public void check() {
 
         Supplier<Integer> supplier = mock(Supplier.class);
         when(supplier.get()).thenReturn(-1, 0, 5, 6, 9, 12);

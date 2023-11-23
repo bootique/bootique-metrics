@@ -60,7 +60,7 @@ public class HeartbeatIT {
     }
 
     @Test
-    public void testHeartbeat_Defaults() {
+    public void heartbeat_Defaults() {
 
         BQRuntime runtime = testFactory.app()
                 .autoLoadModules()
@@ -79,7 +79,7 @@ public class HeartbeatIT {
     }
 
     @Test
-    public void testHeartbeat() throws InterruptedException {
+    public void heartbeat() throws InterruptedException {
 
         TestListener listener = new TestListener();
 
@@ -128,7 +128,7 @@ public class HeartbeatIT {
     }
 
     @Test
-    public void testHeartbeat_Skip() throws InterruptedException {
+    public void heartbeat_Skip() throws InterruptedException {
 
         TestListener listener = new TestListener();
         CountingHealthCheck hc1 = new CountingHealthCheck();

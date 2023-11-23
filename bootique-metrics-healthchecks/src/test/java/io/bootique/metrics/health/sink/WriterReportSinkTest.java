@@ -27,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class WriterReportSinkTest {
 
     @Test
-    public void testWrite() {
+    public void write() {
 
         StringWriter out = new StringWriter();
         WriterReportSink sink = new WriterReportSink(out);

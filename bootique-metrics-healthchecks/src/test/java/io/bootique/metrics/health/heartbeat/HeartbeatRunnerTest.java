@@ -59,7 +59,7 @@ public class HeartbeatRunnerTest {
     }
 
     @Test
-    public void testStart() throws InterruptedException {
+    public void start() throws InterruptedException {
 
         TestListener listener = new TestListener();
 

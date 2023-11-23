@@ -25,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class ValueRangeTest {
 
     @Test
-    public void testReachedThreshold_Int() {
+    public void reachedThreshold_Int() {
 
         ValueRange<Integer> range = ValueRange.create(0, 5, 8, 11);
 
@@ -37,7 +37,7 @@ public class ValueRangeTest {
     }
 
     @Test
-    public void testReachedThreshold_Double() {
+    public void reachedThreshold_Double() {
 
         ValueRange<Double> range = ValueRange.create(0., 5.1, 8.6, 11.);
 
@@ -49,7 +49,7 @@ public class ValueRangeTest {
     }
 
     @Test
-    public void testToString() {
+    public void toStringTest() {
         ValueRange<Double> range = ValueRange.create(0., 5.1, 8.6, 11.);
         assertEquals("min:0.0, warning:5.1, critical:8.6, max:11.0", range.toString());
     }

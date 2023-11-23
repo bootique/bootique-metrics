@@ -73,7 +73,7 @@ public class FileReportSyncTest {
     }
 
     @Test
-    public void testWrite() {
+    public void write() {
 
         File dir = newReportDir();
         File report = new File(dir, "hc.txt");

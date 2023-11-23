@@ -27,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class SkippingHealthCheckTest {
 
     @Test
-    public void testSafeCheck_RunEvery1() {
+    public void safeCheck_RunEvery1() {
         CountingHealthCheck chc = new CountingHealthCheck();
         SkippingHealthCheck shc = new SkippingHealthCheck(chc, 1);
 
@@ -48,7 +48,7 @@ public class SkippingHealthCheckTest {
     }
 
     @Test
-    public void testSafeCheck_RunEvery2() {
+    public void safeCheck_RunEvery2() {
         CountingHealthCheck chc = new CountingHealthCheck();
         SkippingHealthCheck shc = new SkippingHealthCheck(chc, 2);
 

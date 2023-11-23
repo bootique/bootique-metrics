@@ -29,7 +29,7 @@ import static org.mockito.Mockito.*;
 public class Slf4JReportSinkTest {
 
     @Test
-    public void testAppend() {
+    public void append() {
         Logger logger = mock(Logger.class);
 
         Slf4JReportSink sink = new Slf4JReportSink(logger);
@@ -42,7 +42,7 @@ public class Slf4JReportSinkTest {
     }
 
     @Test
-    public void testAppend_LineBreaks() {
+    public void append_LineBreaks() {
 
         String lineBreak = System.lineSeparator();
         Logger logger = mock(Logger.class);

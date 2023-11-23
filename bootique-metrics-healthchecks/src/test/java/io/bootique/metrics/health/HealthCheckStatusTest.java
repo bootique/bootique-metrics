@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class HealthCheckStatusTest {
 
     @Test
-    public void testMatchesNagiosCodes() {
+    public void matchesNagiosCodes() {
         // health checks must follow Nagios plugin spec for names and return codes
         // from https://assets.nagios.com/downloads/nagioscore/docs/nagioscore/3/en/pluginapi.html
         assertEquals(0, HealthCheckStatus.OK.ordinal());

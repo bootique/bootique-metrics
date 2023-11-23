@@ -41,7 +41,7 @@ public class MetricsModuleIT {
     }
 
     @Test
-    public void testMetricRegistryConfig() {
+    public void metricRegistryConfig() {
 
         BQRuntime runtime = createRuntime("--config", "classpath:config1.yml");
         MetricRegistryFactory factory = runtime.getInstance(MetricRegistryFactory.class);
@@ -57,7 +57,7 @@ public class MetricsModuleIT {
     }
 
     @Test
-    public void testMetricRegistry() {
+    public void metricRegistry() {
 
         BQRuntime runtime = createRuntime();
 

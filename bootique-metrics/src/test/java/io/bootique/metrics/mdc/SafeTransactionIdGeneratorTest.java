@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class SafeTransactionIdGeneratorTest {
 
     @Test
-    public void testNextId() {
+    public void nextId() {
 
         SafeTransactionIdGenerator generator = new SafeTransactionIdGenerator();
 
@@ -43,7 +43,7 @@ public class SafeTransactionIdGeneratorTest {
     }
 
     @Test
-    public void testNextId_MidRange() {
+    public void nextId_MidRange() {
 
         SafeTransactionIdGenerator generator = new SafeTransactionIdGenerator(-1);
 
@@ -60,7 +60,7 @@ public class SafeTransactionIdGeneratorTest {
     }
 
     @Test
-    public void testNextId_Overflow() throws InterruptedException {
+    public void nextId_Overflow() throws InterruptedException {
 
         SafeTransactionIdGenerator generator = new SafeTransactionIdGenerator(UnsafeTransactionIdGenerator.RESET_THRESHOLD - 1);
 

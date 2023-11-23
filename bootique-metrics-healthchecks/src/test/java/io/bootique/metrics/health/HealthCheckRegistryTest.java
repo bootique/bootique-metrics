@@ -78,7 +78,7 @@ public class HealthCheckRegistryTest {
 
     @Deprecated
     @Test
-    public void testFiltered() {
+    public void filtered() {
         HealthCheckRegistry original = createRegistry(success, failure);
         HealthCheckRegistry filtered = original.filtered(s -> "1".equals(s));
         assertNotSame(original, filtered);
@@ -92,7 +92,7 @@ public class HealthCheckRegistryTest {
     }
 
     @Test
-    public void testRunHealthChecks_Serial() {
+    public void runHealthChecks_Serial() {
         HealthCheckRegistry registry = createRegistry(success, failure);
 
         Map<String, HealthCheckOutcome> results = registry.runHealthChecks();
@@ -102,7 +102,7 @@ public class HealthCheckRegistryTest {
     }
 
     @Test
-    public void testRunHealthChecks_Serial_Inactive() {
+    public void runHealthChecks_Serial_Inactive() {
         HealthCheckRegistry registry = createRegistry(success, inactive);
 
         Map<String, HealthCheckOutcome> results = registry.runHealthChecks();
@@ -111,7 +111,7 @@ public class HealthCheckRegistryTest {
     }
 
     @Test
-    public void testRunHealthChecks_Parallel() {
+    public void runHealthChecks_Parallel() {
 
         HealthCheckRegistry registry = createRegistry(success, failure, failureTh);
 
@@ -123,7 +123,7 @@ public class HealthCheckRegistryTest {
     }
 
     @Test
-    public void testRunHealthChecks_Parallel_Inactive() {
+    public void runHealthChecks_Parallel_Inactive() {
 
         HealthCheckRegistry registry = createRegistry(success, inactive, failure);
 
@@ -134,7 +134,7 @@ public class HealthCheckRegistryTest {
     }
 
     @Test
-    public void testRunHealthChecks_ParallelTimeout() {
+    public void runHealthChecks_ParallelTimeout() {
 
         HealthCheckRegistry registry = createRegistry(slowSuccess, success, slowSuccess);
         Map<String, HealthCheckOutcome> results = runParallel(registry, 3, 80);

@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class HealthCheckOutcomeTest {
 
     @Test
-    public void testCompareTo() {
+    public void compareTo() {
         HealthCheckOutcome o1 = HealthCheckOutcome.outcome(HealthCheckStatus.OK, "C", null);
         HealthCheckOutcome o2 = HealthCheckOutcome.outcome(HealthCheckStatus.WARNING, "B", null);
         HealthCheckOutcome o3 = HealthCheckOutcome.outcome(HealthCheckStatus.CRITICAL, "D", null);

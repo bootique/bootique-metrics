@@ -32,7 +32,7 @@ import static org.mockito.Mockito.verify;
 public class HeartbeatReporterTest {
 
     @Test
-    public void testHealthChecksFinished() {
+    public void healthChecksFinished() {
 
         ReportSink mockSink = mock(ReportSink.class);
         ReportWriter writer = mock(ReportWriter.class);
