@@ -25,12 +25,12 @@ import org.junit.jupiter.api.Test;
 public class MetricsModuleProviderIT {
 
 	@Test
-	public void testAutoLoadable() {
+    public void autoLoadable() {
 		BQModuleProviderChecker.testAutoLoadable(MetricsModuleProvider.class);
 	}
 
 	@Test
-	public void testMeta() {
+    public void meta() {
 		BQModuleProviderChecker.testMetadata(MetricsModuleProvider.class);
 	}
 }
