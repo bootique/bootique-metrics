@@ -19,35 +19,17 @@
 
 package io.bootique.metrics;
 
-import io.bootique.BQModuleMetadata;
 import io.bootique.BQModuleProvider;
-import io.bootique.di.BQModule;
-
-import java.lang.reflect.Type;
-import java.util.Collections;
-import java.util.Map;
+import io.bootique.bootstrap.BuiltModule;
 
 public class MetricsModuleProvider implements BQModuleProvider {
 
     @Override
-    public BQModule module() {
-        return new MetricsModule();
-    }
-
-    /**
-     * @return a single entry map with {@link MetricRegistryFactory}.
-     */
-    @Override
-    public Map<String, Type> configs() {
-        // TODO: config prefix is hardcoded. Refactor away from ConfigModule, and make provider
-        // generate config prefix, reusing it in metadata...
-        return Collections.singletonMap("metrics", MetricRegistryFactory.class);
-    }
-
-    @Override
-    public BQModuleMetadata.Builder moduleBuilder() {
-        return BQModuleProvider.super
-                .moduleBuilder()
-                .description("Integrates Dropwizard metrics in the application.");
+    public BuiltModule buildModule() {
+        return BuiltModule.of(new MetricsModule())
+                .provider(this)
+                .description("Integrates Dropwizard metrics.")
+                .config("metrics", MetricRegistryFactory.class)
+                .build();
     }
 }
