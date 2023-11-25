@@ -1,1 +1,1 @@
-io.bootique.metrics.health.HealthCheckModuleProvider
+io.bootique.metrics.health.HealthCheckModule

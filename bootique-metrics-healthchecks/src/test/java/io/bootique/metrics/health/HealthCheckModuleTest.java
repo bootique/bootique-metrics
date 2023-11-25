@@ -17,19 +17,15 @@
  * under the License.
  */
 
-package io.bootique.metrics;
+package io.bootique.metrics.health;
 
-import io.bootique.BQModuleProvider;
-import io.bootique.bootstrap.BuiltModule;
+import io.bootique.junit5.BQModuleProviderChecker;
+import org.junit.jupiter.api.Test;
 
-public class MetricsModuleProvider implements BQModuleProvider {
+public class HealthCheckModuleTest {
 
-    @Override
-    public BuiltModule buildModule() {
-        return BuiltModule.of(new MetricsModule())
-                .provider(this)
-                .description("Integrates Dropwizard metrics.")
-                .config("metrics", MetricRegistryFactory.class)
-                .build();
+    @Test
+    public void autoLoadable() {
+        BQModuleProviderChecker.testAutoLoadable(HealthCheckModule.class);
     }
 }

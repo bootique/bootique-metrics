@@ -20,6 +20,8 @@
 package io.bootique.metrics.health;
 
 import io.bootique.BQCoreModule;
+import io.bootique.BQModuleProvider;
+import io.bootique.bootstrap.BuiltModule;
 import io.bootique.config.ConfigurationFactory;
 import io.bootique.di.BQModule;
 import io.bootique.di.Binder;
@@ -33,7 +35,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class HealthCheckModule implements BQModule {
+public class HealthCheckModule implements BQModule, BQModuleProvider {
+
+    private static final String CONFIG_PREFIX = "heartbeat";
 
     /**
      * Returns an instance of {@link HealthCheckModuleExtender} used by downstream modules to load custom extensions for
@@ -44,6 +48,15 @@ public class HealthCheckModule implements BQModule {
      */
     public static HealthCheckModuleExtender extend(Binder binder) {
         return new HealthCheckModuleExtender(binder);
+    }
+
+    @Override
+    public BuiltModule buildModule() {
+        return BuiltModule.of(this)
+                .provider(this)
+                .description("Integrates monitoring health checks and heartbeat")
+                .config(CONFIG_PREFIX, HeartbeatFactory.class)
+                .build();
     }
 
     @Override
@@ -64,7 +77,7 @@ public class HealthCheckModule implements BQModule {
     @Provides
     @Singleton
     HeartbeatFactory provideHeartbeatFactory(ConfigurationFactory configurationFactory) {
-        return configurationFactory.config(HeartbeatFactory.class, "heartbeat");
+        return configurationFactory.config(HeartbeatFactory.class, CONFIG_PREFIX);
     }
 
     @Provides

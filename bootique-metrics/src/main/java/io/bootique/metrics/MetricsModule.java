@@ -20,8 +20,10 @@
 package io.bootique.metrics;
 
 import com.codahale.metrics.MetricRegistry;
-import io.bootique.ConfigModule;
+import io.bootique.BQModuleProvider;
+import io.bootique.bootstrap.BuiltModule;
 import io.bootique.config.ConfigurationFactory;
+import io.bootique.di.BQModule;
 import io.bootique.di.Binder;
 import io.bootique.di.Provides;
 import io.bootique.metrics.mdc.StripedTransactionIdGenerator;
@@ -30,7 +32,18 @@ import io.bootique.metrics.mdc.TransactionIdMDC;
 
 import javax.inject.Singleton;
 
-public class MetricsModule extends ConfigModule {
+public class MetricsModule implements BQModule, BQModuleProvider {
+
+    private static final String CONFIG_PREFIX = "metrics";
+
+    @Override
+    public BuiltModule buildModule() {
+        return BuiltModule.of(this)
+                .provider(this)
+                .description("Integrates Dropwizard metrics.")
+                .config(CONFIG_PREFIX, MetricRegistryFactory.class)
+                .build();
+    }
 
     @Override
     public void configure(Binder binder) {
@@ -41,7 +54,7 @@ public class MetricsModule extends ConfigModule {
     @Provides
     @Singleton
     MetricRegistryFactory provideMetricRegistryFactory(ConfigurationFactory configFactory) {
-        return config(MetricRegistryFactory.class, configFactory);
+        return configFactory.config(MetricRegistryFactory.class, CONFIG_PREFIX);
     }
 
     @Provides
@@ -51,8 +64,7 @@ public class MetricsModule extends ConfigModule {
         int cpus = Runtime.getRuntime().availableProcessors();
         if (cpus < 1) {
             cpus = 1;
-        }
-        else if(cpus > 4) {
+        } else if (cpus > 4) {
             cpus = 4;
         }
 

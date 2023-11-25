@@ -1,1 +1,1 @@
-io.bootique.metrics.MetricsModuleProvider
+io.bootique.metrics.MetricsModule

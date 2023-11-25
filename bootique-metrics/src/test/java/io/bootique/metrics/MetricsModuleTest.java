@@ -17,20 +17,20 @@
  * under the License.
  */
 
-package io.bootique.metrics.health;
+package io.bootique.metrics;
 
-import io.bootique.BQModuleProvider;
-import io.bootique.bootstrap.BuiltModule;
-import io.bootique.metrics.health.heartbeat.HeartbeatFactory;
+import io.bootique.junit5.BQModuleProviderChecker;
+import org.junit.jupiter.api.Test;
 
-public class HealthCheckModuleProvider implements BQModuleProvider {
+public class MetricsModuleTest {
 
-    @Override
-    public BuiltModule buildModule() {
-        return BuiltModule.of(new HealthCheckModule())
-                .provider(this)
-                .description("Integrates monitoring health checks and heartbeat")
-                .config("heartbeat", HeartbeatFactory.class)
-                .build();
-    }
+	@Test
+    public void autoLoadable() {
+		BQModuleProviderChecker.testAutoLoadable(MetricsModule.class);
+	}
+
+	@Test
+    public void meta() {
+		BQModuleProviderChecker.testMetadata(MetricsModule.class);
+	}
 }
