@@ -21,7 +21,7 @@ package io.bootique.metrics;
 
 import com.codahale.metrics.MetricRegistry;
 import io.bootique.BQModuleProvider;
-import io.bootique.bootstrap.BuiltModule;
+import io.bootique.ModuleCrate;
 import io.bootique.config.ConfigurationFactory;
 import io.bootique.di.BQModule;
 import io.bootique.di.Binder;
@@ -37,8 +37,8 @@ public class MetricsModule implements BQModule, BQModuleProvider {
     private static final String CONFIG_PREFIX = "metrics";
 
     @Override
-    public BuiltModule buildModule() {
-        return BuiltModule.of(this)
+    public ModuleCrate moduleCrate() {
+        return ModuleCrate.of(this)
                 .provider(this)
                 .description("Integrates Dropwizard metrics.")
                 .config(CONFIG_PREFIX, MetricRegistryFactory.class)

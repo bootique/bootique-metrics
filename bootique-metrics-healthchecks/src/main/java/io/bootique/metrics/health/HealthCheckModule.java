@@ -21,7 +21,7 @@ package io.bootique.metrics.health;
 
 import io.bootique.BQCoreModule;
 import io.bootique.BQModuleProvider;
-import io.bootique.bootstrap.BuiltModule;
+import io.bootique.ModuleCrate;
 import io.bootique.config.ConfigurationFactory;
 import io.bootique.di.BQModule;
 import io.bootique.di.Binder;
@@ -51,8 +51,8 @@ public class HealthCheckModule implements BQModule, BQModuleProvider {
     }
 
     @Override
-    public BuiltModule buildModule() {
-        return BuiltModule.of(this)
+    public ModuleCrate moduleCrate() {
+        return ModuleCrate.of(this)
                 .provider(this)
                 .description("Integrates monitoring health checks and heartbeat")
                 .config(CONFIG_PREFIX, HeartbeatFactory.class)
