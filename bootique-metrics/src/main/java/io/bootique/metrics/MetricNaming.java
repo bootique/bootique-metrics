@@ -19,7 +19,7 @@
 
 package io.bootique.metrics;
 
-import io.bootique.di.BQModule;
+import io.bootique.BQModule;
 import io.bootique.names.ClassToName;
 
 import java.util.StringJoiner;

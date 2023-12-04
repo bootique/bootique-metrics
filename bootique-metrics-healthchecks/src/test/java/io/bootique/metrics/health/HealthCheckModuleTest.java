@@ -19,13 +19,13 @@
 
 package io.bootique.metrics.health;
 
-import io.bootique.junit5.BQModuleProviderChecker;
+import io.bootique.junit5.BQModuleTester;
 import org.junit.jupiter.api.Test;
 
 public class HealthCheckModuleTest {
 
     @Test
     public void autoLoadable() {
-        BQModuleProviderChecker.testAutoLoadable(HealthCheckModule.class);
+        BQModuleTester.of(HealthCheckModule.class).testAutoLoadable().testConfig();
     }
 }

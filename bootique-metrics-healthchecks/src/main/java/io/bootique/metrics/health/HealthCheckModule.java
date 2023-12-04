@@ -20,7 +20,6 @@
 package io.bootique.metrics.health;
 
 import io.bootique.BQCoreModule;
-import io.bootique.BQModuleProvider;
 import io.bootique.ModuleCrate;
 import io.bootique.config.ConfigurationFactory;
 import io.bootique.di.BQModule;
@@ -35,7 +34,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class HealthCheckModule implements BQModule, BQModuleProvider {
+public class HealthCheckModule implements BQModule {
 
     private static final String CONFIG_PREFIX = "heartbeat";
 
@@ -51,9 +50,8 @@ public class HealthCheckModule implements BQModule, BQModuleProvider {
     }
 
     @Override
-    public ModuleCrate moduleCrate() {
+    public ModuleCrate crate() {
         return ModuleCrate.of(this)
-                .provider(this)
                 .description("Integrates monitoring health checks and heartbeat")
                 .config(CONFIG_PREFIX, HeartbeatFactory.class)
                 .build();

@@ -20,10 +20,9 @@
 package io.bootique.metrics;
 
 import com.codahale.metrics.MetricRegistry;
-import io.bootique.BQModuleProvider;
+import io.bootique.BQModule;
 import io.bootique.ModuleCrate;
 import io.bootique.config.ConfigurationFactory;
-import io.bootique.di.BQModule;
 import io.bootique.di.Binder;
 import io.bootique.di.Provides;
 import io.bootique.metrics.mdc.StripedTransactionIdGenerator;
@@ -32,14 +31,13 @@ import io.bootique.metrics.mdc.TransactionIdMDC;
 
 import javax.inject.Singleton;
 
-public class MetricsModule implements BQModule, BQModuleProvider {
+public class MetricsModule implements BQModule {
 
     private static final String CONFIG_PREFIX = "metrics";
 
     @Override
-    public ModuleCrate moduleCrate() {
+    public ModuleCrate crate() {
         return ModuleCrate.of(this)
-                .provider(this)
                 .description("Integrates Dropwizard metrics.")
                 .config(CONFIG_PREFIX, MetricRegistryFactory.class)
                 .build();

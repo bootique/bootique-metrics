@@ -19,18 +19,13 @@
 
 package io.bootique.metrics;
 
-import io.bootique.junit5.BQModuleProviderChecker;
+import io.bootique.junit5.BQModuleTester;
 import org.junit.jupiter.api.Test;
 
 public class MetricsModuleTest {
 
 	@Test
-    public void autoLoadable() {
-		BQModuleProviderChecker.testAutoLoadable(MetricsModule.class);
-	}
-
-	@Test
-    public void meta() {
-		BQModuleProviderChecker.testMetadata(MetricsModule.class);
+    public void check() {
+		BQModuleTester.of(MetricsModule.class).testAutoLoadable().testConfig();
 	}
 }
