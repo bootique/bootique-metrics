@@ -22,7 +22,7 @@ package io.bootique.metrics.health;
 import io.bootique.BQCoreModule;
 import io.bootique.ModuleCrate;
 import io.bootique.config.ConfigurationFactory;
-import io.bootique.di.BQModule;
+import io.bootique.BQModule;
 import io.bootique.di.Binder;
 import io.bootique.di.Provides;
 import io.bootique.metrics.health.heartbeat.*;
