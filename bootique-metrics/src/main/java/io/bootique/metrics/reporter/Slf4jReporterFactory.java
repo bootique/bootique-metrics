@@ -19,8 +19,6 @@
 
 package io.bootique.metrics.reporter;
 
-import java.util.concurrent.TimeUnit;
-
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Slf4jReporter;
 import com.fasterxml.jackson.annotation.JsonTypeName;
@@ -28,6 +26,8 @@ import io.bootique.annotation.BQConfig;
 import io.bootique.annotation.BQConfigProperty;
 import io.bootique.shutdown.ShutdownManager;
 import io.bootique.value.Duration;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * A {@link ReporterFactory} that produces a {@link Slf4jReporter}.
@@ -40,9 +40,7 @@ public class Slf4jReporterFactory implements ReporterFactory {
 
     @Override
     public void installReporter(MetricRegistry metricRegistry, ShutdownManager shutdownManager) {
-        Slf4jReporter reporter = Slf4jReporter.forRegistry(metricRegistry).build();
-        shutdownManager.addShutdownHook(reporter);
-
+        Slf4jReporter reporter = shutdownManager.onShutdown(Slf4jReporter.forRegistry(metricRegistry).build());
         reporter.start(period.getDuration().toMillis(), TimeUnit.MILLISECONDS);
     }
 

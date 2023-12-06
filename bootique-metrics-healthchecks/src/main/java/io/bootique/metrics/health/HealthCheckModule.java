@@ -86,9 +86,9 @@ public class HealthCheckModule implements BQModule {
             Set<HeartbeatListener> listeners,
             ShutdownManager shutdownManager) {
 
-        Heartbeat hb = heartbeatFactory.createHeartbeat(registry, listeners);
-        shutdownManager.addShutdownHook(hb::stop);
-        return hb;
+        return shutdownManager.onShutdown(
+                heartbeatFactory.createHeartbeat(registry, listeners),
+                Heartbeat::stop);
     }
 
     @Provides

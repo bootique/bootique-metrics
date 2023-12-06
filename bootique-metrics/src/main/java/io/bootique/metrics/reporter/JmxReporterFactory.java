@@ -34,8 +34,8 @@ public class JmxReporterFactory implements ReporterFactory {
 
     @Override
     public void installReporter(MetricRegistry metricRegistry, ShutdownManager shutdownManager) {
-        JmxReporter reporter = JmxReporter.forRegistry(metricRegistry).inDomain("bq.metrics").build();
-        shutdownManager.addShutdownHook(reporter);
+        JmxReporter reporter = shutdownManager
+                .onShutdown(JmxReporter.forRegistry(metricRegistry).inDomain("bq.metrics").build());
         reporter.start();
     }
 }
