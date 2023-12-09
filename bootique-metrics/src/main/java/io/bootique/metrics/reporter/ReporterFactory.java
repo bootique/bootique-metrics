@@ -20,10 +20,10 @@
 package io.bootique.metrics.reporter;
 
 import com.codahale.metrics.MetricRegistry;
+import com.codahale.metrics.Reporter;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import io.bootique.annotation.BQConfig;
 import io.bootique.config.PolymorphicConfiguration;
-import io.bootique.shutdown.ShutdownManager;
 
 /**
  * Superinterface of reporter factories.
@@ -32,5 +32,8 @@ import io.bootique.shutdown.ShutdownManager;
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type", defaultImpl = Slf4jReporterFactory.class)
 public interface ReporterFactory extends PolymorphicConfiguration {
 
-    void installReporter(MetricRegistry metricRegistry, ShutdownManager shutdownManager);
+    /**
+     * @since 3.0
+     */
+    Reporter createAndStart(MetricRegistry metricRegistry);
 }

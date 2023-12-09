@@ -23,7 +23,6 @@ import com.codahale.metrics.MetricRegistry;
 import io.bootique.annotation.BQConfig;
 import io.bootique.annotation.BQConfigProperty;
 import io.bootique.metrics.reporter.ReporterFactory;
-import io.bootique.shutdown.ShutdownManager;
 
 import java.util.List;
 
@@ -32,12 +31,12 @@ public class MetricRegistryFactory {
 
     private List<ReporterFactory> reporters;
 
-    public MetricRegistry createMetricsRegistry(ShutdownManager shutdownManager) {
+    public MetricRegistry create() {
 
         MetricRegistry registry = new MetricRegistry();
 
         if (reporters != null) {
-            reporters.forEach(reporterFactory -> reporterFactory.installReporter(registry, shutdownManager));
+            reporters.forEach(r -> r.createAndStart(registry));
         }
 
         return registry;

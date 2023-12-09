@@ -16,25 +16,27 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+package io.bootique.metrics.reporter;
 
-package io.bootique.metrics;
+import io.bootique.shutdown.ShutdownManager;
+import io.bootique.value.Duration;
+import org.junit.jupiter.api.Test;
 
-import com.codahale.metrics.MetricRegistry;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.mock;
 
-import javax.inject.Inject;
-import javax.inject.Provider;
+public class SltF4ReporterFactoryTest {
 
-public class MetricRegistryProvider implements Provider<MetricRegistry> {
-
-    private MetricRegistryFactory metricRegistryFactory;
-
-    @Inject
-    public MetricRegistryProvider(MetricRegistryFactory metricRegistryFactory) {
-        this.metricRegistryFactory = metricRegistryFactory;
+    @Test
+    public void period() {
+        Slf4jReporterFactory factory = new Slf4jReporterFactory(mock(ShutdownManager.class));
+        factory.setPeriod(new Duration("10min"));
+        assertEquals(600_000L, factory.resolvePeriod().toMillis());
     }
 
-    @Override
-    public MetricRegistry get() {
-        return metricRegistryFactory.create();
+    @Test
+    public void period_Default() {
+        Slf4jReporterFactory factory = new Slf4jReporterFactory(mock(ShutdownManager.class));
+        assertEquals(30_000L, factory.resolvePeriod().toMillis());
     }
 }

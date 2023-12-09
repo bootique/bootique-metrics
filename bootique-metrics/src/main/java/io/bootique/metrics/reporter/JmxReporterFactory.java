@@ -20,10 +20,13 @@
 package io.bootique.metrics.reporter;
 
 import com.codahale.metrics.MetricRegistry;
+import com.codahale.metrics.Reporter;
 import com.codahale.metrics.jmx.JmxReporter;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import io.bootique.annotation.BQConfig;
 import io.bootique.shutdown.ShutdownManager;
+
+import javax.inject.Inject;
 
 /**
  * A {@link ReporterFactory} that produces a {@link JmxReporter}.
@@ -32,10 +35,17 @@ import io.bootique.shutdown.ShutdownManager;
 @JsonTypeName("jmx")
 public class JmxReporterFactory implements ReporterFactory {
 
+    private final ShutdownManager shutdownManager;
+
+    @Inject
+    public JmxReporterFactory(ShutdownManager shutdownManager) {
+        this.shutdownManager = shutdownManager;
+    }
+
     @Override
-    public void installReporter(MetricRegistry metricRegistry, ShutdownManager shutdownManager) {
-        JmxReporter reporter = shutdownManager
-                .onShutdown(JmxReporter.forRegistry(metricRegistry).inDomain("bq.metrics").build());
+    public Reporter createAndStart(MetricRegistry metricRegistry) {
+        JmxReporter reporter = JmxReporter.forRegistry(metricRegistry).inDomain("bq.metrics").build();
         reporter.start();
+        return shutdownManager.onShutdown(reporter);
     }
 }

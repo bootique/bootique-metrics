@@ -48,12 +48,8 @@ public class MetricsModuleIT {
 
         assertEquals(3, factory.getReporters().size());
         assertTrue(factory.getReporters().get(0) instanceof Slf4jReporterFactory);
-        assertEquals(java.time.Duration.ofSeconds(30),
-                ((Slf4jReporterFactory) factory.getReporters().get(0)).getPeriod().getDuration());
         assertTrue(factory.getReporters().get(1) instanceof JmxReporterFactory);
         assertTrue(factory.getReporters().get(2) instanceof Slf4jReporterFactory);
-        assertEquals(java.time.Duration.ofSeconds(4),
-                ((Slf4jReporterFactory) factory.getReporters().get(2)).getPeriod().getDuration());
     }
 
     @Test

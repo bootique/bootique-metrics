@@ -20,6 +20,7 @@
 package io.bootique.metrics.reporter;
 
 import com.codahale.metrics.MetricRegistry;
+import com.codahale.metrics.Reporter;
 import com.codahale.metrics.Slf4jReporter;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import io.bootique.annotation.BQConfig;
@@ -27,6 +28,8 @@ import io.bootique.annotation.BQConfigProperty;
 import io.bootique.shutdown.ShutdownManager;
 import io.bootique.value.Duration;
 
+import javax.inject.Inject;
+import java.time.temporal.ChronoUnit;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -36,16 +39,24 @@ import java.util.concurrent.TimeUnit;
 @JsonTypeName("slf4j")
 public class Slf4jReporterFactory implements ReporterFactory {
 
-    private Duration period = new Duration("30s");
+    private final ShutdownManager shutdownManager;
 
-    @Override
-    public void installReporter(MetricRegistry metricRegistry, ShutdownManager shutdownManager) {
-        Slf4jReporter reporter = shutdownManager.onShutdown(Slf4jReporter.forRegistry(metricRegistry).build());
-        reporter.start(period.getDuration().toMillis(), TimeUnit.MILLISECONDS);
+    private Duration period;
+
+    @Inject
+    public Slf4jReporterFactory(ShutdownManager shutdownManager) {
+        this.shutdownManager = shutdownManager;
     }
 
-    public Duration getPeriod() {
-        return period;
+    @Override
+    public Reporter createAndStart(MetricRegistry metricRegistry) {
+        Slf4jReporter reporter = Slf4jReporter.forRegistry(metricRegistry).build();
+        reporter.start(resolvePeriod().toMillis(), TimeUnit.MILLISECONDS);
+        return shutdownManager.onShutdown(reporter);
+    }
+
+    java.time.Duration resolvePeriod() {
+        return period != null ? period.getDuration() : java.time.Duration.of(30, ChronoUnit.SECONDS);
     }
 
     @BQConfigProperty("Set the amount of time between polls. Default value is 30 seconds.")
