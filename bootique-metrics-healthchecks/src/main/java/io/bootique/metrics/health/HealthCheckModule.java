@@ -20,13 +20,15 @@
 package io.bootique.metrics.health;
 
 import io.bootique.BQCoreModule;
+import io.bootique.BQModule;
 import io.bootique.ModuleCrate;
 import io.bootique.config.ConfigurationFactory;
-import io.bootique.BQModule;
 import io.bootique.di.Binder;
 import io.bootique.di.Provides;
-import io.bootique.metrics.health.heartbeat.*;
-import io.bootique.shutdown.ShutdownManager;
+import io.bootique.metrics.health.heartbeat.Heartbeat;
+import io.bootique.metrics.health.heartbeat.HeartbeatCommand;
+import io.bootique.metrics.health.heartbeat.HeartbeatFactory;
+import io.bootique.metrics.health.heartbeat.HeartbeatReporter;
 
 import javax.inject.Provider;
 import javax.inject.Singleton;
@@ -80,15 +82,8 @@ public class HealthCheckModule implements BQModule {
 
     @Provides
     @Singleton
-    Heartbeat provideHeartbeat(
-            HeartbeatFactory heartbeatFactory,
-            HealthCheckRegistry registry,
-            Set<HeartbeatListener> listeners,
-            ShutdownManager shutdownManager) {
-
-        return shutdownManager.onShutdown(
-                heartbeatFactory.createHeartbeat(registry, listeners),
-                Heartbeat::stop);
+    Heartbeat provideHeartbeat(HeartbeatFactory heartbeatFactory) {
+        return heartbeatFactory.createHeartbeat();
     }
 
     @Provides

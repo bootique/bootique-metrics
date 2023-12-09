@@ -27,12 +27,14 @@ import io.bootique.metrics.health.sink.ReportSinkFactory;
 import io.bootique.metrics.health.sink.Slf4JReportSyncFactory;
 import io.bootique.metrics.health.writer.NagiosReportWriterFactory;
 import io.bootique.metrics.health.writer.ReportWriterFactory;
+import io.bootique.shutdown.ShutdownManager;
 import io.bootique.value.Duration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.inject.Inject;
+import javax.inject.Provider;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @BQConfig
 public class HeartbeatFactory {
@@ -42,23 +44,35 @@ public class HeartbeatFactory {
     private static final long FIXED_DELAY_MS_DEFAULT = 60_000L;
     private static final long HEALTH_CHECK_TIMEOUT_DEFAULT = 5_000L;
 
+    private final HealthCheckRegistry registry;
+    // since HeartbeatReporter created by this factory is implemented as a listener, injecting listeners via Provider
+    // for lazy initialization
+    private final Provider<Set<HeartbeatListener>> listeners;
+    private final ShutdownManager shutdownManager;
+
     private Duration initialDelay;
     private Duration fixedDelay;
     private int threadPoolSize;
     private Duration healthCheckTimeout;
-
     @Deprecated(forRemoval = true)
     private List<String> healthChecks;
     private Map<String, HeartbeatHealthCheckFactory> checks;
-
     private ReportSinkFactory sink;
     private ReportWriterFactory writer;
 
-    public Heartbeat createHeartbeat(
+    @Inject
+    public HeartbeatFactory(
             HealthCheckRegistry registry,
-            Set<HeartbeatListener> listeners) {
+            Provider<Set<HeartbeatListener>> listeners,
+            ShutdownManager shutdownManager) {
+        this.registry = registry;
+        this.listeners = listeners;
+        this.shutdownManager = shutdownManager;
+    }
 
-        HealthCheckRegistry heartbeatRegistry = heartbeatRegistry(registry);
+    public Heartbeat createHeartbeat() {
+
+        HealthCheckRegistry heartbeatRegistry = heartbeatRegistry();
         HeartbeatRunner runner = new HeartbeatRunner(
                 heartbeatRegistry,
                 listeners,
@@ -67,7 +81,8 @@ public class HeartbeatFactory {
                 getHealthCheckTimeoutMs(),
                 getThreadPoolSize()
         );
-        return new Heartbeat(runner);
+
+        return shutdownManager.onShutdown(new Heartbeat(runner), Heartbeat::stop);
     }
 
     public HeartbeatReporter createReporter() {
@@ -76,13 +91,14 @@ public class HeartbeatFactory {
                 createWriterFactory().createReportWriter());
     }
 
-    protected HealthCheckRegistry heartbeatRegistry(HealthCheckRegistry registry) {
+    protected HealthCheckRegistry heartbeatRegistry() {
 
         // no explicit health checks means run all available health checks...
         if ((checks == null || checks.isEmpty()) && (healthChecks == null || healthChecks.isEmpty())) {
             return registry;
         }
 
+        // for heartbeat, create a registry with a subset of checks
         Map<String, HealthCheck> checks = new HashMap<>();
         getCheckFactories(registry).forEach((k, v) -> checks.put(k, v.createHeartbeatCheck(k, registry)));
         return new HealthCheckRegistry(checks);
@@ -120,8 +136,7 @@ public class HeartbeatFactory {
 
         // report missing checks
         if (!badNames.isEmpty()) {
-            String s = badNames.stream().collect(Collectors.joining(", "));
-            LOGGER.warn("The following health check name(s) are invalid and will be ignored: {}", s);
+            LOGGER.warn("The following health check name(s) are invalid and will be ignored: {}", String.join(", ", badNames));
         }
 
         return result;

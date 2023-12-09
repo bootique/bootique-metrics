@@ -65,8 +65,7 @@ public class HeartbeatReporterIT {
 
         BQRuntime runtime = testFactory.app("-c", "classpath:io/bootique/metrics/health/heartbeat/HeartbeatReporterIT.yml")
                 .autoLoadModules()
-                .module(b -> HealthCheckModule.extend(b)
-                        .addHealthCheck("hc1", success)
+                .module(b -> HealthCheckModule.extend(b).addHealthCheck("hc1", success)
                         // testing this setting...
                         .enableHeartbeatReporting()
                 )
@@ -94,8 +93,7 @@ public class HeartbeatReporterIT {
 
         BQRuntime runtime = testFactory.app("-c", "classpath:io/bootique/metrics/health/heartbeat/HeartbeatReporterIT.yml")
                 .autoLoadModules()
-                .module(b -> HealthCheckModule.extend(b)
-                                .addHealthCheck("hc1", success)
+                .module(b -> HealthCheckModule.extend(b).addHealthCheck("hc1", success)
                         // testing that NOT enabling reporting results in no reporting
                         // .enableHeartbeatReporting()
                 )
@@ -115,6 +113,4 @@ public class HeartbeatReporterIT {
         Thread.sleep(100);
         TestInMemorySinkFactory.assertNoReport();
     }
-
-
 }

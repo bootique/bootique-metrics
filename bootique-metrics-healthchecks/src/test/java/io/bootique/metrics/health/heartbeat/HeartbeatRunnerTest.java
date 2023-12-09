@@ -67,7 +67,7 @@ public class HeartbeatRunnerTest {
 
         this.watch = new HeartbeatRunner(
                 registry,
-                Set.of(listener),
+                () -> Set.of(listener),
                 3,
                 50,
                 5_000L,

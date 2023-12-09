@@ -20,6 +20,7 @@ package io.bootique.metrics.health.heartbeat;
 
 import io.bootique.metrics.health.HealthCheckRegistry;
 
+import javax.inject.Provider;
 import java.util.Objects;
 import java.util.Set;
 import java.util.Timer;
@@ -33,7 +34,7 @@ import java.util.concurrent.Executors;
 public class HeartbeatRunner {
 
     private final HealthCheckRegistry registry;
-    private final Set<HeartbeatListener> listeners;
+    private final Provider<Set<HeartbeatListener>> listeners;
     private final long initialDelayMs;
     private final long fixedDelayMs;
     private final long healthCheckTimeoutMs;
@@ -41,7 +42,7 @@ public class HeartbeatRunner {
 
     public HeartbeatRunner(
             HealthCheckRegistry registry,
-            Set<HeartbeatListener> listeners,
+            Provider<Set<HeartbeatListener>> listeners,
             long initialDelayMs,
             long fixedDelayMs,
             long healthCheckTimeoutMs,
@@ -84,6 +85,6 @@ public class HeartbeatRunner {
     }
 
     protected TimerTask createHeartbeatTask(ExecutorService threadPool) {
-        return new HeartbeatTask(registry, threadPool, healthCheckTimeoutMs, listeners);
+        return new HeartbeatTask(registry, threadPool, healthCheckTimeoutMs, listeners.get());
     }
 }
