@@ -28,7 +28,7 @@
 
 	<groupId>io.bootique.metrics</groupId>
 	<artifactId>bootique-metrics-parent</artifactId>
-	<version>3.0-SNAPSHOT</version>
+	<version>3.0-M4</version>
 	<packaging>pom</packaging>
 
     <name>bootique-metrics-parent: Parent of metrics modules for Bootique</name>
@@ -49,7 +49,7 @@
     <scm>
         <developerConnection>scm:git:ssh://git@github.com/bootique/bootique-metrics</developerConnection>
         <url>https://github.com/bootique/bootique-metrics</url>
-        <tag>HEAD</tag>
+        <tag>3.0-M4</tag>
     </scm>
 
     <dependencyManagement>
