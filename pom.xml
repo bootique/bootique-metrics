@@ -42,7 +42,6 @@
     </modules>
 
     <properties>
-        <bootique.version>${project.version}</bootique.version>
         <metrics.version>4.2.15</metrics.version>
     </properties>
 
@@ -57,7 +56,7 @@
             <dependency>
                 <groupId>io.bootique</groupId>
                 <artifactId>bootique</artifactId>
-                <version>${bootique.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.dropwizard.metrics</groupId>
@@ -84,7 +83,7 @@
             <dependency>
                 <groupId>io.bootique</groupId>
                 <artifactId>bootique-junit5</artifactId>
-                <version>${bootique.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.slf4j</groupId>
