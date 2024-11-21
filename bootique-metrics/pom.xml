@@ -24,7 +24,7 @@
     <parent>
         <groupId>io.bootique.metrics</groupId>
         <artifactId>bootique-metrics-parent</artifactId>
-        <version>3.0-SNAPSHOT</version>
+        <version>3.0-M6</version>
     </parent>
 
     <artifactId>bootique-metrics</artifactId>
