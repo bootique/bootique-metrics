@@ -30,8 +30,8 @@ import io.bootique.metrics.health.heartbeat.HeartbeatCommand;
 import io.bootique.metrics.health.heartbeat.HeartbeatFactory;
 import io.bootique.metrics.health.heartbeat.HeartbeatReporter;
 
-import javax.inject.Provider;
-import javax.inject.Singleton;
+import jakarta.inject.Provider;
+import jakarta.inject.Singleton;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;

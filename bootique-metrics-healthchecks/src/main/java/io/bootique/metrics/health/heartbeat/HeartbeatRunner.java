@@ -20,7 +20,7 @@ package io.bootique.metrics.health.heartbeat;
 
 import io.bootique.metrics.health.HealthCheckRegistry;
 
-import javax.inject.Provider;
+import jakarta.inject.Provider;
 import java.util.Objects;
 import java.util.Set;
 import java.util.Timer;

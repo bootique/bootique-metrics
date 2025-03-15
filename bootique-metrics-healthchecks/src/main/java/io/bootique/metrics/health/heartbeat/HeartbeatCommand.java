@@ -24,7 +24,7 @@ import io.bootique.command.CommandOutcome;
 import io.bootique.command.CommandWithMetadata;
 import io.bootique.meta.application.CommandMetadata;
 
-import javax.inject.Provider;
+import jakarta.inject.Provider;
 
 /**
  * A command that starts the application heartbeat. It is declared as a hidden command. To activate heartbeat, one would
