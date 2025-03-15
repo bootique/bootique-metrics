@@ -29,7 +29,7 @@ import io.bootique.metrics.mdc.StripedTransactionIdGenerator;
 import io.bootique.metrics.mdc.TransactionIdGenerator;
 import io.bootique.metrics.mdc.TransactionIdMDC;
 
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 
 public class MetricsModule implements BQModule {
 
@@ -46,7 +46,7 @@ public class MetricsModule implements BQModule {
     @Override
     public void configure(Binder binder) {
         // eager-load the registry. Otherwise, it may never start...
-        binder.bind(MetricRegistry.class).toProvider(MetricRegistryProvider.class).initOnStartup();
+        binder.bind(MetricRegistry.class).toJakartaProvider(MetricRegistryProvider.class).initOnStartup();
     }
 
     @Provides

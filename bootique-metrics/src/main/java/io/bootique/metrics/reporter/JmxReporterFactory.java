@@ -26,7 +26,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import io.bootique.annotation.BQConfig;
 import io.bootique.shutdown.ShutdownManager;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 /**
  * A {@link ReporterFactory} that produces a {@link JmxReporter}.

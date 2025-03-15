@@ -20,9 +20,9 @@
 package io.bootique.metrics;
 
 import com.codahale.metrics.MetricRegistry;
+import jakarta.inject.Inject;
+import jakarta.inject.Provider;
 
-import javax.inject.Inject;
-import javax.inject.Provider;
 
 public class MetricRegistryProvider implements Provider<MetricRegistry> {
 

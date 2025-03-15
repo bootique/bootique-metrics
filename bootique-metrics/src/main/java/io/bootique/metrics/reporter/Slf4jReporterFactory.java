@@ -28,7 +28,7 @@ import io.bootique.annotation.BQConfigProperty;
 import io.bootique.shutdown.ShutdownManager;
 import io.bootique.value.Duration;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import java.time.temporal.ChronoUnit;
 import java.util.concurrent.TimeUnit;
 
