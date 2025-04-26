@@ -76,21 +76,6 @@ public class HealthCheckRegistryTest {
         return new HealthCheckRegistry(healthChecks);
     }
 
-    @Deprecated
-    @Test
-    public void filtered() {
-        HealthCheckRegistry original = createRegistry(success, failure);
-        HealthCheckRegistry filtered = original.filtered(s -> "1".equals(s));
-        assertNotSame(original, filtered);
-
-        Map<String, HealthCheckOutcome> originalResult = original.runHealthChecks();
-        Map<String, HealthCheckOutcome> filteredResult = filtered.runHealthChecks();
-
-        assertEquals(2, originalResult.size());
-        assertEquals(1, filteredResult.size());
-        assertEquals(HealthCheckStatus.CRITICAL, filteredResult.get("1").getStatus());
-    }
-
     @Test
     public void runHealthChecks_Serial() {
         HealthCheckRegistry registry = createRegistry(success, failure);

@@ -97,30 +97,4 @@ public class TransactionIdMDC {
     public static void clearId() {
         MDC.remove(MDC_KEY);
     }
-
-    /**
-     * Initializes SLF4J MDC with the current transaction ID.
-     *
-     * @deprecated in favor of static {@link #setId(String)}
-     */
-    @Deprecated(since = "3.0", forRemoval = true)
-    public void reset(String transactionId) {
-        TransactionIdMDC.setId(transactionId);
-    }
-
-    /**
-     * @deprecated since 3.0 in favor of the static {@link #getId()}
-     */
-    @Deprecated(since = "3.0", forRemoval = true)
-    public String get() {
-        return getId();
-    }
-
-    /**
-     * @deprecated since 3.0 in favor of the static {@link #clearId()}
-     */
-    @Deprecated(since = "3.0", forRemoval = true)
-    public void clear() {
-        clearId();
-    }
 }

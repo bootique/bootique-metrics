@@ -54,8 +54,6 @@ public class HeartbeatFactory {
     private Duration fixedDelay;
     private int threadPoolSize;
     private Duration healthCheckTimeout;
-    @Deprecated(forRemoval = true)
-    private List<String> healthChecks;
     private Map<String, HeartbeatHealthCheckFactory> checks;
     private ReportSinkFactory sink;
     private ReportWriterFactory writer;
@@ -94,7 +92,7 @@ public class HeartbeatFactory {
     protected HealthCheckRegistry heartbeatRegistry() {
 
         // no explicit health checks means run all available health checks...
-        if ((checks == null || checks.isEmpty()) && (healthChecks == null || healthChecks.isEmpty())) {
+        if (checks == null || checks.isEmpty()) {
             return registry;
         }
 
@@ -120,20 +118,6 @@ public class HeartbeatFactory {
             }
         }
 
-        // merge "checks" with deprecated "healthChecks"
-        if (healthChecks != null && !healthChecks.isEmpty()) {
-
-            LOGGER.warn("The use of 'heartbeat.healthChecks' configuration is deprecated. Use 'heartbeat.checks' map instead.");
-
-            for (String check : healthChecks) {
-                if (registry.containsHealthCheck(check)) {
-                    result.put(check, new HeartbeatHealthCheckFactory());
-                } else {
-                    badNames.add(check);
-                }
-            }
-        }
-
         // report missing checks
         if (!badNames.isEmpty()) {
             LOGGER.warn("The following health check name(s) are invalid and will be ignored: {}", String.join(", ", badNames));
@@ -142,11 +126,6 @@ public class HeartbeatFactory {
         return result;
     }
 
-    @Deprecated(since = "3.0", forRemoval = true)
-    @BQConfigProperty("Deprecated since 3.0 in favor of the 'checks' map that allows to specify extra properties of heartbeat health checks")
-    public void setHealthChecks(List<String> healthChecks) {
-        this.healthChecks = healthChecks;
-    }
 
     @BQConfigProperty("Configures health checks to be included in heartbeat. If omitted, all known health checks will be used")
     public void setChecks(Map<String, HeartbeatHealthCheckFactory> checks) {
