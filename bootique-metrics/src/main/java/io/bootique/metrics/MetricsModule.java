@@ -27,8 +27,6 @@ import io.bootique.di.Binder;
 import io.bootique.di.Provides;
 import io.bootique.metrics.mdc.StripedTransactionIdGenerator;
 import io.bootique.metrics.mdc.TransactionIdGenerator;
-import io.bootique.metrics.mdc.TransactionIdMDC;
-
 import jakarta.inject.Singleton;
 
 public class MetricsModule implements BQModule {
@@ -67,14 +65,5 @@ public class MetricsModule implements BQModule {
         }
 
         return new StripedTransactionIdGenerator(cpus);
-    }
-
-    // TransactionIdMDC is now static, so it doesn't need to be injectable. This stays around for now until we
-    // remove all non-static methods
-    @Deprecated(since = "3.0", forRemoval = true)
-    @Provides
-    @Singleton
-    TransactionIdMDC provideTransactionIdMDC() {
-        return new TransactionIdMDC();
     }
 }
