@@ -46,7 +46,7 @@ public class MetricsModule implements BQModule {
     @Override
     public void configure(Binder binder) {
         // eager-load the registry. Otherwise, it may never start...
-        binder.bind(MetricRegistry.class).toJakartaProvider(MetricRegistryProvider.class).initOnStartup();
+        binder.bind(MetricRegistry.class).toProvider(MetricRegistryProvider.class).initOnStartup();
     }
 
     @Provides
