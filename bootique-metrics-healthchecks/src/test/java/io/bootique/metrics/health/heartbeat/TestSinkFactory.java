@@ -18,29 +18,17 @@
  */
 package io.bootique.metrics.health.heartbeat;
 
-import io.bootique.metrics.health.HealthCheckOutcome;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import io.bootique.metrics.health.sink.ReportSink;
+import io.bootique.metrics.health.sink.ReportSinkFactory;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.function.Supplier;
 
-public class HeartbeatReporterTest {
+@JsonTypeName("test-in-memory")
+public class TestSinkFactory implements ReportSinkFactory {
 
-    @BeforeEach
-    public void before() {
-        TestSink.reset();
-    }
-
-    @Test
-    public void healthChecksFinished() {
-
-        HeartbeatReporter processor = new HeartbeatReporter(() -> new TestSink(), (r, o) -> o.append(r.toString()));
-
-        Map<String, HealthCheckOutcome> results = new HashMap<>();
-        results.put("x", HealthCheckOutcome.ok());
-
-        processor.healthChecksFinished(results);
-        TestSink.assertReport("{x=[OK]}");
+    @Override
+    public Supplier<ReportSink> createReportSyncSupplier() {
+        return () -> new TestSink();
     }
 }

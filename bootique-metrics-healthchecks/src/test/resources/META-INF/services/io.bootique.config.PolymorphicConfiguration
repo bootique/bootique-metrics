@@ -1,1 +1,1 @@
-io.bootique.metrics.health.heartbeat.TestInMemorySinkFactory
+io.bootique.metrics.health.heartbeat.TestSinkFactory

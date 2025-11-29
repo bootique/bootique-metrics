@@ -19,28 +19,58 @@
 
 package io.bootique.metrics.health.heartbeat;
 
+import io.bootique.metrics.health.HealthCheckRegistry;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
-import static org.mockito.Mockito.*;
+import java.util.Map;
+import java.util.Set;
+import java.util.Timer;
+import java.util.concurrent.Executors;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class HeartbeatTest {
 
+    TestHeartbeatWatch stopper = new TestHeartbeatWatch();
+
+    @AfterEach
+    public void afterEach() {
+        stopper.stop();
+    }
+
     @Test
     public void startStop() {
+        HeartbeatRunner runner = new HeartbeatRunner(new HealthCheckRegistry(Map.of()), () -> Set.of(), 0, 1, 1, 1) {
+            @Override
+            public HeartbeatWatch start() {
+                return stopper;
+            }
+        };
 
-        HeartbeatWatch mockStopper = mock(HeartbeatWatch.class);
-        HeartbeatRunner mockRunner = mock(HeartbeatRunner.class);
-        when(mockRunner.start()).thenReturn(mockStopper);
-
-        Heartbeat hb = new Heartbeat(mockRunner);
-        verifyNoMoreInteractions(mockStopper);
+        Heartbeat hb = new Heartbeat(runner);
+        assertFalse(stopper.stopped);
 
         hb.start();
-        verifyNoMoreInteractions(mockStopper);
-        assertSame(mockStopper, hb.heartbeatWatch);
+        assertFalse(stopper.stopped);
+        assertSame(stopper, hb.heartbeatWatch);
 
         hb.stop();
-        verify(mockStopper).stop();
+        assertTrue(stopper.stopped);
+    }
+
+    static class TestHeartbeatWatch extends HeartbeatWatch {
+
+        boolean stopped;
+
+        public TestHeartbeatWatch() {
+            super(new Timer("test", true), Executors.newSingleThreadExecutor());
+        }
+
+        @Override
+        public void stop() {
+            stopped = true;
+            super.stop();
+        }
     }
 }

@@ -19,40 +19,337 @@
 package io.bootique.metrics.health.sink;
 
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
 import org.slf4j.Logger;
+import org.slf4j.Marker;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static java.util.Arrays.asList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
 
 public class Slf4JReportSinkTest {
 
     @Test
     public void append() {
-        Logger logger = mock(Logger.class);
-
-        Slf4JReportSink sink = new Slf4JReportSink(logger);
-
-        ArgumentCaptor<String> args = ArgumentCaptor.forClass(String.class);
-        sink.append("one").appendln("two").append("three").close();
-        verify(logger, times(2)).info(args.capture());
-
-        assertEquals(asList("onetwo", "three"), args.getAllValues());
+        TestLogger logger = new TestLogger();
+        new Slf4JReportSink(logger).append("one").appendln("two").append("three").close();
+        assertEquals(asList("onetwo", "three"), logger.infos);
     }
 
     @Test
     public void append_LineBreaks() {
-
         String lineBreak = System.lineSeparator();
-        Logger logger = mock(Logger.class);
+        TestLogger logger = new TestLogger();
+        new Slf4JReportSink(logger).append(lineBreak + "one" + lineBreak + "two").appendln("three" + lineBreak).close();
+        assertEquals(asList("", "one", "twothree", ""), logger.infos);
+    }
 
-        Slf4JReportSink sink = new Slf4JReportSink(logger);
+    static class TestLogger implements Logger {
 
-        ArgumentCaptor<String> args = ArgumentCaptor.forClass(String.class);
-        sink.append(lineBreak + "one" + lineBreak + "two").appendln("three" + lineBreak).close();
-        verify(logger, times(4)).info(args.capture());
+        List<String> infos = new ArrayList<>();
 
-        assertEquals(asList("", "one", "twothree", ""), args.getAllValues());
+        @Override
+        public String getName() {
+            return "";
+        }
+
+        @Override
+        public boolean isTraceEnabled() {
+            return false;
+        }
+
+        @Override
+        public void trace(String msg) {
+        }
+
+        @Override
+        public void trace(String format, Object arg) {
+
+        }
+
+        @Override
+        public void trace(String format, Object arg1, Object arg2) {
+
+        }
+
+        @Override
+        public void trace(String format, Object... arguments) {
+
+        }
+
+        @Override
+        public void trace(String msg, Throwable t) {
+
+        }
+
+        @Override
+        public boolean isTraceEnabled(Marker marker) {
+            return false;
+        }
+
+        @Override
+        public void trace(Marker marker, String msg) {
+
+        }
+
+        @Override
+        public void trace(Marker marker, String format, Object arg) {
+
+        }
+
+        @Override
+        public void trace(Marker marker, String format, Object arg1, Object arg2) {
+
+        }
+
+        @Override
+        public void trace(Marker marker, String format, Object... argArray) {
+
+        }
+
+        @Override
+        public void trace(Marker marker, String msg, Throwable t) {
+
+        }
+
+        @Override
+        public boolean isDebugEnabled() {
+            return false;
+        }
+
+        @Override
+        public void debug(String msg) {
+
+        }
+
+        @Override
+        public void debug(String format, Object arg) {
+
+        }
+
+        @Override
+        public void debug(String format, Object arg1, Object arg2) {
+
+        }
+
+        @Override
+        public void debug(String format, Object... arguments) {
+
+        }
+
+        @Override
+        public void debug(String msg, Throwable t) {
+
+        }
+
+        @Override
+        public boolean isDebugEnabled(Marker marker) {
+            return false;
+        }
+
+        @Override
+        public void debug(Marker marker, String msg) {
+
+        }
+
+        @Override
+        public void debug(Marker marker, String format, Object arg) {
+
+        }
+
+        @Override
+        public void debug(Marker marker, String format, Object arg1, Object arg2) {
+
+        }
+
+        @Override
+        public void debug(Marker marker, String format, Object... arguments) {
+
+        }
+
+        @Override
+        public void debug(Marker marker, String msg, Throwable t) {
+        }
+
+        @Override
+        public boolean isInfoEnabled() {
+            return false;
+        }
+
+        @Override
+        public void info(String msg) {
+            infos.add(msg);
+        }
+
+        @Override
+        public void info(String format, Object arg) {
+
+        }
+
+        @Override
+        public void info(String format, Object arg1, Object arg2) {
+
+        }
+
+        @Override
+        public void info(String format, Object... arguments) {
+
+        }
+
+        @Override
+        public void info(String msg, Throwable t) {
+
+        }
+
+        @Override
+        public boolean isInfoEnabled(Marker marker) {
+            return false;
+        }
+
+        @Override
+        public void info(Marker marker, String msg) {
+
+        }
+
+        @Override
+        public void info(Marker marker, String format, Object arg) {
+
+        }
+
+        @Override
+        public void info(Marker marker, String format, Object arg1, Object arg2) {
+
+        }
+
+        @Override
+        public void info(Marker marker, String format, Object... arguments) {
+
+        }
+
+        @Override
+        public void info(Marker marker, String msg, Throwable t) {
+
+        }
+
+        @Override
+        public boolean isWarnEnabled() {
+            return false;
+        }
+
+        @Override
+        public void warn(String msg) {
+
+        }
+
+        @Override
+        public void warn(String format, Object arg) {
+
+        }
+
+        @Override
+        public void warn(String format, Object... arguments) {
+
+        }
+
+        @Override
+        public void warn(String format, Object arg1, Object arg2) {
+
+        }
+
+        @Override
+        public void warn(String msg, Throwable t) {
+
+        }
+
+        @Override
+        public boolean isWarnEnabled(Marker marker) {
+            return false;
+        }
+
+        @Override
+        public void warn(Marker marker, String msg) {
+
+        }
+
+        @Override
+        public void warn(Marker marker, String format, Object arg) {
+
+        }
+
+        @Override
+        public void warn(Marker marker, String format, Object arg1, Object arg2) {
+
+        }
+
+        @Override
+        public void warn(Marker marker, String format, Object... arguments) {
+
+        }
+
+        @Override
+        public void warn(Marker marker, String msg, Throwable t) {
+
+        }
+
+        @Override
+        public boolean isErrorEnabled() {
+            return false;
+        }
+
+        @Override
+        public void error(String msg) {
+
+        }
+
+        @Override
+        public void error(String format, Object arg) {
+
+        }
+
+        @Override
+        public void error(String format, Object arg1, Object arg2) {
+
+        }
+
+        @Override
+        public void error(String format, Object... arguments) {
+
+        }
+
+        @Override
+        public void error(String msg, Throwable t) {
+
+        }
+
+        @Override
+        public boolean isErrorEnabled(Marker marker) {
+            return false;
+        }
+
+        @Override
+        public void error(Marker marker, String msg) {
+
+        }
+
+        @Override
+        public void error(Marker marker, String format, Object arg) {
+
+        }
+
+        @Override
+        public void error(Marker marker, String format, Object arg1, Object arg2) {
+
+        }
+
+        @Override
+        public void error(Marker marker, String format, Object... arguments) {
+
+        }
+
+        @Override
+        public void error(Marker marker, String msg, Throwable t) {
+
+        }
     }
 }

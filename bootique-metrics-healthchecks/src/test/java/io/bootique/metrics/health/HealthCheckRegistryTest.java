@@ -29,8 +29,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 public class HealthCheckRegistryTest {
 
@@ -42,28 +40,11 @@ public class HealthCheckRegistryTest {
 
     @BeforeEach
     public void before() {
-        this.success = mock(HealthCheck.class);
-        when(success.safeCheck()).thenReturn(HealthCheckOutcome.ok());
-        when(success.isActive()).thenReturn(true);
-
-        this.inactive = mock(HealthCheck.class);
-        when(inactive.safeCheck()).thenReturn(HealthCheckOutcome.ok());
-        when(inactive.isActive()).thenReturn(false);
-
-        this.failure = mock(HealthCheck.class);
-        when(failure.safeCheck()).thenReturn(HealthCheckOutcome.critical("uh"));
-        when(failure.isActive()).thenReturn(true);
-
-        this.failureTh = mock(HealthCheck.class);
-        when(failureTh.safeCheck()).thenReturn(HealthCheckOutcome.critical(new Throwable("uh")));
-        when(failureTh.isActive()).thenReturn(true);
-
-        this.slowSuccess = mock(HealthCheck.class);
-        when(slowSuccess.isActive()).thenReturn(true);
-        when(slowSuccess.safeCheck()).then(i -> {
-            Thread.sleep(500);
-            return HealthCheckOutcome.ok();
-        });
+        this.success = new TestHealthCheck(true, HealthCheckOutcome.ok());
+        this.inactive = new TestHealthCheck(false, HealthCheckOutcome.ok());
+        this.failure = new TestHealthCheck(true, HealthCheckOutcome.critical("uh"));
+        this.failureTh = new TestHealthCheck(true, HealthCheckOutcome.critical(new Throwable("uh")));
+        this.slowSuccess = new TestHealthCheck(true, HealthCheckOutcome.ok(), 500);
     }
 
     private HealthCheckRegistry createRegistry(HealthCheck... checks) {
@@ -142,6 +123,37 @@ public class HealthCheckRegistryTest {
             return registry.runHealthChecks(threadPool, timeoutMs, TimeUnit.MILLISECONDS);
         } finally {
             threadPool.shutdownNow();
+        }
+    }
+
+    static class TestHealthCheck implements HealthCheck {
+
+        private final long delay;
+        private final HealthCheckOutcome outcome;
+        private final boolean active;
+
+        public TestHealthCheck(boolean active, HealthCheckOutcome outcome) {
+            this(active, outcome, -1);
+        }
+
+        public TestHealthCheck(boolean active, HealthCheckOutcome outcome, long delay) {
+            this.active = active;
+            this.outcome = outcome;
+            this.delay = delay;
+        }
+
+        @Override
+        public boolean isActive() {
+            return active;
+        }
+
+        @Override
+        public HealthCheckOutcome check() throws Exception {
+            if (delay > 0) {
+                Thread.sleep(500);
+            }
+
+            return outcome;
         }
     }
 }

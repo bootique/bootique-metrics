@@ -27,9 +27,6 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
 @BQTest
 public class HealthCheckModuleIT {
 
@@ -50,9 +47,8 @@ public class HealthCheckModuleIT {
     @Test
     public void healthcheckRegistry_Contributions() {
 
-        HealthCheckOutcome hcr = mock(HealthCheckOutcome.class);
-        HealthCheck hc = mock(HealthCheck.class);
-        when(hc.safeCheck()).thenReturn(hcr);
+        HealthCheckOutcome hcr = HealthCheckOutcome.ok();
+        HealthCheck hc = () -> hcr;
 
         BQRuntime runtime = testFactory
                 .app()

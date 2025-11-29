@@ -31,8 +31,6 @@ import java.util.Map;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 public class HeartbeatRunnerTest {
 
@@ -42,12 +40,8 @@ public class HeartbeatRunnerTest {
 
     @BeforeEach
     public void before() {
-        this.success = mock(HealthCheck.class);
-        when(success.safeCheck()).thenReturn(HealthCheckOutcome.ok());
-
-        this.failure = mock(HealthCheck.class);
-        when(failure.safeCheck()).thenReturn(HealthCheckOutcome.critical("uh"));
-
+        this.success = () -> HealthCheckOutcome.ok();
+        this.failure = () -> HealthCheckOutcome.critical("uh");
         this.watch = null;
     }
 

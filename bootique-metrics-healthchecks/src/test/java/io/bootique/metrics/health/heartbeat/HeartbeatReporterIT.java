@@ -31,9 +31,6 @@ import io.bootique.value.Percent;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
 @BQTest
 public class HeartbeatReporterIT {
 
@@ -45,7 +42,7 @@ public class HeartbeatReporterIT {
     @BeforeEach
     public void before() {
 
-        TestInMemorySinkFactory.reset();
+        TestSink.reset();
 
         ValueRange<Percent> range = ValueRange.builder(Percent.class)
                 .min(Percent.ZERO)
@@ -55,9 +52,7 @@ public class HeartbeatReporterIT {
 
         HealthCheckData<Percent> data = new HealthCheckData<>(new Percent(0.4), range);
 
-        this.success = mock(HealthCheck.class);
-        when(success.safeCheck()).thenReturn(HealthCheckOutcome.ok().withData(data));
-        when(success.isActive()).thenReturn(true);
+        this.success = () -> HealthCheckOutcome.ok().withData(data);
     }
 
     @Test
@@ -71,21 +66,21 @@ public class HeartbeatReporterIT {
                 )
                 .createRuntime();
 
-        TestInMemorySinkFactory.assertNoReport();
+        TestSink.assertNoReport();
 
         Heartbeat hb = runtime.getInstance(Heartbeat.class);
 
         Thread.sleep(100);
 
         // not started yet...
-        TestInMemorySinkFactory.assertNoReport();
+        TestSink.assertNoReport();
 
         // start..
         hb.start();
         Thread.sleep(100);
 
         // config has "percentPrecision: 3", so "75.555" will be truncated in the output
-        TestInMemorySinkFactory.assertReport("OK", "hc1 OK|'hc1'=40%;75.5;90;0;100", "");
+        TestSink.assertReport("OK", "hc1 OK|'hc1'=40%;75.5;90;0;100", "");
     }
 
     @Test
@@ -99,18 +94,18 @@ public class HeartbeatReporterIT {
                 )
                 .createRuntime();
 
-        TestInMemorySinkFactory.assertNoReport();
+        TestSink.assertNoReport();
 
         Heartbeat hb = runtime.getInstance(Heartbeat.class);
 
         Thread.sleep(100);
 
         // not started yet...
-        TestInMemorySinkFactory.assertNoReport();
+        TestSink.assertNoReport();
 
         // start..
         hb.start();
         Thread.sleep(100);
-        TestInMemorySinkFactory.assertNoReport();
+        TestSink.assertNoReport();
     }
 }

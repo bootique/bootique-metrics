@@ -18,19 +18,15 @@
  */
 package io.bootique.metrics.health.heartbeat;
 
-import com.fasterxml.jackson.annotation.JsonTypeName;
 import io.bootique.metrics.health.sink.ReportSink;
-import io.bootique.metrics.health.sink.ReportSinkFactory;
 
 import java.util.Objects;
-import java.util.function.Supplier;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@JsonTypeName("test-in-memory")
-public class TestInMemorySinkFactory implements ReportSinkFactory {
+class TestSink implements ReportSink {
 
-    public static String LAST_REPORT;
+    private static String LAST_REPORT;
 
     public static void reset() {
         LAST_REPORT = null;
@@ -56,29 +52,21 @@ public class TestInMemorySinkFactory implements ReportSinkFactory {
         assertEquals(expected.toString(), LAST_REPORT);
     }
 
-    @Override
-    public Supplier<ReportSink> createReportSyncSupplier() {
-        return () -> new TestInMemorySink();
+    private final StringBuilder currentReport;
+
+    public TestSink() {
+        this.currentReport = new StringBuilder();
     }
 
-    static class TestInMemorySink implements ReportSink {
+    @Override
+    public ReportSink append(String string) {
+        Objects.requireNonNull(currentReport, "sink is closed").append(string);
+        return this;
+    }
 
-        private StringBuilder currentReport;
-
-        public TestInMemorySink() {
-            this.currentReport = new StringBuilder();
-        }
-
-        @Override
-        public ReportSink append(String string) {
-            Objects.requireNonNull(currentReport, "sink is closed").append(string);
-            return this;
-        }
-
-        @Override
-        public void close() {
-            TestInMemorySinkFactory.LAST_REPORT = currentReport.toString();
-            currentReport = null;
-        }
+    @Override
+    public void close() {
+        LAST_REPORT = currentReport.toString();
+        currentReport.setLength(0);
     }
 }

@@ -35,8 +35,6 @@ import java.util.Objects;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 @BQTest
 public class HeartbeatIT {
@@ -50,13 +48,8 @@ public class HeartbeatIT {
 
     @BeforeEach
     public void before() {
-        this.success = mock(HealthCheck.class);
-        when(success.safeCheck()).thenReturn(HealthCheckOutcome.ok());
-        when(success.isActive()).thenReturn(true);
-
-        this.failure = mock(HealthCheck.class);
-        when(failure.safeCheck()).thenReturn(HealthCheckOutcome.critical("uh"));
-        when(failure.isActive()).thenReturn(true);
+        this.success = () -> HealthCheckOutcome.ok();
+        this.failure = () -> HealthCheckOutcome.critical("uh");
     }
 
     @Test
@@ -243,5 +236,4 @@ public class HeartbeatIT {
             return HealthCheckOutcome.ok();
         }
     }
-
 }

@@ -18,25 +18,29 @@
  */
 package io.bootique.metrics.reporter;
 
-import io.bootique.shutdown.ShutdownManager;
+import io.bootique.log.DefaultBootLogger;
+import io.bootique.shutdown.DefaultShutdownManager;
 import io.bootique.value.Duration;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.mock;
 
 public class SltF4ReporterFactoryTest {
 
+    static final DefaultShutdownManager shutdownManager = new DefaultShutdownManager(
+            java.time.Duration.ZERO,
+            new DefaultBootLogger(false));
+
     @Test
     public void period() {
-        Slf4jReporterFactory factory = new Slf4jReporterFactory(mock(ShutdownManager.class));
+        Slf4jReporterFactory factory = new Slf4jReporterFactory(shutdownManager);
         factory.setPeriod(new Duration("10min"));
         assertEquals(600_000L, factory.resolvePeriod().toMillis());
     }
 
     @Test
     public void period_Default() {
-        Slf4jReporterFactory factory = new Slf4jReporterFactory(mock(ShutdownManager.class));
+        Slf4jReporterFactory factory = new Slf4jReporterFactory(shutdownManager);
         assertEquals(30_000L, factory.resolvePeriod().toMillis());
     }
 }
